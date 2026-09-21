@@ -204474,7 +204474,7 @@ Transform:
   m_GameObject: {fileID: 1034520936}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 19.6, y: -10.8, z: 0}
+  m_LocalPosition: {x: 10.9, y: -20.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -204497,7 +204497,7 @@ MonoBehaviour:
   cellSize: 0.125
   solidMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   ticksPerSecond: 20
   maximumTicksPerFrame: 3
   activityTarget: {fileID: 1556756209}
@@ -204582,7 +204582,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -217033,11 +217033,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7784914804784648600, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.6875
+      value: 0.85
       objectReference: {fileID: 0}
     - target: {fileID: 7784914804784648600, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.8125
+      value: 0.866
       objectReference: {fileID: 0}
     - target: {fileID: 7888024459979419251, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: m_Layer
