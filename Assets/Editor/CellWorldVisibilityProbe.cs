@@ -28,7 +28,7 @@ public static class CellWorldVisibilityProbe
         {
             if (!w.gameObject.scene.IsValid()) continue;
             text.AppendLine("WORLD " + w.name + " scene=" + w.gameObject.scene.path + " enabled=" + w.enabled + " active=" + w.gameObject.activeInHierarchy + " pos=" + w.transform.position + " scale=" + w.transform.lossyScale);
-            text.AppendLine("Size=" + w.Width + "x" + w.Height + " cell=" + w.CellSize + " water=" + w.GetTotalWaterUnits() + " fuel=" + w.GetTotalFuelUnits() + " awake=" + w.GetActiveChunkCount() + " textures=" + w.AllocatedRenderChunkCount + " dirty=" + w.DirtyChunkCount);
+            text.AppendLine("Size=" + w.Width + "x" + w.Height + " cell=" + w.CellSize + " water=" + w.GetTotalWaterUnits() + " fuel=" + w.GetTotalFuelUnits() + " awake=" + w.GetActiveChunkCount());
             foreach (string n in new[] { "managedExternally", "paused", "solidMask", "simulateAllChunks", "textureNeedsRefresh", "tickNumber" }) text.AppendLine(n + "=" + Field(w,n));
             foreach (string n in new[] { "fire", "smoke" }) { var b = Field(w,n) as byte[]; int count=0; if(b!=null) foreach(byte v in b) if(v>0) count++; text.AppendLine(n + " cells="+count); }
             var rr = w.GetComponentsInChildren<SpriteRenderer>(true);
