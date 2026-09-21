@@ -8,7 +8,7 @@
 - Transient tool data can rebuild safely after an editor script reload.
 - Spray sweeps between its previous and next position to stop at thin colliders. It ignores triggers and the player's own colliders. Fire detection samples the whole traveled segment, including at higher water speeds.
 - A full probe pool waits for space instead of overwriting an active shot. No resources are spent for a shot that cannot obtain a slot.
-- Flame has a tapered, moving core with widening/fading tips. Burning cells and fire lights flicker.
+- Flame has a tapered, moving core with widening/fading tips, a five-color lifetime gradient, and a fully transparent endpoint. Grid fire blends displayed heat and opacity across simulation steps, uses two intermediate colors, and fades out smoothly. Burning cells and fire lights flicker.
 - Diagnostic reporting is now an explicit Tools menu command and writes inside the project Temp folder. It does not access uninitialized arrays or obsolete chunk-rendering properties.
 - Debug painter pause uses P; Space remains the player's jump binding.
 

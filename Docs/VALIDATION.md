@@ -17,7 +17,7 @@ Checked on 21 September 2026 with Unity **6000.6.0f1** on Windows, using an isol
 - Spray shader imported and compiled for the rendered camera. Water and flame screenshots were captured from Level_0 and visually inspected.
 - All 11,247 original snapshot files were accounted for after moves. Original `.meta` contents were preserved, with no duplicate asset GUIDs.
 
-The batch harness completed **102 assertions**. It temporarily held assembly reloads during the short play sequence because installed editor packages requested a reload during startup. An unrelated Unity Search startup `ArgumentOutOfRangeException` was logged before the play checks; the test completed afterward. The final run used a shorter path to avoid Windows path-length errors in an installed package's editor stylesheet loader.
+The batch harness completed **116 assertions**. It temporarily held assembly reloads during the short play sequence because installed editor packages requested a reload during startup. An unrelated Unity Search startup `ArgumentOutOfRangeException` was logged before the play checks; the test completed afterward. The final run used a shorter path to avoid Windows path-length errors in an installed package's editor stylesheet loader.
 
 ## Scope and limits
 
@@ -35,3 +35,7 @@ The harness is stored outside Unity's Assets folder at `Tools/Validation/Pressur
 4. Read `ValidationResults/check-result.txt` and the Unity log. A completed suite ends with `COMPLETE`. Screenshots are saved beside the report. Generated results are ignored by Git.
 
 The harness deliberately constructs its own test scene, controls Input System update settings, and loads Level_0. It refuses to run through its entry point outside batch mode. Use it only in an isolated copy.
+
+## Fire smoothing follow-up — 22 September 2026
+
+Added 14 passing checks for the five-color lifetime gradient, continuous color stops, zero opacity at expiry, displayed heat/opacity interpolation, frame-rate-independent fade timing, visual tails ending, pause behavior, and immediate erase/clear cleanup. The complete suite now passes 116 assertions, including the existing Level_0 and water/flame checks. The new controls are documented in PROJECT_GUIDE.md. Grid fire now redraws every frame by default; the prior capped mode remains available through Smooth Fire Every Frame. Gameplay fire energy, burning and water consumption are unchanged.

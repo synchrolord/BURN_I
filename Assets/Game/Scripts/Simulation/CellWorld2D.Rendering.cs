@@ -4,11 +4,23 @@ using UnityEngine;
 public sealed partial class CellWorld2D
 {
     [Header("Fire Appearance")]
+    [Tooltip("Animate visible fire every rendered frame. Disable to use the capped visual refresh rate below.")]
+    [SerializeField] private bool smoothFireEveryFrame = true;
     [SerializeField, Range(5f, 30f)] private float fireVisualFramesPerSecond = 20f;
+    [Tooltip("Time for displayed heat to move across its full range. Does not change simulated fire energy.")]
+    [SerializeField, Min(0.01f)] private float fireColorBlendSeconds = 0.18f;
+    [Tooltip("Time for opacity to fade across its full range after cooling or extinction.")]
+    [SerializeField, Min(0.01f)] private float fireFadeSeconds = 0.22f;
+    [SerializeField] private Color warmFireColor = new Color(0.98f, 0.30f, 0.035f, 1f);
+    [SerializeField] private Color brightFireColor = new Color(1f, 0.72f, 0.12f, 1f);
     [SerializeField, Range(0f, 1f)] private float fireFlickerAmount = 0.4f;
     [SerializeField, Min(0.1f)] private float fireFlickerSpeed = 7f;
     private bool hasVisibleFire;
     private float nextFireVisualUpdate;
+    // Presentation only: x = displayed energy, y = opacity. Gameplay still uses fire[].
+    private Vector2[] fireVisuals;
+    private float fireAnimationTime;
+    private float lastFireRenderTime;
 
     private void CreateRuntimeTexture()
     {
@@ -60,30 +72,48 @@ public sealed partial class CellWorld2D
 
             if (solid[i]) water[i] = fuel[i] = fire[i] = smoke[i] = 0;
         }
+        if (fireVisuals != null)
+            for (int i = 0; i < solid.Length; i++)
+                if (solid[i]) fireVisuals[i] = Vector2.zero;
     }
 
     private void RenderNow()
     {
         if (runtimeTexture == null) return;
 
+        if (fireVisuals == null || fireVisuals.Length != pixels.Length)
+            fireVisuals = new Vector2[pixels.Length];
+        float visualDelta = Mathf.Max(0f, fireAnimationTime - lastFireRenderTime);
+        lastFireRenderTime = fireAnimationTime;
+
         hasVisibleFire = false;
         for (int i = 0; i < pixels.Length; i++)
         {
-            if (showSolidCells && solid[i]) pixels[i] = solidDebugColor;
-            else if (fire[i] > 0)
+            Vector2 visual = fireVisuals[i];
+            if (solid[i]) visual = Vector2.zero;
+            else if (fire[i] > 0 && visual.y <= 0f)
             {
-                pixels[i] = FireColor(i);
-                hasVisibleFire = true;
+                // Ignition appears immediately; subsequent heat changes blend.
+                visual = new Vector2(fire[i], FireOpacity(fire[i]));
             }
-            else if (smoke[i] > 0) pixels[i] = SmokeColor(smoke[i]);
-            else if (water[i] > 0 && fuel[i] > 0)
+            else if (paused && textureNeedsRefresh)
             {
-                float waterShare = water[i] / (float)(water[i] + fuel[i]);
-                pixels[i] = Color.Lerp(FuelColor(fuel[i]), WaterColor(water[i]), waterShare);
+                // Painting and single-stepping while paused should show the requested state.
+                visual = new Vector2(fire[i], FireOpacity(fire[i]));
             }
-            else if (water[i] > 0) pixels[i] = WaterColor(water[i]);
-            else if (fuel[i] > 0) pixels[i] = FuelColor(fuel[i]);
-            else pixels[i] = new Color32(0, 0, 0, 0);
+            else if (!paused && (fire[i] > 0 || visual.y > 0f))
+            {
+                visual.x = Mathf.MoveTowards(visual.x, fire[i], visualDelta * 3f / Mathf.Max(0.01f, fireColorBlendSeconds));
+                visual.y = Mathf.MoveTowards(visual.y, FireOpacity(fire[i]), visualDelta / Mathf.Max(0.01f, fireFadeSeconds));
+            }
+            fireVisuals[i] = visual;
+            Color underneath = MaterialColorWithoutFire(i);
+            if (visual.y > 0f)
+            {
+                hasVisibleFire = true; // Continue refreshing the tail after simulated fire reaches zero.
+                pixels[i] = CompositeFire(FireColor(i, visual), underneath);
+            }
+            else pixels[i] = underneath;
         }
 
         runtimeTexture.SetPixels32(pixels);
@@ -91,15 +121,43 @@ public sealed partial class CellWorld2D
         textureNeedsRefresh = false;
     }
 
-    private Color FireColor(int index)
+    private static float FireOpacity(byte energy) => energy == 0 ? 0f : Mathf.Lerp(0.45f, 1f, (energy - 1f) * 0.5f);
+
+    private Color MaterialColorWithoutFire(int index)
+    {
+        if (showSolidCells && solid[index]) return solidDebugColor;
+        if (smoke[index] > 0) return SmokeColor(smoke[index]);
+        if (water[index] > 0 && fuel[index] > 0)
+            return Color.Lerp(FuelColor(fuel[index]), WaterColor(water[index]),
+                water[index] / (float)(water[index] + fuel[index]));
+        if (fuel[index] > 0) return FuelColor(fuel[index]);
+        if (water[index] > 0) return WaterColor(water[index]);
+        return Color.clear;
+    }
+
+    private static Color CompositeFire(Color flame, Color underneath)
+    {
+        float belowAlpha = underneath.a * (1f - flame.a);
+        float alpha = flame.a + belowAlpha;
+        if (alpha <= 0f) return Color.clear;
+        Color result = (flame * flame.a + underneath * belowAlpha) / alpha;
+        result.a = alpha;
+        return result;
+    }
+
+    private Color FireColor(int index, Vector2 visual)
     {
         float x = index % width, y = index / width;
-        float noise = Mathf.PerlinNoise(x * 0.32f + Time.time * 0.7f,
-            y * 0.3f - Time.time * fireFlickerSpeed);
-        float heat = Mathf.Clamp01((fire[index] - 1f) * 0.5f + (noise - 0.5f) * fireFlickerAmount);
-        Color color = heat < 0.5f ? Color.Lerp(weakFireColor, mediumFireColor, heat * 2f)
-            : Color.Lerp(mediumFireColor, hotFireColor, (heat - 0.5f) * 2f);
-        color.a *= Mathf.Lerp(0.72f, 1f, noise);
+        float noise = Mathf.PerlinNoise(x * 0.32f + fireAnimationTime * 0.7f,
+            y * 0.3f - fireAnimationTime * fireFlickerSpeed);
+        float heat = Mathf.Clamp01((visual.x - 1f) * 0.5f + (noise - 0.5f) * fireFlickerAmount);
+        float segment = heat * 4f;
+        Color color;
+        if (segment < 1f) color = Color.Lerp(weakFireColor, warmFireColor, segment);
+        else if (segment < 2f) color = Color.Lerp(warmFireColor, mediumFireColor, segment - 1f);
+        else if (segment < 3f) color = Color.Lerp(mediumFireColor, brightFireColor, segment - 2f);
+        else color = Color.Lerp(brightFireColor, hotFireColor, segment - 3f);
+        color.a *= visual.y * Mathf.Lerp(0.72f, 1f, noise);
         return color;
     }
 

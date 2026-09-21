@@ -115,9 +115,11 @@ public sealed partial class CellWorld2D
         {
             if (!IsInsideCircle(x, y, center, radiusSquared)) continue;
             int i = Index(x, y);
-            if (water[i] == 0 && fuel[i] == 0 && fire[i] == 0 && smoke[i] == 0) continue;
+            if (water[i] == 0 && fuel[i] == 0 && fire[i] == 0 && smoke[i] == 0 &&
+                (fireVisuals == null || fireVisuals[i].y == 0f)) continue;
 
             water[i] = fuel[i] = fire[i] = smoke[i] = 0;
+            if (fireVisuals != null) fireVisuals[i] = Vector2.zero;
             WakeCell(x, y);
             changed = true;
         }
@@ -144,6 +146,8 @@ public sealed partial class CellWorld2D
         Array.Clear(fuel, 0, fuel.Length);
         Array.Clear(fire, 0, fire.Length);
         Array.Clear(smoke, 0, smoke.Length);
+        if (fireVisuals != null) Array.Clear(fireVisuals, 0, fireVisuals.Length);
+        hasVisibleFire = false;
         textureNeedsRefresh = true;
     }
 
