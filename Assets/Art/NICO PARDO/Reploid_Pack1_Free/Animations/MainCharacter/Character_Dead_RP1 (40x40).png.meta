@@ -1,0 +1,730 @@
+fileFormatVersion: 2
+guid: 60bb1699ec2707247aa2fc557ea5ea3e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3878973489675726039
+    second: Character_Dead_RP1 (40x40)_0
+  - first:
+      213: -7001796495595831171
+    second: Character_Dead_RP1 (40x40)_1
+  - first:
+      213: 3643705940138086532
+    second: Character_Dead_RP1 (40x40)_2
+  - first:
+      213: -571501724016340551
+    second: Character_Dead_RP1 (40x40)_3
+  - first:
+      213: 6728538208408812629
+    second: Character_Dead_RP1 (40x40)_4
+  - first:
+      213: -2272954002637937873
+    second: Character_Dead_RP1 (40x40)_5
+  - first:
+      213: -5947502727730568536
+    second: Character_Dead_RP1 (40x40)_6
+  - first:
+      213: -8118318585607400199
+    second: Character_Dead_RP1 (40x40)_7
+  - first:
+      213: 7005855199769088150
+    second: Character_Dead_RP1 (40x40)_8
+  - first:
+      213: 2538787235592228841
+    second: Character_Dead_RP1 (40x40)_9
+  - first:
+      213: 2015370819897766139
+    second: Character_Dead_RP1 (40x40)_10
+  - first:
+      213: 5366749370255183127
+    second: Character_Dead_RP1 (40x40)_11
+  - first:
+      213: -8970127910920218128
+    second: Character_Dead_RP1 (40x40)_12
+  - first:
+      213: -8877384738573580457
+    second: Character_Dead_RP1 (40x40)_13
+  - first:
+      213: -3548219948024810176
+    second: Character_Dead_RP1 (40x40)_14
+  - first:
+      213: 6181991887100427326
+    second: Character_Dead_RP1 (40x40)_15
+  - first:
+      213: 1375912557673148336
+    second: Character_Dead_RP1 (40x40)_16
+  - first:
+      213: -8886947175868046688
+    second: Character_Dead_RP1 (40x40)_17
+  - first:
+      213: 857774949308697926
+    second: Character_Dead_RP1 (40x40)_18
+  - first:
+      213: 2037069486260015929
+    second: Character_Dead_RP1 (40x40)_19
+  - first:
+      213: -4356865501761023362
+    second: Character_Dead_RP1 (40x40)_20
+  - first:
+      213: -3836192700951076381
+    second: Character_Dead_RP1 (40x40)_21
+  - first:
+      213: -3024501055077249368
+    second: Character_Dead_RP1 (40x40)_22
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_0
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 0
+        width: 29
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92398bea92e1b2ac0800000000000000
+      internalID: -3878973489675726039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_1
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 1
+        width: 26
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d708f623f2f94de90800000000000000
+      internalID: -7001796495595831171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_2
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 4
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48059e35f3b019230800000000000000
+      internalID: 3643705940138086532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_3
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 5
+        width: 29
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b19b7fb53e9118f0800000000000000
+      internalID: -571501724016340551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_4
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 3
+        width: 26
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55cb9d9e9d1906d50800000000000000
+      internalID: 6728538208408812629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_5
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 4
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f23a6f19068d470e0800000000000000
+      internalID: -2272954002637937873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_6
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 5
+        width: 29
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a2e3f4c7c9367da0800000000000000
+      internalID: -5947502727730568536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_7
+      rect:
+        serializedVersion: 2
+        x: 287
+        y: 3
+        width: 26
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f45b635240f55f80800000000000000
+      internalID: -8118318585607400199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_8
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 0
+        width: 23
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6905f028f2cc93160800000000000000
+      internalID: 7005855199769088150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_9
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 0
+        width: 23
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ef45c92a859b3320800000000000000
+      internalID: 2538787235592228841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_10
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 0
+        width: 23
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf0b1b2351908fb10800000000000000
+      internalID: 2015370819897766139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_11
+      rect:
+        serializedVersion: 2
+        x: 446
+        y: 0
+        width: 23
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71d8c943e168a7a40800000000000000
+      internalID: 5366749370255183127
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_12
+      rect:
+        serializedVersion: 2
+        x: 487
+        y: 0
+        width: 23
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f998c7d034b38380800000000000000
+      internalID: -8970127910920218128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_13
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 0
+        width: 23
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75709da5d913dc480800000000000000
+      internalID: -8877384738573580457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_14
+      rect:
+        serializedVersion: 2
+        x: 566
+        y: 0
+        width: 27
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 045b60da1c032cec0800000000000000
+      internalID: -3548219948024810176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_15
+      rect:
+        serializedVersion: 2
+        x: 603
+        y: 0
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3cb7f22ed8dac550800000000000000
+      internalID: 6181991887100427326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_16
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 0
+        width: 36
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0bf6b1a6e29381310800000000000000
+      internalID: 1375912557673148336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_17
+      rect:
+        serializedVersion: 2
+        x: 683
+        y: 9
+        width: 7
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a269bce0a83ba480800000000000000
+      internalID: -8886947175868046688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_18
+      rect:
+        serializedVersion: 2
+        x: 690
+        y: 0
+        width: 27
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64d06ce85cd67eb00800000000000000
+      internalID: 857774949308697926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_19
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 13
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 933d057a7ef154c10800000000000000
+      internalID: 2037069486260015929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_20
+      rect:
+        serializedVersion: 2
+        x: 725
+        y: 3
+        width: 29
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e725169e8ed4983c0800000000000000
+      internalID: -4356865501761023362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_21
+      rect:
+        serializedVersion: 2
+        x: 763
+        y: 0
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e16dd1401b13cac0800000000000000
+      internalID: -3836192700951076381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Character_Dead_RP1 (40x40)_22
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 0
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ae835d9050d606d0800000000000000
+      internalID: -3024501055077249368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Character_Dead_RP1 (40x40)_0: -3878973489675726039
+      Character_Dead_RP1 (40x40)_1: -7001796495595831171
+      Character_Dead_RP1 (40x40)_10: 2015370819897766139
+      Character_Dead_RP1 (40x40)_11: 5366749370255183127
+      Character_Dead_RP1 (40x40)_12: -8970127910920218128
+      Character_Dead_RP1 (40x40)_13: -8877384738573580457
+      Character_Dead_RP1 (40x40)_14: -3548219948024810176
+      Character_Dead_RP1 (40x40)_15: 6181991887100427326
+      Character_Dead_RP1 (40x40)_16: 1375912557673148336
+      Character_Dead_RP1 (40x40)_17: -8886947175868046688
+      Character_Dead_RP1 (40x40)_18: 857774949308697926
+      Character_Dead_RP1 (40x40)_19: 2037069486260015929
+      Character_Dead_RP1 (40x40)_2: 3643705940138086532
+      Character_Dead_RP1 (40x40)_20: -4356865501761023362
+      Character_Dead_RP1 (40x40)_21: -3836192700951076381
+      Character_Dead_RP1 (40x40)_22: -3024501055077249368
+      Character_Dead_RP1 (40x40)_3: -571501724016340551
+      Character_Dead_RP1 (40x40)_4: 6728538208408812629
+      Character_Dead_RP1 (40x40)_5: -2272954002637937873
+      Character_Dead_RP1 (40x40)_6: -5947502727730568536
+      Character_Dead_RP1 (40x40)_7: -8118318585607400199
+      Character_Dead_RP1 (40x40)_8: 7005855199769088150
+      Character_Dead_RP1 (40x40)_9: 2538787235592228841
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

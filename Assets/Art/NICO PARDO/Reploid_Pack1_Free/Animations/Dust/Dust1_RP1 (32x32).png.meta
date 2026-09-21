@@ -1,0 +1,496 @@
+fileFormatVersion: 2
+guid: cdf600f3ad6302e4cabb5a23f92f897f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7853051009850373965
+    second: Dust1_RP1 (32x32)_0
+  - first:
+      213: -260360835411701342
+    second: Dust1_RP1 (32x32)_1
+  - first:
+      213: 2076219581641810325
+    second: Dust1_RP1 (32x32)_2
+  - first:
+      213: 7981089843933407771
+    second: Dust1_RP1 (32x32)_3
+  - first:
+      213: 1940110965235000540
+    second: Dust1_RP1 (32x32)_4
+  - first:
+      213: -3032080851856624180
+    second: Dust1_RP1 (32x32)_5
+  - first:
+      213: -405552892134762461
+    second: Dust1_RP1 (32x32)_6
+  - first:
+      213: -5105889362882428772
+    second: Dust1_RP1 (32x32)_7
+  - first:
+      213: -525607743819895509
+    second: Dust1_RP1 (32x32)_8
+  - first:
+      213: -5860989644894436079
+    second: Dust1_RP1 (32x32)_9
+  - first:
+      213: -2546391265728793524
+    second: Dust1_RP1 (32x32)_10
+  - first:
+      213: -3270443662513398007
+    second: Dust1_RP1 (32x32)_11
+  - first:
+      213: 5622475669625905953
+    second: Dust1_RP1 (32x32)_12
+  - first:
+      213: -8334073948815790889
+    second: Dust1_RP1 (32x32)_13
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Dust1_RP1 (32x32)_0
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 13
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4777254944abfc60800000000000000
+      internalID: 7853051009850373965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dust1_RP1 (32x32)_1
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 11
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a19cdb1333036cf0800000000000000
+      internalID: -260360835411701342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dust1_RP1 (32x32)_2
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 10
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 591687f85b630dc10800000000000000
+      internalID: 2076219581641810325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dust1_RP1 (32x32)_3
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 8
+        width: 19
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1ae02c6de682ce60800000000000000
+      internalID: 7981089843933407771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dust1_RP1 (32x32)_4
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 13
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd42cabc4a8acea10800000000000000
+      internalID: 1940110965235000540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dust1_RP1 (32x32)_5
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 7
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc572d6a782ebe5d0800000000000000
+      internalID: -3032080851856624180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dust1_RP1 (32x32)_6
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 17
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 328dca61bcf2f5af0800000000000000
+      internalID: -405552892134762461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dust1_RP1 (32x32)_7
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 9
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9082f63dac3429b0800000000000000
+      internalID: -5105889362882428772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dust1_RP1 (32x32)_8
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 15
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2dab62ba8aa4b8f0800000000000000
+      internalID: -525607743819895509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dust1_RP1 (32x32)_9
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 6
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11503d788f499aea0800000000000000
+      internalID: -5860989644894436079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dust1_RP1 (32x32)_10
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 19
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c44f31b92a669acd0800000000000000
+      internalID: -2546391265728793524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dust1_RP1 (32x32)_11
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 5
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90f16f501dc0d92d0800000000000000
+      internalID: -3270443662513398007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dust1_RP1 (32x32)_12
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 4
+        width: 43
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 123245615db070e40800000000000000
+      internalID: 5622475669625905953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dust1_RP1 (32x32)_13
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 7
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dc6ffc36eb675c80800000000000000
+      internalID: -8334073948815790889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Dust1_RP1 (32x32)_0: 7853051009850373965
+      Dust1_RP1 (32x32)_1: -260360835411701342
+      Dust1_RP1 (32x32)_10: -2546391265728793524
+      Dust1_RP1 (32x32)_11: -3270443662513398007
+      Dust1_RP1 (32x32)_12: 5622475669625905953
+      Dust1_RP1 (32x32)_13: -8334073948815790889
+      Dust1_RP1 (32x32)_2: 2076219581641810325
+      Dust1_RP1 (32x32)_3: 7981089843933407771
+      Dust1_RP1 (32x32)_4: 1940110965235000540
+      Dust1_RP1 (32x32)_5: -3032080851856624180
+      Dust1_RP1 (32x32)_6: -405552892134762461
+      Dust1_RP1 (32x32)_7: -5105889362882428772
+      Dust1_RP1 (32x32)_8: -525607743819895509
+      Dust1_RP1 (32x32)_9: -5860989644894436079
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
