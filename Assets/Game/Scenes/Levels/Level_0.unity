@@ -204474,7 +204474,7 @@ Transform:
   m_GameObject: {fileID: 1034520936}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -26.6, y: -57.4, z: 0}
+  m_LocalPosition: {x: -27.4, y: -43, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -204495,8 +204495,8 @@ MonoBehaviour:
   fireVisualFramesPerSecond: 20
   fireFlickerAmount: 0.4
   fireFlickerSpeed: 7
-  width: 1000
-  height: 1000
+  width: 900
+  height: 600
   cellSize: 0.125
   solidMask:
     serializedVersion: 2
