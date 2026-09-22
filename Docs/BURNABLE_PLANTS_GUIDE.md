@@ -53,7 +53,7 @@ To get a quick first test, select a single healthy vine slice such as one of you
 
 A ready-made **Example_Vine_HealthyOnly** asset is also included in **Assets/Game/Tiles/BurnablePlants**. You can drag that straight into the Tile Palette for a first test. Its four damage slots are intentionally empty for you to fill with your matching burned artwork.
 
-Existing ordinary plant tiles do not become burnable automatically. Repaint them using the new assets on the plant map. Keep decorative plants separate from the level's collision Tilemap. The new tiles have **no collider**, so burning a vine does not remove the wall behind it. This system does not implement climbable vines or destructible wall geometry.
+Existing ordinary plant tiles do not become burnable automatically. Repaint them using the new assets on the plant map. Keep them separate from permanent level walls. Plant collision is optional: use the setup below for solid plants, or leave the map without a collider for walk-through decoration. Burning a plant does not remove a separate wall behind it. This system does not implement climbing.
 
 If the plant layer is obscured, adjust its TilemapRenderer sorting layer/order for your scenery; keep CellWorld's fire above the plants. The setup command chooses a starting order, but cannot know every layer in your level.
 
@@ -67,6 +67,7 @@ On each BurnablePlantTile asset:
 | Burn Seconds | 6 | Time needed to consume each burning simulation cell |
 | Wet Seconds | 2 | Simulation time during which water prevents plant fuel from reigniting |
 | Disappear When Burned | On | Remove the tile completely at full consumption; off leaves stage 4 as an inert remnant |
+| Collision Type | Sprite | Keeps the healthy sprite's physics shape until fully burned. Grid uses the cell outline; None is walk-through. Requires a Tilemap Collider 2D on the map. |
 
 Burn Seconds is **not a fixed duration for a whole vine network**. Fire must travel between cells. A longer network takes longer, and water can stop it halfway. The sprite stage is based on total fuel consumed in that individual painted piece. The existing CellWorld fire spread chance, spread interval and upward bonus also affect plant fire.
 
@@ -84,6 +85,24 @@ All five stage sprites must keep matching dimensions, pivot and PPU. The baker r
 
 Adding sprites to a sheet changes its source hash, so rebake masks for that sheet afterward. Re-running the creation command makes **new** tile assets; to update an existing type, edit its existing asset instead. This preserves painted references.
 
+## Solid plants: keep collision until the entire piece burns
+
+1. Stop Play mode and select **Burnable Plants** in the Hierarchy.
+2. Add **Tilemap Collider 2D** to that same object. Leave **Is Trigger** off.
+3. Set that object's **Layer** at the top of the Inspector to **Ground**. This is the physics layer, not the renderer's sorting layer. In the current Level_0, Ground is already included in the player's Ground Mask, the tool's Obstacle Mask and CellWorld's Solid Mask.
+4. Select each BurnablePlantTile asset and leave **Collision Type = Sprite**. It uses the healthy sprite's Unity physics shape, which you can edit in Sprite Editor's **Custom Physics Shape**. Use **Grid** for a full cell-shaped block, or **None** for flowers/grass that should remain walk-through on the same map.
+5. Save the scene and test. The healthy collision shape stays unchanged through all five visual stages, including the final handful of pixels. At 100% burned, collision disappears. If Disappear When Burned is off, its charred artwork stays but is no longer solid.
+
+You need one Tilemap Collider 2D for the map, not a collider or Rigidbody on every plant. A Rigidbody is not needed on this static Tilemap for basic collision. The moving player already has one.
+
+For a different layer or scene, include the plant layer in **CellWorld → Solid Mask** and **PressureTool2D → Obstacle Mask**. Include it in the player's **Ground Mask** if plants should support standing/wall checks, and allow contact with the Player layer in the Physics 2D collision matrix. Setting Collision Type alone does not add a collider component or change these masks.
+
+Optional for large connected solid maps: add a **Rigidbody 2D** set to **Static** and a **Composite Collider 2D** on the same object; set the Tilemap Collider's **Composite Operation** to **Merge**. The plant manager also refreshes composite geometry when tiles change, including a composite configured for manual generation.
+
+When a plant finishes burning, the manager processes the Tilemap's collision change and resamples only nearby CellWorld cells. It checks the remaining physics geometry, so overlapping permanent walls stay solid. Distant plants finishing in one frame do not force a scan of the space between them. Changing to a damaged sprite does not trigger a full-world physics bake.
+
+Keep the map, its transforms and collider configuration static during Play mode. Configure collision before playing. Use Reset Plants And Rebuild after deliberate runtime changes; it also heals damage. Disabling the manager restores its healthy tiles and collision, while disabling the entire GameObject removes its colliders from physics.
+
 ## Performance and boundaries
 
 - A thousand painted tiles still use one manager; there is no per-plant Update loop.
@@ -91,13 +110,14 @@ Adding sprites to a sheet changes its source hash, so rebake masks for that shee
 - Initialization scans the map once and maps opaque samples onto CellWorld cells. Sparse fuel records exist only where plants are painted.
 - The simulation looks up plant fuel when fire touches it. Idle plants do not perform distance searches, physics checks or full-map scans every frame.
 - Only pieces whose burn stage changes need a tile replacement. Runtime stage tiles are shared per plant type and stage.
+- Sprite-collision stages also share runtime sprite copies per type/stage. Their appearance uses the damaged artwork, while their physics outline comes from the healthy sprite; imported sprite assets are never modified.
 - Overlapping large plants keep independent damage even where their fuel cells overlap.
 
 This avoids the overhead of hundreds of animated plant objects, but it is not a guarantee of no frame drops. Huge sheets, very large/scaled plants, lots of simultaneous burning cells, and the existing CellWorld texture upload still have costs. Profile the actual level before increasing the fire grid resolution. A finer global grid costs much more than simply adding more tile artwork.
 
 This version is for **static level decoration**. Plant positions are registered when the manager enables after CellWorld is ready. Moving the map or editing it during Play mode does not automatically move the registered fuel. `ResetPlantsAndRebuild()` restores original sprites, resets damage and registers again. Disabling/re-enabling the manager also resets its vegetation. Do not use disabling as a way to pause/save plant damage.
 
-Saving/loading burn damage between game sessions and destructible colliders are not included. Stopping Play mode restores your scene's unburned tiles. Clearing CellWorld's liquids/fire stops burning but does not heal plant damage; reset the plant manager to heal it.
+Saving/loading burn damage between game sessions is not included. Stopping Play mode restores your scene's unburned tiles. Clearing CellWorld's liquids/fire stops burning but does not heal plant damage; reset the plant manager to heal it. Plant colliders are removed at full burn; independent terrain colliders are preserved.
 
 ## Where the code lives
 
@@ -105,6 +125,8 @@ Saving/loading burn damage between game sessions and destructible colliders are 
 |---|---|
 | `Assets/Game/Scripts/Vegetation/BurnablePlantTile.cs` | Shared sprite references and burn settings; baked alpha samples |
 | `Assets/Game/Scripts/Vegetation/BurnablePlantMap2D.cs` | One manager per Tilemap; transforms masks, tracks individual damage, changes stages and removes completed plants |
+| `Assets/Game/Scripts/Vegetation/BurnablePlantMap2D.Collision.cs` | Keeps the healthy collision shape on damaged artwork, batches collider changes, restores collision on reset |
+| `Assets/Game/Scripts/Simulation/CellWorld2D.Collision.cs` | Updates only affected simulation obstacle cells from the remaining physical colliders |
 | `Assets/Game/Scripts/Simulation/CellWorld2D.Vegetation.cs` | Sparse stationary fuel, wetness, consumption, overlap handling and diagonal spread |
 | `Assets/Game/Scripts/Simulation/CellWorld2D.Fire.cs` | Existing fire tick, now also consuming plant fuel |
 | `Assets/Game/Scripts/Simulation/CellWorld2D.Materials.cs` | Existing ignition/water entry points, including wall-backed plants |

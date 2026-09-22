@@ -13,7 +13,9 @@ public sealed class BurnablePlantTileEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
+        if (DrawDefaultInspector() && !EditorApplication.isPlaying)
+            foreach (Tilemap map in UnityEngine.Object.FindObjectsByType<Tilemap>(FindObjectsInactive.Include)) map.RefreshAllTiles();
+        EditorGUILayout.HelpBox("Collision needs a Tilemap Collider 2D on the plant Tilemap. Sprite keeps the healthy physics shape through every damage stage; Grid uses the cell outline; None is walk-through. Collision ends when fully burned.", MessageType.Info);
         EditorGUILayout.HelpBox("Stages 0–4: healthy → last few pixels. The tile disappears after stage 4 finishes. Keep all five sprites on the same canvas, pivot and pixels-per-unit.", MessageType.Info);
         foreach (BurnablePlantTile tile in targets)
         {

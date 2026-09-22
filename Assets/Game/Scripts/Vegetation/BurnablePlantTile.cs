@@ -12,6 +12,8 @@ public sealed class BurnablePlantTile : TileBase
     [Tooltip("How long water prevents the plant fuel from reigniting, in simulation seconds.")]
     [SerializeField, Min(0f)] private float wetSeconds = 2f;
     [SerializeField] private bool disappearWhenBurned = true;
+    [Tooltip("Requires a Tilemap Collider 2D on the plant map. Sprite keeps the HEALTHY sprite's physics shape until fully burned; Grid keeps the cell outline. None is decoration only.")]
+    [SerializeField] private Tile.ColliderType collisionType = Tile.ColliderType.Sprite;
     [SerializeField, HideInInspector] private Vector2[] fuelSamples = new Vector2[0];
     [SerializeField, HideInInspector] private Sprite bakedSprite;
     [SerializeField, HideInInspector] private string bakedSourceHash;
@@ -19,6 +21,7 @@ public sealed class BurnablePlantTile : TileBase
     public float BurnSeconds => Mathf.Max(0.25f, burnSeconds);
     public float WetSeconds => Mathf.Max(0f, wetSeconds);
     public bool DisappearWhenBurned => disappearWhenBurned;
+    public Tile.ColliderType CollisionType => collisionType;
     public Vector2[] FuelSamples => fuelSamples;
     public bool HasBakedMask => bakedSprite != null && bakedSprite == GetStageSprite(0) && fuelSamples.Length > 0;
     public string BakedSourceHash => bakedSourceHash;
@@ -48,7 +51,7 @@ public sealed class BurnablePlantTile : TileBase
         tileData.color = Color.white;
         tileData.transform = Matrix4x4.identity;
         tileData.flags = TileFlags.None;
-        tileData.colliderType = Tile.ColliderType.None;
+        tileData.colliderType = collisionType;
     }
 
 #if UNITY_EDITOR

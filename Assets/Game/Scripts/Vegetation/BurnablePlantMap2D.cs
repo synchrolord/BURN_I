@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 /// <summary>One component for the whole plant Tilemap. No per-plant GameObjects or Update methods.</summary>
 [DisallowMultipleComponent, RequireComponent(typeof(Tilemap), typeof(TilemapRenderer))]
-public sealed class BurnablePlantMap2D : MonoBehaviour
+public sealed partial class BurnablePlantMap2D : MonoBehaviour
 {
     [SerializeField] private CellWorld2D world;
     [Tooltip("This is a static decoration map. After runtime painting or moving it, call ResetPlantsAndRebuild().")]
@@ -20,6 +20,7 @@ public sealed class BurnablePlantMap2D : MonoBehaviour
         public double capacity, consumed;
         public int stage;
         public bool queued, finished;
+        public Bounds collisionBounds;
     }
 
     private Tilemap map;
@@ -53,6 +54,7 @@ public sealed class BurnablePlantMap2D : MonoBehaviour
     private void RegisterMap()
     {
         registeredWorld = world;
+        InitializePlantCollision();
         BoundsInt bounds = map.cellBounds;
         if (bounds.size == Vector3Int.zero) { registered = true; return; }
         Vector3Int last = bounds.max - Vector3Int.one;
@@ -94,6 +96,8 @@ public sealed class BurnablePlantMap2D : MonoBehaviour
             if (clipped) partial++;
             int id = plants.Count;
             var plant = new Plant { position = position, tile = tile, transform = tileTransform, color = map.GetColor(position) };
+            if (plantCollider != null && tile.CollisionType != Tile.ColliderType.None)
+                plant.collisionBounds = GetPlantCollisionBounds(plant);
             int accepted = 0;
             foreach (Vector2Int cell in cells)
                 if (world.RegisterPlantFuel(cell, this, id, tile.BurnSeconds, tile.WetSeconds)) accepted++;
@@ -101,8 +105,10 @@ public sealed class BurnablePlantMap2D : MonoBehaviour
             plants.Add(plant);
             plantAt.Add(position, id);
             RegisteredFuelSampleCount += accepted;
+            QueueCollisionRefresh(plant);
         }
         registered = true;
+        FlushPlantCollisionChanges();
         if (warnAboutUnregisteredPlants && (missingMasks + outside + partial > 0))
             Debug.LogWarning($"Plants: {missingMasks} missing baked masks, {outside} outside CellWorld, {partial} partly outside. Bake masks / enlarge or reposition CellWorld.", this);
     }
@@ -135,32 +141,39 @@ public sealed class BurnablePlantMap2D : MonoBehaviour
             float progress = (float)(plant.consumed / plant.capacity);
             int stage = Mathf.Min(4, Mathf.FloorToInt(progress * 5f));
             bool finished = progress >= 0.99999f;
-            if (finished && plant.tile.DisappearWhenBurned) map.SetTile(plant.position, null);
+            if (finished)
+            {
+                QueueCollisionRefresh(plant);
+                if (plant.tile.DisappearWhenBurned) map.SetTile(plant.position, null);
+                else SetStage(plant, 4, true); // An optional charred remnant is no longer solid.
+            }
             else if (stage != plant.stage) SetStage(plant, stage);
             plant.stage = stage;
             plant.finished = finished;
         }
         dirtyPlants.Clear();
+        FlushPlantCollisionChanges();
     }
 
-    private void SetStage(Plant plant, int stage)
+    private void SetStage(Plant plant, int stage, bool finished = false)
     {
+        int cacheIndex = finished ? 5 : stage;
         if (!stageTiles.TryGetValue(plant.tile, out Tile[] stages))
         {
-            stages = new Tile[5];
+            stages = new Tile[6];
             stageTiles.Add(plant.tile, stages);
         }
-        if (stages[stage] == null)
+        if (stages[cacheIndex] == null)
         {
             Tile tile = ScriptableObject.CreateInstance<Tile>();
             tile.name = plant.tile.name + " burn " + stage;
             tile.hideFlags = HideFlags.HideAndDontSave;
-            tile.sprite = plant.tile.GetStageSprite(stage);
+            tile.sprite = GetPlantStageSprite(plant.tile, stage, finished);
             tile.flags = TileFlags.None;
-            tile.colliderType = Tile.ColliderType.None;
-            stages[stage] = tile;
+            tile.colliderType = finished ? Tile.ColliderType.None : plant.tile.CollisionType;
+            stages[cacheIndex] = tile;
         }
-        map.SetTile(plant.position, stages[stage]);
+        map.SetTile(plant.position, stages[cacheIndex]);
         map.SetTransformMatrix(plant.position, plant.transform);
         map.SetColor(plant.position, plant.color);
     }
@@ -195,14 +208,17 @@ public sealed class BurnablePlantMap2D : MonoBehaviour
                 if (!ours && stageTiles.TryGetValue(plant.tile, out Tile[] stages))
                     foreach (Tile tile in stages) if (current == tile) { ours = true; break; }
                 if (!ours) continue;
+                QueueCollisionRefresh(plant);
                 map.SetTile(plant.position, plant.tile);
                 map.SetTransformMatrix(plant.position, plant.transform);
                 map.SetColor(plant.position, plant.color);
             }
         }
+        FlushPlantCollisionChanges();
         foreach (Tile[] stages in stageTiles.Values)
             foreach (Tile tile in stages) if (tile != null) Destroy(tile);
         plants.Clear(); plantAt.Clear(); stageTiles.Clear(); dirtyPlants.Clear();
+        ReleasePlantCollision();
         RegisteredFuelSampleCount = 0;
         registered = false;
         registeredWorld = null;

@@ -111,13 +111,14 @@ These also form one component. Attach only `CellWorld2D.cs`.
 | `.Buoyancy.cs` | Oil/water exchange and separation. Oil rises through water. |
 | `.Fire.cs` | Burning fuel, fire spread/decay, extinguishing, delayed ignition, and fire cluster queries. |
 | `.Vegetation.cs` | Stationary plant fuel, per-cell burn time, wetness, overlapping plants and diagonal vine connections. |
+| `.Collision.cs` | Local obstacle updates when plant colliders disappear; preserves other walls and avoids a full-world rebake. |
 | `.Smoke.cs` | Smoke rise, sideways movement, and decay. |
 | `.Chunks.cs` | Active/sleeping regions and waking cells near changes or a target. These are simulation chunks, not separate rendered sprites. |
 | `.Rendering.cs` | Physics-to-solid-grid baking, runtime texture/sprite, material colors, animated fire colors, bounds gizmo. |
 
 Each cell has separate water, fuel, fire, and smoke data. Water and fuel share a liquid capacity. Fire energy is 0–3. A solid cell blocks liquids; stationary plants can burn on a wall without making the wall passable. CellWorld's transform is the grid origin; with the normal unrotated, unit-scale setup its visible size is `Width × Cell Size` by `Height × Cell Size`. Select it to see its bounds.
 
-`Vegetation/BurnablePlantTile.cs` stores the five sprite stages and shared settings. `Vegetation/BurnablePlantMap2D.cs` tracks each painted tile's damage and changes its appearance. `Editor/BurnablePlantEditor.cs` provides creation, mask baking, Tilemap setup and build checks. Use the [plant guide](BURNABLE_PLANTS_GUIDE.md) for the artwork workflow.
+`Vegetation/BurnablePlantTile.cs` stores the five sprite stages, collision type and shared settings. `Vegetation/BurnablePlantMap2D.cs` tracks each painted tile's damage and changes its appearance; its `.Collision.cs` file keeps the original collision shape until the plant fully burns. Add a Tilemap Collider 2D to enable solid plants, and use the Ground layer in Level_0. `Editor/BurnablePlantEditor.cs` provides creation, mask baking, Tilemap setup and build checks. Use the [plant guide](BURNABLE_PLANTS_GUIDE.md) for the artwork and collision workflow.
 
 The existing simulation order is preserved, including two smoke/fire passes per tick. Tick-based fire settings therefore retain their existing behavior; changing that order is a gameplay change, not just tidying.
 

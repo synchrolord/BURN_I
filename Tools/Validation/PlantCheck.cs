@@ -69,6 +69,7 @@ public sealed class PlantCheckRunner : MonoBehaviour
         Sprite[] sprites = new Sprite[5];
         for (int i=0;i<5;i++) sprites[i] = Sprite.Create(texture, new Rect(0,0,16,16), Vector2.one * .5f, 16);
         tile.SetArtwork(sprites); tile.SetBakedMask(samples, "test"); Set(tile,"burnSeconds",seconds);
+        Set(tile,"collisionType",UnityEngine.Tilemaps.Tile.ColliderType.None); // These original tests cover decoration-only maps.
         return tile;
     }
     BurnablePlantMap2D Map(BurnablePlantTile tile, Vector3Int[] positions, Matrix4x4? matrix = null)
