@@ -2,6 +2,7 @@ using UnityEngine;
 
 public sealed partial class PressureTool2D
 {
+    private Vector2 obstaclePlantContact;
     private readonly RaycastHit2D[] obstacleHits = new RaycastHit2D[16];
 
     private void UpdateEmission(float deltaTime)
@@ -93,6 +94,8 @@ public sealed partial class PressureTool2D
             bool hit = TryHitObstacle(previous, next, out Vector2 hitPosition);
             if (hit) next = hitPosition;
             DepositAlongSegment(probe, previous, next);
+            if (hit && probe.material == ToolMaterial.Water && probe.remainingWater > 0)
+                probe.remainingWater -= cellWorld.ApplyPlantWaterImpact(obstaclePlantContact, probe.remainingWater);
             probe.position = next;
             if (hit || probe.remainingLife <= 0f ||
                 (probe.material == ToolMaterial.Water && probe.remainingWater <= 0))
@@ -118,6 +121,7 @@ public sealed partial class PressureTool2D
             if (hit.collider == null || hit.collider.transform.IsChildOf(transform) ||
                 (playerBody != null && hit.rigidbody == playerBody) || hit.distance >= nearest) continue;
             nearest = hit.distance;
+            obstaclePlantContact = hit.point + (end - start).normalized * cellWorld.CellSize * 0.5f;
             position = hit.point - (end - start).normalized * cellWorld.CellSize * 0.55f;
             found = true;
         }

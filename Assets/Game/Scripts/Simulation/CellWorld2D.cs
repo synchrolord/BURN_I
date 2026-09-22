@@ -204,6 +204,7 @@ public sealed partial class CellWorld2D : MonoBehaviour
 
     private void SimulateOneTick()
     {
+        plantSimulationTime += 1.0 / ticksPerSecond;
         AgeChunks();
         WakeChunksNearTarget();
         ClearMovementFlagsInAwakeChunks();

@@ -58,7 +58,11 @@ public sealed partial class CellWorld2D
             int i = Index(x, y);
             solid[i] = Physics2D.OverlapBox(CellToWorld(x, y), sampleSize, 0f, solidMask.value) != null;
 
-            if (solid[i]) water[i] = fuel[i] = fire[i] = smoke[i] = 0;
+            if (solid[i])
+            {
+                water[i] = fuel[i] = smoke[i] = 0;
+                if (!HasPlantFuel(i)) fire[i] = 0;
+            }
         }
     }
 

@@ -18,16 +18,25 @@ public sealed partial class CellWorld2D
     {
         if (!IsReady || amount <= 0 || !TryWorldToCell(position, out Vector2Int cell)) return 0;
         int i = Index(cell.x, cell.y);
-        if (solid[i]) return 0;
+        bool plant = HasPlantFuel(i);
+        if (solid[i] && !plant) return 0;
         int spent = Mathf.Min(amount, fire[i]);
+        // Wetting solid-backed leaves still consumes a real shot unit even when there is no flame.
+        if (plant)
+        {
+            spent = Mathf.Max(1, spent);
+            WetPlant(i);
+        }
         if (spent > 0)
         {
-            fire[i] -= (byte)spent;
-            AddSmokeAtCell(cell.x, cell.y, 1);
+            fire[i] = (byte)Mathf.Max(0, fire[i] - spent);
+            if (plant) AddPlantSmoke(cell.x, cell.y, 1);
+            else AddSmokeAtCell(cell.x, cell.y, 1);
             WakeCell(cell.x, cell.y);
             textureNeedsRefresh = true;
         }
-        return spent + AddWater(position, 0, amount - spent);
+        int remaining = amount - spent;
+        return spent + (remaining > 0 ? AddWater(position, 0, remaining) : 0);
     }
 
     public int AddSmoke(Vector2 position, int radius, int amountPerCell)
@@ -67,8 +76,9 @@ public sealed partial class CellWorld2D
         {
             if (!IsInsideCircle(x, y, center, radiusSquared)) continue;
             int i = Index(x, y);
-            if (solid[i]) continue;
+            if (solid[i] && !CanBurnPlant(i)) continue;
 
+            if (HasPlantFuel(i) && !CanBurnPlant(i) && fuel[i] == 0) continue;
             byte oldValue = fire[i];
             fire[i] = (byte)Mathf.Max(fire[i], energy);
             if (fire[i] == oldValue) continue;

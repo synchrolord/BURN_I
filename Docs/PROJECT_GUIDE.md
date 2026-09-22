@@ -10,6 +10,8 @@ Use Unity **6000.6.0f1**, the version recorded in `ProjectSettings/ProjectVersio
 
 ## Start here
 
+For burnable vines, connectors and plant artwork, see [BURNABLE_PLANTS_GUIDE.md](BURNABLE_PLANTS_GUIDE.md). It covers the five sprite stages, Tile Palette setup, stationary fire spread, water and performance.
+
 1. Open `Assets/Game/Scenes/Levels/Level_0.unity`.
 2. Press Play and click the Game view so it receives keyboard and mouse input.
 3. Move with A/D, jump with Space, and aim with the mouse. The input asset also contains W/S, but the motor currently reads only horizontal movement.
@@ -28,6 +30,7 @@ The small tool overlay shows the selected mode, nozzle, and resource counts. `Sh
 | `Assets/Game/Scripts/Player` | Movement, aiming, camera, animation helpers, old spray preview. |
 | `Assets/Game/Scripts/Weapons` | Pressure tool input, resources, spray motion, and appearance. |
 | `Assets/Game/Scripts/Simulation` | Grid, liquids, buoyancy, fire, smoke, rendering, debug painting. |
+| `Assets/Game/Scripts/Vegetation` | Burnable plant tile definitions and one manager per plant Tilemap. |
 | `Assets/Game/Scripts/Lighting` | Reusable lights that follow burning regions. |
 | `Assets/Game/Scripts/UI` | Tank sprite display. |
 | `Assets/Game/Editor` | Editor-only diagnostics; excluded from player builds. |
@@ -107,11 +110,14 @@ These also form one component. Attach only `CellWorld2D.cs`.
 | `.Liquids.cs` | Downward and sideways liquid movement, spreading, viscosity, capacity checks. |
 | `.Buoyancy.cs` | Oil/water exchange and separation. Oil rises through water. |
 | `.Fire.cs` | Burning fuel, fire spread/decay, extinguishing, delayed ignition, and fire cluster queries. |
+| `.Vegetation.cs` | Stationary plant fuel, per-cell burn time, wetness, overlapping plants and diagonal vine connections. |
 | `.Smoke.cs` | Smoke rise, sideways movement, and decay. |
 | `.Chunks.cs` | Active/sleeping regions and waking cells near changes or a target. These are simulation chunks, not separate rendered sprites. |
 | `.Rendering.cs` | Physics-to-solid-grid baking, runtime texture/sprite, material colors, animated fire colors, bounds gizmo. |
 
-Each cell has separate water, fuel, fire, and smoke data. Water and fuel share a liquid capacity. Fire energy is 0–3. A solid cell blocks material. CellWorld's transform is the grid origin; with the normal unrotated, unit-scale setup its visible size is `Width × Cell Size` by `Height × Cell Size`. Select it to see its bounds.
+Each cell has separate water, fuel, fire, and smoke data. Water and fuel share a liquid capacity. Fire energy is 0–3. A solid cell blocks liquids; stationary plants can burn on a wall without making the wall passable. CellWorld's transform is the grid origin; with the normal unrotated, unit-scale setup its visible size is `Width × Cell Size` by `Height × Cell Size`. Select it to see its bounds.
+
+`Vegetation/BurnablePlantTile.cs` stores the five sprite stages and shared settings. `Vegetation/BurnablePlantMap2D.cs` tracks each painted tile's damage and changes its appearance. `Editor/BurnablePlantEditor.cs` provides creation, mask baking, Tilemap setup and build checks. Use the [plant guide](BURNABLE_PLANTS_GUIDE.md) for the artwork workflow.
 
 The existing simulation order is preserved, including two smoke/fire passes per tick. Tick-based fire settings therefore retain their existing behavior; changing that order is a gameplay change, not just tidying.
 

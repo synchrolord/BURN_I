@@ -29,9 +29,25 @@ public sealed partial class CellWorld2D
                     int spent = Mathf.Min(water[i], waterUsedToExtinguish);
                     water[i] -= (byte)spent;
                     fire[i] = (byte)Mathf.Max(0, fire[i] - spent);
-                    AddSmokeAtCell(x, y, 1); // Temporary steam-like effect.
+                    WetPlant(i);
+                    AddPlantSmoke(x, y, 1); // Temporary steam-like effect.
                     textureNeedsRefresh = true;
                     continue;
+                }
+
+                bool plantBurning = BurnPlant(i, out bool firstPlantPass);
+                if (plantBurning)
+                {
+                    fire[i] = 3;
+                    if (firstPlantPass && burnFuelNow) AddPlantSmoke(x, y, smokeMadeByFire);
+                    if (spreadNow)
+                    {
+                        TrySpreadFire(x, y, x, y + 1, true);
+                        TrySpreadFire(x, y, x - 1, y, false);
+                        TrySpreadFire(x, y, x + 1, y, false);
+                        TrySpreadFire(x, y, x, y - 1, false);
+                        SpreadPlantFireDiagonally(x, y);
+                    }
                 }
 
                 // Fuel keeps fire hot and is slowly consumed.
@@ -53,10 +69,10 @@ public sealed partial class CellWorld2D
                         TrySpreadFire(x, y, x, y - 1, false);
                     }
                 }
-                else if (decayNow)
+                else if (!plantBurning && decayNow)
                 {
                     fire[i]--;
-                    AddSmokeAtCell(x, y, 1);
+                    AddPlantSmoke(x, y, 1);
                     textureNeedsRefresh = true;
                 }
             }
@@ -67,7 +83,8 @@ public sealed partial class CellWorld2D
     {
         if (!InBounds(toX, toY)) return;
         int target = Index(toX, toY);
-        if (solid[target] || fuel[target] == 0 || fire[target] > 0) return;
+        bool plant = CanBurnPlant(target);
+        if (fire[target] > 0 || water[target] > 0 || (!plant && (solid[target] || fuel[target] == 0))) return;
 
         float chance = fireSpreadChance + (upward ? upwardSpreadBonus : 0f);
         if (UnityEngine.Random.value <= Mathf.Clamp01(chance)) ScheduleFire(toX, toY, 2);
