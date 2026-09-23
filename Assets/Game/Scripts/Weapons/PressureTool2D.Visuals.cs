@@ -3,6 +3,27 @@ using UnityEngine.Rendering;
 
 public sealed partial class PressureTool2D
 {
+    [Header("Flame Color Over Lifetime")]
+    [Tooltip("Hot yellow through orange/red to a transparent ember. Evaluated smoothly over each flame probe's lifetime.")]
+    [SerializeField] private Gradient flameColorOverLifetime = new Gradient
+    {
+        colorKeys = new[]
+        {
+            new GradientColorKey(new Color(1f, 0.9f, 0.22f), 0f),
+            new GradientColorKey(new Color(1f, 0.72f, 0.10f), 0.25f),
+            new GradientColorKey(new Color(1f, 0.44f, 0.04f), 0.5f),
+            new GradientColorKey(new Color(1f, 0.18f, 0.025f), 0.75f),
+            new GradientColorKey(new Color(0.55f, 0.045f, 0.01f), 1f)
+        },
+        alphaKeys = new[]
+        {
+            new GradientAlphaKey(0.95f, 0f),
+            new GradientAlphaKey(0.70f, 0.4f),
+            new GradientAlphaKey(0.25f, 0.8f),
+            new GradientAlphaKey(0f, 1f)
+        }
+    };
+
     private GameObject sprayVisualObject;
     private Mesh sprayMesh;
     private MeshRenderer sprayRenderer;
@@ -83,7 +104,7 @@ public sealed partial class PressureTool2D
             sprayVertices[v + 2] = new Vector3(top.x + side.x, top.y + side.y, z);
             sprayVertices[v + 3] = new Vector3(top.x - side.x, top.y - side.y, z);
             Color color = water ? new Color(0.2f, 0.72f, 1f, 0.88f)
-                : Color.Lerp(new Color(1f, 0.9f, 0.22f, 0.95f), new Color(1f, 0.18f, 0.025f, 0.1f), age);
+                : EvaluateFlameColor(age);
             for (int j = 0; j < 4; j++) sprayColors[v + j] = color;
         }
         sprayMesh.vertices = sprayVertices;
@@ -91,6 +112,9 @@ public sealed partial class PressureTool2D
         sprayMesh.RecalculateBounds();
         sprayRenderer.enabled = ActiveProbeCount > 0;
     }
+
+    private Color EvaluateFlameColor(float age) =>
+        flameColorOverLifetime.Evaluate(Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(age)));
 
     private void ClearSprayVisuals()
     {

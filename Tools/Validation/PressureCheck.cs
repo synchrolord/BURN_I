@@ -67,6 +67,67 @@ public sealed class PressureCheckRunner : MonoBehaviour
         tool.RefillAllResources();
         tool.UseWater();
     }
+
+    static void AdvanceFireVisuals(CellWorld2D world, float seconds)
+    {
+        Set(world, "fireAnimationTime", (float)Get(world, "fireAnimationTime") + seconds);
+        Call(world, "RenderNow");
+    }
+
+    static void CheckFireVisuals(CellWorld2D world, PressureTool2D tool)
+    {
+        var gradient = (Gradient)Get(tool, "flameColorOverLifetime");
+        Require(gradient.colorKeys.Length == 5, "Flying flame has five blended lifetime colors");
+        Color young = (Color)Call(tool, "EvaluateFlameColor", 0f);
+        Color middle = (Color)Call(tool, "EvaluateFlameColor", .5f);
+        Color old = (Color)Call(tool, "EvaluateFlameColor", .9f);
+        Color end = (Color)Call(tool, "EvaluateFlameColor", 1f);
+        Require(young.a > middle.a && middle.a > old.a && old.a > end.a && end.a == 0f,
+            "Flame fades continuously to fully transparent at expiry");
+        Color previous = young;
+        float largestColorStep = 0f;
+        for (int i = 1; i <= 600; i++)
+        {
+            Color current = (Color)Call(tool, "EvaluateFlameColor", i / 600f);
+            largestColorStep = Mathf.Max(largestColorStep, ((Vector4)current - (Vector4)previous).magnitude);
+            previous = current;
+        }
+        Require(largestColorStep < .015f, "Lifetime gradient has no jumps at its color stops");
+        Set(world, "paused", false);
+        Vector2 point = world.CellToWorld(30, 30);
+        int index = 30 + 30 * world.Width;
+        byte[] fire = (byte[])Get(world, "fire");
+        world.ClearAllMaterials(); world.Ignite(point, 0, 3); Call(world, "RenderNow");
+        var visuals = (Vector2[])Get(world, "fireVisuals");
+        Require(visuals[index] == new Vector2(3f, 1f), "New grid fire appears immediately");
+        fire[index] = 1; AdvanceFireVisuals(world, 1f / 60f);
+        Require(visuals[index].x > 1f && visuals[index].x < 3f && visuals[index].y > .45f,
+            "Grid heat and opacity blend instead of snapping between energy levels");
+        Require(world.GetFireEnergy(point) == 1, "Visual interpolation does not modify simulated fire energy");
+        AdvanceFireVisuals(world, .3f);
+        Require(Mathf.Approximately(visuals[index].x, 1f) && Mathf.Approximately(visuals[index].y, .45f),
+            "Cooling settles at the weak-fire color and opacity");
+        fire[index] = 0; AdvanceFireVisuals(world, 1f / 60f);
+        Require(visuals[index].y > 0f && (bool)Get(world, "hasVisibleFire"), "Extinguished fire keeps a short visual fade tail");
+        AdvanceFireVisuals(world, .3f);
+        Require(visuals[index].y == 0f && !(bool)Get(world, "hasVisibleFire"), "Fade ends fully transparent and stops requesting fire refreshes");
+        world.Ignite(point, 0, 3); Call(world, "RenderNow"); fire[index] = 0;
+        for (int i = 0; i < 6; i++) AdvanceFireVisuals(world, 1f / 60f);
+        Vector2 at60 = visuals[index];
+        world.ClearAllMaterials(); world.Ignite(point, 0, 3); Call(world, "RenderNow"); fire[index] = 0;
+        for (int i = 0; i < 2; i++) AdvanceFireVisuals(world, 1f / 20f);
+        Require(Vector2.Distance(at60, visuals[index]) < .0001f, "Fire fade has the same timing at 20 and 60 visual updates per second");
+        Set(world, "paused", true);
+        float clockBefore = (float)Get(world, "fireAnimationTime"); Vector2 pausedVisual = visuals[index];
+        Call(world, "LateUpdate"); Call(world, "RenderNow");
+        Require((float)Get(world, "fireAnimationTime") == clockBefore && visuals[index] == pausedVisual,
+            "Pausing freezes the visual clock and fade without catch-up");
+        world.EraseCircle(point, 0); Call(world, "RenderNow");
+        Require(visuals[index] == Vector2.zero, "Erase removes a fading cell even after its simulated materials are empty");
+        world.Ignite(point, 0, 3); Call(world, "RenderNow"); world.ClearAllMaterials(); Call(world, "RenderNow");
+        Require(visuals[index] == Vector2.zero && !(bool)Get(world, "hasVisibleFire"), "Clear removes fire and its visual history immediately");
+        Require((bool)Get(world, "smoothFireEveryFrame"), "Smooth fire animation is enabled without editing existing scene values");
+    }
     private IEnumerator Start()
     {
         DontDestroyOnLoad(gameObject);
@@ -100,6 +161,7 @@ public sealed class PressureCheckRunner : MonoBehaviour
         player.SetActive(true);
         yield return null;
         tool.enabled = false; // Drive simulation with known time steps below.
+        CheckFireVisuals(world, tool);
         input.user.UnpairDevices();
         UnityEngine.InputSystem.Users.InputUser.PerformPairingWithDevice(mouse, input.user);
         UnityEngine.InputSystem.Users.InputUser.PerformPairingWithDevice(keyboard, input.user);

@@ -188,8 +188,10 @@ public sealed partial class CellWorld2D : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (!paused) fireAnimationTime += Time.deltaTime;
         // All changes made this frame are uploaded together.
-        if (textureNeedsRefresh || (hasVisibleFire && !paused && Time.time >= nextFireVisualUpdate))
+        if (textureNeedsRefresh || (hasVisibleFire && !paused &&
+            (smoothFireEveryFrame || Time.time >= nextFireVisualUpdate)))
         {
             RenderNow();
             nextFireVisualUpdate = Time.time + 1f / fireVisualFramesPerSecond;

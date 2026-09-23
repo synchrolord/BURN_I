@@ -137,6 +137,7 @@ Select the player's `PressureTool2D`. Existing saved Inspector values take prece
 | Water Gravity Scale / Drag | More gravity bends downward faster; more drag reduces reach. |
 | Water Drop Width | Thickness of the visible streaks. |
 | Flame Width | Plume width; older flames expand and fade. |
+| Flame Color Over Lifetime | Five-color gradient from hot yellow through orange/red to an ember. Its alpha keys control opacity; the default reaches zero at expiry. |
 | Flame Lift / Drag / Turbulence | Upward acceleration, slowdown, and lateral waviness. |
 | Flame Deposit Jitter | Variation in where fire is added to the grid. |
 | Leave Unburned Fuel Residue | Optional oil deposition; normally off because this mode sprays already-burning flame. |
@@ -157,7 +158,7 @@ Flame probes ignite along their swept paths. Their warm core, taper, expansion, 
 - **Fire:** fuel burn, decay, and spread intervals control persistence; spread chance and upward bonus control propagation. Water Used To Extinguish limits pooled-water consumption per fire pass. Direct spray impacts spend water immediately, up to the fire energy at the hit cell.
 - **Smoke:** capacity, rise amount, sideways chance, and decay interval control the cloud.
 - **Activity:** chunk size, awake radius, awake lifetime and Activity Target limit work. Simulate All Chunks is useful for small experiments.
-- **Rendering:** water/fuel/smoke colors affect the cell texture. Fire Appearance controls flicker speed, amount, and refresh rate. It still renders a full grid texture; larger grids cost more to upload.
+- **Rendering:** water/fuel/smoke colors affect the cell texture. Fire Appearance controls flicker and smooth transitions. Warm Fire Color and Bright Fire Color add two intermediate colors to the existing weak/medium/hot palette. Fire Color Blend Seconds (default 0.18) smooths heat changes; Fire Fade Seconds (0.22) controls the final visual fade. Smooth Fire Every Frame is on by default, including in existing scenes. Turn it off to use the previous capped Fire Visual Frames Per Second setting when reducing texture-upload work matters. The world still uploads a full grid texture, so larger grids cost more to animate.
 - **Solids:** Solid Mask is sampled from Physics2D colliders at startup. After changing terrain colliders while running, call `RebakeSolidsFromPhysics()` or press B with the debug painter enabled.
 
 ## Debug painter controls
@@ -179,6 +180,8 @@ The pause key is P so it does not compete with player jumping. Pausing CellWorld
 **Make water faster:** increase Water Speed Multiplier on the player. Test Jet against a thin wall and while aiming upward. Tune lifetime for range separately; avoid making the grid larger merely to hide a bad muzzle position.
 
 **Make the flame wavier:** increase Flame Turbulence slightly and adjust Flame Lift. For its shape/colors, edit `.Visuals.cs` and `PressureSpray.shader`. For longer-lasting environmental fire, edit CellWorld's fire settings instead.
+
+**Smooth the color changes:** tune CellWorld's Fire Color Blend Seconds; adding palette colors alone does not smooth the simulation's discrete heat changes. The new displayed heat/opacity values blend independently from simulated fire, so extinguishing remains immediate even while a brief visual tail fades. Burning fuel keeps its flame bright; cooling flames become dimmer. The tool's Flame Color Over Lifetime gradient separately controls the airborne plume, with an eased transition to fully transparent. Pause freezes grid-fire animation, while erasing or clearing removes its visual history immediately.
 
 **Change the switch key:** open `Assets/Game/Settings/inputActions.inputactions`, select `PLayer → SwitchMaterial`, edit its binding, and save the asset. Keep the action name or update its matching `On...` callback too.
 
