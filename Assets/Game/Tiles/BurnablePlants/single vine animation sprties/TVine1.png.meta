@@ -4,10 +4,10 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: -327203726448197668
-    second: TVine1_0
+    second: TVine1_burn0
   - first:
       213: -8904911447191469621
-    second: TVine1_1
+    second: TVine1_burn1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -118,7 +118,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TVine1_0
+      name: TVine1_burn0
       rect:
         serializedVersion: 2
         x: 0
@@ -140,7 +140,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TVine1_1
+      name: TVine1_burn1
       rect:
         serializedVersion: 2
         x: 16
@@ -162,7 +162,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TVine1_2
+      name: TVine1_burn2
       rect:
         serializedVersion: 2
         x: 32
@@ -184,7 +184,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TVine1_3
+      name: TVine1_burn3
       rect:
         serializedVersion: 2
         x: 48
@@ -221,10 +221,10 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":16.0,"y":16.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      TVine1_0: -327203726448197668
-      TVine1_1: -8904911447191469621
-      TVine1_2: -594916275
-      TVine1_3: -226500745
+      TVine1_burn0: -327203726448197668
+      TVine1_burn1: -8904911447191469621
+      TVine1_burn2: -594916275
+      TVine1_burn3: -226500745
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -4,16 +4,16 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: 7572986722938643871
-    second: CornerVine2_0
+    second: CornerVine2_burn0
   - first:
       213: 3645662678762906052
-    second: CornerVine2_1
+    second: CornerVine2_burn1
   - first:
       213: 7065994524689724985
-    second: CornerVine2_2
+    second: CornerVine2_burn2
   - first:
       213: -6630275277947554379
-    second: CornerVine2_3
+    second: CornerVine2_burn3
   - first:
       213: -949413542534908439
     second: CornerVine2_4
@@ -127,7 +127,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CornerVine2_0
+      name: CornerVine2_burn0
       rect:
         serializedVersion: 2
         x: 0
@@ -149,7 +149,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CornerVine2_1
+      name: CornerVine2_burn1
       rect:
         serializedVersion: 2
         x: 16
@@ -171,7 +171,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CornerVine2_2
+      name: CornerVine2_burn2
       rect:
         serializedVersion: 2
         x: 32
@@ -193,7 +193,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CornerVine2_3
+      name: CornerVine2_burn3
       rect:
         serializedVersion: 2
         x: 48
@@ -230,10 +230,10 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":16.0,"y":16.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      CornerVine2_0: 7572986722938643871
-      CornerVine2_1: 3645662678762906052
-      CornerVine2_2: 7065994524689724985
-      CornerVine2_3: -6630275277947554379
+      CornerVine2_burn0: 7572986722938643871
+      CornerVine2_burn1: 3645662678762906052
+      CornerVine2_burn2: 7065994524689724985
+      CornerVine2_burn3: -6630275277947554379
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -4,7 +4,7 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: 534178451701872957
-    second: CrossVine2_0
+    second: CrossVine2_burn0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -115,7 +115,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CrossVine2_0
+      name: CrossVine2_burn0
       rect:
         serializedVersion: 2
         x: 0
@@ -137,7 +137,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CrossVine2_1
+      name: CrossVine2_burn1
       rect:
         serializedVersion: 2
         x: 16
@@ -159,7 +159,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CrossVine2_2
+      name: CrossVine2_burn2
       rect:
         serializedVersion: 2
         x: 32
@@ -181,7 +181,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CrossVine2_3
+      name: CrossVine2_burn3
       rect:
         serializedVersion: 2
         x: 48
@@ -218,10 +218,10 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":16.0,"y":16.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      CrossVine2_0: 534178451701872957
-      CrossVine2_1: 828954066
-      CrossVine2_2: -551624151
-      CrossVine2_3: -613541839
+      CrossVine2_burn0: 534178451701872957
+      CrossVine2_burn1: 828954066
+      CrossVine2_burn2: -551624151
+      CrossVine2_burn3: -613541839
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -71,6 +71,7 @@ public static class BurnablePlantEditor
         {
             if (group.Value[0] == null) { Debug.LogWarning("Skipping " + group.Key + ": select its _burn0 healthy sprite too."); continue; }
             BurnablePlantTile tile = ScriptableObject.CreateInstance<BurnablePlantTile>();
+            tile.name = group.Key;
             tile.SetArtwork(group.Value);
             if (!BakeMask(tile)) { UnityEngine.Object.DestroyImmediate(tile); continue; }
             string safeName = string.Concat(group.Key.Select(c => Path.GetInvalidFileNameChars().Contains(c) ? '_' : c));

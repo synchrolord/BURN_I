@@ -4,16 +4,16 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: -4980095996640492162
-    second: strightVine3_0
+    second: strightVine3_burn0
   - first:
       213: -8798538668838027213
-    second: strightVine3_1
+    second: strightVine3_burn1
   - first:
       213: -4075317079806208507
-    second: strightVine3_2
+    second: strightVine3_burn2
   - first:
       213: -1837013088138209661
-    second: strightVine3_3
+    second: strightVine3_burn3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -124,7 +124,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: strightVine3_0
+      name: strightVine3_burn0
       rect:
         serializedVersion: 2
         x: 0
@@ -146,7 +146,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: strightVine3_1
+      name: strightVine3_burn1
       rect:
         serializedVersion: 2
         x: 16
@@ -168,7 +168,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: strightVine3_2
+      name: strightVine3_burn2
       rect:
         serializedVersion: 2
         x: 32
@@ -190,7 +190,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: strightVine3_3
+      name: strightVine3_burn3
       rect:
         serializedVersion: 2
         x: 48
@@ -227,10 +227,10 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":16.0,"y":16.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      strightVine3_0: -4980095996640492162
-      strightVine3_1: -8798538668838027213
-      strightVine3_2: -4075317079806208507
-      strightVine3_3: -1837013088138209661
+      strightVine3_burn0: -4980095996640492162
+      strightVine3_burn1: -8798538668838027213
+      strightVine3_burn2: -4075317079806208507
+      strightVine3_burn3: -1837013088138209661
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
