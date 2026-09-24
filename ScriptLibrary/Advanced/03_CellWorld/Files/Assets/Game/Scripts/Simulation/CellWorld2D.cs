@@ -5,8 +5,8 @@ using UnityEngine.Serialization;
 
 // "partial" only means this one class is split into several smaller files.
 // Attach ONLY this CellWorld2D.cs file to the CellWorld GameObject.
-[RequireComponent(typeof(SpriteRenderer))]
-public sealed partial class CellWorld2D : MonoBehaviour
+[DisallowMultipleComponent, RequireComponent(typeof(SpriteRenderer))]
+public partial class CellWorld2D : MonoBehaviour
 {
     
     private bool managedExternally;
@@ -141,8 +141,9 @@ public sealed partial class CellWorld2D : MonoBehaviour
     public float CellSize => cellSize;
     public bool IsPaused => paused;
 
-    private void Start()
+    protected void Start()
     {
+        if (!InitializeRoomShape()) return;
         paused = startPaused;
         spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -161,13 +162,14 @@ public sealed partial class CellWorld2D : MonoBehaviour
         chunkCountX = Mathf.CeilToInt(width / (float)chunkSize);
         chunkCountY = Mathf.CeilToInt(height / (float)chunkSize);
         chunkAwakeTicks = new byte[chunkCountX * chunkCountY];
+        BuildRoomChunks();
 
         CreateRuntimeTexture();
         BakeSolidsFromPhysics();
         textureNeedsRefresh = true;
     }
 
-    private void Update()
+    protected void Update()
     {
         if (managedExternally || paused || runtimeTexture == null)
             return;
@@ -186,7 +188,7 @@ public sealed partial class CellWorld2D : MonoBehaviour
         if (completed == maximumTicksPerFrame) accumulator = 0f;
     }
 
-    private void LateUpdate()
+    protected void LateUpdate()
     {
         // All changes made this frame are uploaded together.
         if (textureNeedsRefresh || (hasVisibleFire && !paused && Time.time >= nextFireVisualUpdate))
@@ -196,7 +198,7 @@ public sealed partial class CellWorld2D : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
+    protected void OnDestroy()
     {
         if (runtimeSprite != null) Destroy(runtimeSprite);
         if (runtimeTexture != null) Destroy(runtimeTexture);

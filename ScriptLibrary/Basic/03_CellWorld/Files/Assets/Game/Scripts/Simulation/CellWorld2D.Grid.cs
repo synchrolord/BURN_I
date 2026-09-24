@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed partial class CellWorld2D
+public partial class CellWorld2D
 {
     // A flat array is a rectangle stored row by row: index = x + y * width.
     private byte[] water, fuel, smoke, fire;
@@ -20,14 +20,7 @@ public sealed partial class CellWorld2D
 
     private void InitializeGrid()
     {
-        // Keep the authored size, including Level_0's 900 x 600. Reject accidental huge grids.
-        if (width < 16 || height < 16 || width > 2048 || height > 2048 ||
-            (long)width * height > 1048576 || cellSize < 0.01f || float.IsNaN(cellSize) || float.IsInfinity(cellSize))
-        {
-            Debug.LogError("CellWorld needs dimensions 16–2048, at most 1,048,576 cells, and finite Cell Size >= 0.01.", this);
-            enabled = false;
-            return;
-        }
+        if (!InitializeRoomShape()) return;
         ticksPerSecond = Mathf.Clamp(ticksPerSecond, 1f, 60f);
         maximumTicksPerFrame = Mathf.Clamp(maximumTicksPerFrame, 1, 8);
         chunkSize = Mathf.Clamp(chunkSize, 8, 64);
@@ -53,6 +46,7 @@ public sealed partial class CellWorld2D
         chunkCountX = Mathf.CeilToInt(width / (float)chunkSize);
         chunkCountY = Mathf.CeilToInt(height / (float)chunkSize);
         chunkAwakeTicks = new byte[chunkCountX * chunkCountY];
+        BuildRoomChunks();
         CreateRuntimeTexture();
         BakeSolidsFromPhysics();
         textureNeedsRefresh = true;
@@ -62,7 +56,7 @@ public sealed partial class CellWorld2D
     {
         Vector3 local = transform.InverseTransformPoint(worldPosition);
         cell = new Vector2Int(Mathf.FloorToInt(local.x / cellSize), Mathf.FloorToInt(local.y / cellSize));
-        return InBounds(cell.x, cell.y);
+        return ContainsCell(cell.x, cell.y);
     }
 
     public Vector2 CellToWorld(int x, int y) =>
@@ -73,7 +67,7 @@ public sealed partial class CellWorld2D
     private bool IsInsideCircle(int x, int y, Vector2Int center, int radiusSquared)
     {
         int dx = x - center.x, dy = y - center.y;
-        return InBounds(x, y) && dx * dx + dy * dy <= radiusSquared;
+        return ContainsCell(x, y) && dx * dx + dy * dy <= radiusSquared;
     }
 
     // Compatibility for callers that choose to advance the same simulation themselves.

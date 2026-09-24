@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public sealed partial class CellWorld2D
+public partial class CellWorld2D
 {
     // Smoke rises once per tick, sometimes spreads sideways, and slowly fades.
     private void SimulateSmokeAt(int x, int y)
@@ -38,6 +38,7 @@ public sealed partial class CellWorld2D
 
     private void AddSmokeAtCell(int x, int y, int amount)
     {
+        if (!ContainsCell(x, y)) return;
         int i = Index(x, y);
         if (solid[i] || amount <= 0) return;
         smoke[i] = (byte)Mathf.Min(smokeCapacity, smoke[i] + amount);

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Put this on a trigger collider covering the ladder. The player does the actual movement.
 [RequireComponent(typeof(Collider2D))]
 public sealed class ClimbArea2D : MonoBehaviour
 {

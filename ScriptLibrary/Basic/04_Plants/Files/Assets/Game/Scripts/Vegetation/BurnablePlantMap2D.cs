@@ -47,8 +47,8 @@ public sealed partial class BurnablePlantMap2D : MonoBehaviour
             Debug.LogWarning("Burnable plants need a CellWorld2D. Assign World, then re-enable the component.", this);
             yield break;
         }
-        while (world != null && !world.IsInitialized) yield return null;
-        if (world != null) RegisterMap();
+        while (world != null && !world.IsInitialized && !world.InitializationFailed) yield return null;
+        if (world != null && world.IsInitialized) RegisterMap();
         initialization = null;
     }
 

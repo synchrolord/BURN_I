@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public sealed partial class CellWorld2D
+public partial class CellWorld2D
 {
     // Basic rule: fall down, try the two lower diagonals, then level with neighbors.
     // Water and fuel share capacity, so moving one never overwrites the other.

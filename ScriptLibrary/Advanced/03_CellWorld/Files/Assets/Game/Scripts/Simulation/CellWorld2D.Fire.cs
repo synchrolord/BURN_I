@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public sealed partial class CellWorld2D
+public partial class CellWorld2D
 {
     private void SimulateFire()
     {
@@ -20,7 +20,7 @@ public sealed partial class CellWorld2D
             for (int x = minX; x <= maxX; x++)
             {
                 int i = Index(x, y);
-                if (fire[i] == 0) continue;
+                if (!ContainsCell(x, y) || fire[i] == 0) continue;
                 WakeCell(x, y);
 
                 // Water wins first.
@@ -81,7 +81,7 @@ public sealed partial class CellWorld2D
 
     private void TrySpreadFire(int fromX, int fromY, int toX, int toY, bool upward)
     {
-        if (!InBounds(toX, toY)) return;
+        if (!ContainsCell(fromX, fromY) || !ContainsCell(toX, toY)) return;
         int target = Index(toX, toY);
         bool plant = CanBurnPlant(target);
         if (fire[target] > 0 || water[target] > 0 || (!plant && (solid[target] || fuel[target] == 0))) return;
@@ -92,6 +92,7 @@ public sealed partial class CellWorld2D
 
     private void ScheduleFire(int x, int y, byte energy)
     {
+        if (!ContainsCell(x, y)) return;
         int i = Index(x, y);
         if (pendingFire[i] == 0) pendingFireIndices.Add(i);
         pendingFire[i] = (byte)Mathf.Max(pendingFire[i], energy);
@@ -103,7 +104,8 @@ public sealed partial class CellWorld2D
         for (int n = 0; n < pendingFireIndices.Count; n++)
         {
             int i = pendingFireIndices[n];
-            fire[i] = (byte)Mathf.Max(fire[i], pendingFire[i]);
+            if (ContainsCell(i % width, i / width))
+                fire[i] = (byte)Mathf.Max(fire[i], pendingFire[i]);
             pendingFire[i] = 0;
         }
 
@@ -130,6 +132,7 @@ public sealed partial class CellWorld2D
             for (int y = minY; y <= maxY; y++)
             for (int x = minX; x <= maxX; x++)
             {
+                if (!ContainsCell(x, y)) continue;
                 byte energy = fire[Index(x, y)];
                 if (energy < minimumEnergy) continue;
                 strength += energy;

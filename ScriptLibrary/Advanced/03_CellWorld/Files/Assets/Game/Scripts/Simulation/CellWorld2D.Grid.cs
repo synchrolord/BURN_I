@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public sealed partial class CellWorld2D
+public partial class CellWorld2D
 {
     public bool TryWorldToCell(Vector2 worldPosition, out Vector2Int cell)
     {
@@ -9,7 +9,7 @@ public sealed partial class CellWorld2D
             Mathf.FloorToInt(local.x / cellSize),
             Mathf.FloorToInt(local.y / cellSize)
         );
-        return InBounds(cell.x, cell.y);
+        return ContainsCell(cell.x, cell.y);
     }
 
     public Vector2 CellToWorld(int x, int y)
@@ -24,7 +24,7 @@ public sealed partial class CellWorld2D
 
     private bool IsInsideCircle(int x, int y, Vector2Int center, int radiusSquared)
     {
-        if (!InBounds(x, y)) return false;
+        if (!ContainsCell(x, y)) return false;
         int dx = x - center.x;
         int dy = y - center.y;
         return dx * dx + dy * dy <= radiusSquared;

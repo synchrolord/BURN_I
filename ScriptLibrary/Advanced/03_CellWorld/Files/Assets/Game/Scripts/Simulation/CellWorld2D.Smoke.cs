@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public sealed partial class CellWorld2D
+public partial class CellWorld2D
 {
     private void SimulateSmoke()
     {
@@ -81,7 +81,7 @@ public sealed partial class CellWorld2D
 
     private int MoveSmoke(int fromX, int fromY, int toX, int toY, int requested)
     {
-        if (!InBounds(toX, toY)) return 0;
+        if (!ContainsCell(fromX, fromY) || !ContainsCell(toX, toY)) return 0;
         int from = Index(fromX, fromY);
         int to = Index(toX, toY);
         if (solid[to]) return 0;
@@ -101,6 +101,7 @@ public sealed partial class CellWorld2D
 
     private void AddSmokeAtCell(int x, int y, int amount)
     {
+        if (!ContainsCell(x, y)) return;
         int i = Index(x, y);
         smoke[i] = (byte)Mathf.Min(smokeCapacity, smoke[i] + amount);
         WakeCell(x, y);

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public sealed partial class CellWorld2D
+public partial class CellWorld2D
 {
     [Header("Fire Appearance")]
     [SerializeField, Range(5f, 30f)] private float fireVisualFramesPerSecond = 20f;
@@ -56,12 +56,13 @@ public sealed partial class CellWorld2D
         for (int x = 1; x < width - 1; x++)
         {
             int i = Index(x, y);
-            solid[i] = Physics2D.OverlapBox(CellToWorld(x, y), sampleSize, 0f, solidMask.value) != null;
+            bool outsideRoom = !ContainsCell(x, y);
+            solid[i] = outsideRoom || Physics2D.OverlapBox(CellToWorld(x, y), sampleSize, 0f, solidMask.value) != null;
 
             if (solid[i])
             {
                 water[i] = fuel[i] = smoke[i] = 0;
-                if (!HasPlantFuel(i)) fire[i] = 0;
+                if (outsideRoom || !HasPlantFuel(i)) fire[i] = 0;
             }
         }
     }
@@ -73,7 +74,8 @@ public sealed partial class CellWorld2D
         hasVisibleFire = false;
         for (int i = 0; i < pixels.Length; i++)
         {
-            if (showSolidCells && solid[i]) pixels[i] = solidDebugColor;
+            if (!ContainsCell(i % width, i / width)) pixels[i] = new Color32(0, 0, 0, 0);
+            else if (showSolidCells && solid[i]) pixels[i] = solidDebugColor;
             else if (fire[i] > 0)
             {
                 pixels[i] = FireColor(i);
@@ -120,7 +122,7 @@ public sealed partial class CellWorld2D
         return color;
     }
 
-    private void OnDrawGizmosSelected()
+    protected void OnDrawGizmosSelected()
     {
         Matrix4x4 oldMatrix = Gizmos.matrix;
         Gizmos.matrix = transform.localToWorldMatrix;

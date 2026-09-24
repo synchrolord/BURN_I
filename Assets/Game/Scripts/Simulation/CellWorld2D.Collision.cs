@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed partial class CellWorld2D
+public partial class CellWorld2D
 {
     private void BakeSolidsFromPhysics()
     {
@@ -27,12 +27,12 @@ public sealed partial class CellWorld2D
         for (int x = 1; x < width - 1; x++)
         {
             int i = Index(x, y);
-            solid[i] = Physics2D.OverlapBox(CellToWorld(x, y), sampleSize, 0f, solidMask.value) != null;
+            solid[i] = !ContainsCell(x, y) || Physics2D.OverlapBox(CellToWorld(x, y), sampleSize, 0f, solidMask.value) != null;
 
             if (solid[i])
             {
                 water[i] = fuel[i] = smoke[i] = 0;
-                if (!HasPlantFuel(i)) fire[i] = 0;
+                if (!ContainsCell(x, y) || !HasPlantFuel(i)) fire[i] = 0;
             }
         }
     }
@@ -71,13 +71,14 @@ public sealed partial class CellWorld2D
         foreach (int i in cells)
         {
             int x = i % width, y = i / width;
-            bool blocked = Physics2D.OverlapBox(CellToWorld(x, y), sampleSize, 0f, solidMask.value) != null;
+            bool blocked = !ContainsCell(x, y) || x == 0 || y == 0 || x == width - 1 || y == height - 1 ||
+                Physics2D.OverlapBox(CellToWorld(x, y), sampleSize, 0f, solidMask.value) != null;
             if (solid[i] == blocked) continue;
             solid[i] = blocked;
             if (blocked)
             {
                 water[i] = fuel[i] = smoke[i] = 0;
-                if (!HasPlantFuel(i)) fire[i] = 0;
+                if (!ContainsCell(x, y) || !HasPlantFuel(i)) fire[i] = 0;
             }
             WakeCell(x, y);
             textureNeedsRefresh = true;

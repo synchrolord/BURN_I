@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public sealed partial class CellWorld2D
+public partial class CellWorld2D
 {
     private void SimulateLiquid(
         byte[] liquid,
@@ -313,7 +313,7 @@ public sealed partial class CellWorld2D
         {
             int x = startX + direction * distance;
 
-            if (!InBounds(x, y))
+            if (!ContainsCell(x, y))
                 break;
 
             int current = Index(x, y);
@@ -324,7 +324,7 @@ public sealed partial class CellWorld2D
 
             int belowY = y - 1;
 
-            if (!InBounds(x, belowY))
+            if (!ContainsCell(x, belowY))
                 continue;
 
             int below = Index(x, belowY);
@@ -487,7 +487,7 @@ public sealed partial class CellWorld2D
         int maximumFlow,
         int requiredDifference)
     {
-        if (!InBounds(toX, toY))
+        if (!ContainsCell(toX, toY))
             return;
 
         int from = Index(fromX, fromY);
@@ -532,7 +532,7 @@ public sealed partial class CellWorld2D
         int requested)
     {
         if (requested <= 0 ||
-            !InBounds(toX, toY))
+            !ContainsCell(fromX, fromY) || !ContainsCell(toX, toY))
         {
             return 0;
         }

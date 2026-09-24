@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public sealed partial class CellWorld2D
+public partial class CellWorld2D
 {
     // ----- Public methods used by weapons, pickups, drains, and debug tools.
 
@@ -176,10 +176,10 @@ public sealed partial class CellWorld2D
     public int GetActiveChunkCount()
     {
         if (chunkAwakeTicks == null) return 0;
-        if (simulateAllChunks) return chunkAwakeTicks.Length;
         int total = 0;
-        for (int i = 0; i < chunkAwakeTicks.Length; i++)
-            if (chunkAwakeTicks[i] > 0) total++;
+        for (int y = 0; y < chunkCountY; y++)
+        for (int x = 0; x < chunkCountX; x++)
+            if (IsChunkAwake(x, y)) total++;
         return total;
     }
 

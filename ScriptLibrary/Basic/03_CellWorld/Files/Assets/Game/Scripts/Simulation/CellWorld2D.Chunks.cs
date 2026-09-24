@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 // A chunk is a small rectangle of cells. Settled chunks sleep; edits and movement wake them.
-public sealed partial class CellWorld2D
+public partial class CellWorld2D
 {
     private void AgeChunks()
     {
@@ -54,7 +54,7 @@ public sealed partial class CellWorld2D
 
     private void WakeChunk(int x, int y)
     {
-        if (x < 0 || x >= chunkCountX || y < 0 || y >= chunkCountY) return;
+        if (x < 0 || x >= chunkCountX || y < 0 || y >= chunkCountY || !IsRoomChunk(x, y)) return;
         chunkAwakeTicks[ChunkIndex(x, y)] = (byte)Mathf.Min(255, chunkStayAwakeTicks);
     }
 
@@ -65,7 +65,7 @@ public sealed partial class CellWorld2D
     }
 
     private bool IsChunkAwake(int x, int y) =>
-        simulateAllChunks || chunkAwakeTicks[ChunkIndex(x, y)] > 0;
+        IsRoomChunk(x, y) && (simulateAllChunks || chunkAwakeTicks[ChunkIndex(x, y)] > 0);
 
     private int ChunkIndex(int x, int y) => x + y * chunkCountX;
 

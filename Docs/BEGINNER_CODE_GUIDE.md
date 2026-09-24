@@ -12,7 +12,7 @@ Advanced wall jumps/sliding, swimming, variable jump height, acceleration/decele
 | --- | --- |
 | `Assets/Game/Scripts` | Edit these files. This is the running game. |
 | `ScriptLibrary/Basic` | Clean reference copies of the basic modules. |
-| `ScriptLibrary/Advanced` | The exact working script versions from before this simplification. |
+| `ScriptLibrary/Advanced` | The pre-simplification behavior, with shared polygon compatibility added. |
 | `ScriptLibrary/Switch-Script-Edition.cmd` | Switch one complete module while Unity is closed. |
 | `Docs/BEGINNER_CODE_GUIDE.md` | This guide. |
 | `../BURN_I_Feature_Library` | The older library containing the larger campaign/infection/enemy update, plus backups. |
@@ -117,3 +117,7 @@ Create a C# script in an appropriate `Assets/Game/Scripts` subfolder, give its p
 To replace an existing script, overwrite its contents while preserving the class name and its existing `.meta`. Do not rename or delete the metadata to force Unity to reimport: scenes and prefabs use that ID to find their scripts. Keep public methods that other scripts call, or update those callers in the same change.
 
 Older PROJECT_GUIDE/REFACTOR_NOTES descriptions may describe the advanced tool and physics. This guide is the entry point for the basic edition.
+
+## Optional polygon worlds
+
+See [POLYGON_CELLWORLD_GUIDE.md](POLYGON_CELLWORLD_GUIDE.md) to draw a room outline and assign CellWorldPoly2D to the existing gun/plant/light fields. Both script-library editions support it.

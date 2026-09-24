@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public sealed partial class CellWorld2D
+public partial class CellWorld2D
 {
     private void SimulateFireAt(int x, int y)
     {
@@ -49,7 +49,7 @@ public sealed partial class CellWorld2D
 
     private void TrySpreadFire(int fromX, int fromY, int toX, int toY, bool upward)
     {
-        if (!InBounds(toX, toY)) return;
+        if (!ContainsCell(toX, toY)) return;
         int target = Index(toX, toY);
         bool plant = CanBurnPlant(target);
         if (fire[target] > 0 || water[target] > 0 || (!plant && (solid[target] || fuel[target] == 0))) return;
@@ -64,7 +64,7 @@ public sealed partial class CellWorld2D
     {
         foreach (int i in pendingFireIndices)
         {
-            fire[i] = (byte)Mathf.Max(fire[i], pendingFire[i]);
+            if (ContainsCell(i % width, i / width)) fire[i] = (byte)Mathf.Max(fire[i], pendingFire[i]);
             pendingFire[i] = 0;
         }
         if (pendingFireIndices.Count > 0) textureNeedsRefresh = true;
@@ -88,6 +88,7 @@ public sealed partial class CellWorld2D
             for (int y = minY; y <= maxY; y++)
             for (int x = minX; x <= maxX; x++)
             {
+                if (!ContainsCell(x, y)) continue;
                 int energy = fire[Index(x, y)];
                 if (energy < minimumEnergy) continue;
                 total += energy;

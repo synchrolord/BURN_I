@@ -1,8 +1,8 @@
 # Basic cell simulation
 
-The Simulation folder is reduced from **2,409 to 1,185 C# lines** across the same 12 files, including CellWorldDebugPainter. The largest remaining file is 197 lines. The module includes all matching scripts and their original `.meta` files. `CellWorld2D.Materials.cs` (197 lines) and `CellWorld2D.Vegetation.cs` (135 lines) stay exactly as before. No files are deleted or renamed.
+This module contains the basic rectangular simulation and the optional CellWorldPoly2D component. Both share the same simulation rules and stable original script IDs. See Docs/POLYGON_CELLWORLD_GUIDE.md to draw a custom outline.
 
-This is a real rule simplification: `Liquids` drops from 655 to 72 lines and `Buoyancy` from 338 to 23. The saved Level_0 remains one finite 900×600 CellWorld. There is no new zone registry, room streaming, manager hierarchy, or per-cell GameObject.
+This is a real rule simplification: `Liquids` drops from 655 to 72 lines and `Buoyancy` from 338 to 23. The saved Level_0 remains one finite 900Ã—600 CellWorld. There is no new zone registry, room streaming, manager hierarchy, or per-cell GameObject.
 
 ## How to read it
 
@@ -25,13 +25,13 @@ The loop visits awake chunks, then cells inside each chunk. For each cell it per
 
 ## Preserved connections
 
-There are **no public or internal API changes**. Current tool, player, lighting, plant, collision and editor callers retain their names/signatures: initialization/dimension/pause properties; coordinate conversion; AddWater/AddFuel/AddSmoke/Ignite; ApplyWaterImpact/ApplyPlantWaterImpact; ExtractWater/EraseCircle; water fraction/fire energy; total counts, chunk count, clearing, stepping and rebaking; plant registration/unregistration; local collision refresh and diagnostics; fire cluster sampling; and the internal externally-managed tick hooks.
+Existing APIs remain compatible; ContainsCell, IncludedCellCount and InitializationFailed also describe the optional polygon boundary. Current tool, player, lighting, plant, collision and editor callers retain their names/signatures: initialization/dimension/pause properties; coordinate conversion; AddWater/AddFuel/AddSmoke/Ignite; ApplyWaterImpact/ApplyPlantWaterImpact; ExtractWater/EraseCircle; water fraction/fire energy; total counts, chunk count, clearing, stepping and rebaking; plant registration/unregistration; local collision refresh and diagnostics; fire cluster sampling; and the internal externally-managed tick hooks.
 
 Script paths, class names, original GUIDs and serialized setting names are preserved. No scene, material, imported sprite, baked plant mask, prefab or rendering asset is changed by this simulation patch. Burning plants retain their previous damage artwork and collision behavior through the existing plant manager.
 
 ## Limits and tuning
 
-Tune viscosity, per-cell capacity, fire intervals, smoke decay, tick rate and chunk settings in the Inspector. Width/height/cell size are initialization settings: stop Play before editing them. Startup accepts dimensions 16–2048, up to 1,048,576 total cells, with a finite cell size of at least 0.01. It reports invalid grids rather than silently resizing the authored scene. The existing 900×600 level fits. Invalid grids must be corrected before plant registration can finish.
+Tune viscosity, per-cell capacity, fire intervals, smoke decay, tick rate and chunk settings in the Inspector. Width/height/cell size are initialization settings: stop Play before editing them. Startup accepts dimensions 16â€“2048, up to 1,048,576 total cells, with a finite cell size of at least 0.01. It reports invalid grids rather than silently resizing the authored scene. The existing 900Ã—600 level fits. Invalid grids must be corrected before plant registration can finish.
 
 Chunk timers remain important for this size. Keep Simulate All Chunks off for normal play and assign Activity Target to the player as before. Awake timers have a minimum of two ticks so a newly touched chunk survives the timer-aging step. One full texture is still allocated/uploaded when material visuals change; this is not an unlimited-world solution. Physics solids are baked at startup and locally updated for changing plants, as before.
 

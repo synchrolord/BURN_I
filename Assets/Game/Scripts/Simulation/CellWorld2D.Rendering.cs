@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // One texture draws the cell grid; fire color varies smoothly between simulation ticks.
-public sealed partial class CellWorld2D
+public partial class CellWorld2D
 {
     [Header("Fire Appearance")]
     [SerializeField, Range(5f, 30f)] private float fireVisualFramesPerSecond = 20f;
@@ -40,6 +40,7 @@ public sealed partial class CellWorld2D
         hasVisibleFire = false;
         for (int i = 0; i < pixels.Length; i++)
         {
+            if (roomCells != null && !roomCells[i]) { pixels[i] = new Color32(0, 0, 0, 0); continue; }
             if (showSolidCells && solid[i]) pixels[i] = solidDebugColor;
             else if (fire[i] > 0)
             {
@@ -87,7 +88,7 @@ public sealed partial class CellWorld2D
         return color;
     }
 
-    private void OnDrawGizmosSelected()
+    protected void OnDrawGizmosSelected()
     {
         Matrix4x4 oldMatrix = Gizmos.matrix;
         Gizmos.matrix = transform.localToWorldMatrix;

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed partial class CellWorld2D
+public partial class CellWorld2D
 {
     /// <summary>Diagnostic count for the latest local collider refresh, not a full-world scan.</summary>
     public int LastLocalSolidRefreshCellCount { get; private set; }
@@ -37,13 +37,14 @@ public sealed partial class CellWorld2D
         foreach (int i in cells)
         {
             int x = i % width, y = i / width;
-            bool blocked = Physics2D.OverlapBox(CellToWorld(x, y), sampleSize, 0f, solidMask.value) != null;
+            bool outsideRoom = !ContainsCell(x, y);
+            bool blocked = outsideRoom || Physics2D.OverlapBox(CellToWorld(x, y), sampleSize, 0f, solidMask.value) != null;
             if (solid[i] == blocked) continue;
             solid[i] = blocked;
             if (blocked)
             {
                 water[i] = fuel[i] = smoke[i] = 0;
-                if (!HasPlantFuel(i)) fire[i] = 0;
+                if (outsideRoom || !HasPlantFuel(i)) fire[i] = 0;
             }
             WakeCell(x, y);
             textureNeedsRefresh = true;

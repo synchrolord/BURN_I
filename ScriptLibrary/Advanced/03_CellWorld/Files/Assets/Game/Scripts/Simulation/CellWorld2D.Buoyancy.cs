@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public sealed partial class CellWorld2D
+public partial class CellWorld2D
 {
     private void SimulateOilWaterSeparation()
 {
@@ -135,8 +135,8 @@ public sealed partial class CellWorld2D
         int waterX,
         int waterY)
     {
-        if (!InBounds(oilX, oilY) ||
-            !InBounds(waterX, waterY))
+        if (!ContainsCell(oilX, oilY) ||
+            !ContainsCell(waterX, waterY))
         {
             return false;
         }
@@ -197,7 +197,7 @@ public sealed partial class CellWorld2D
         int waterX =
             oilX + direction;
 
-        if (!InBounds(waterX, y))
+        if (!ContainsCell(waterX, y))
             return false;
 
         int oilCell =
@@ -264,7 +264,7 @@ public sealed partial class CellWorld2D
         int oilDestinationX,
         int oilDestinationY)
     {
-        if (!InBounds(
+        if (!ContainsCell(
                 oilDestinationX,
                 oilDestinationY))
         {

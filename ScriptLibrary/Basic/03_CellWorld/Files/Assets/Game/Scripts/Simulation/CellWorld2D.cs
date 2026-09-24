@@ -3,8 +3,8 @@ using UnityEngine.Serialization;
 
 // "partial" means these files are parts of ONE class. Attach only CellWorld2D.cs.
 // Inspector fields keep their old names so existing scenes retain their settings.
-[RequireComponent(typeof(SpriteRenderer))]
-public sealed partial class CellWorld2D : MonoBehaviour
+[DisallowMultipleComponent, RequireComponent(typeof(SpriteRenderer))]
+public partial class CellWorld2D : MonoBehaviour
 {
     [Header("Grid")]
     [SerializeField, Min(16)] private int width = 240;
@@ -73,9 +73,9 @@ public sealed partial class CellWorld2D : MonoBehaviour
     public float CellSize => cellSize;
     public bool IsPaused => paused;
 
-    private void Start() => InitializeGrid();
+    protected void Start() => InitializeGrid();
 
-    private void Update()
+    protected void Update()
     {
         if (managedExternally || paused || !IsReady) return;
         float step = 1f / ticksPerSecond;
@@ -91,14 +91,14 @@ public sealed partial class CellWorld2D : MonoBehaviour
         if (completed == maximumTicksPerFrame) accumulator = 0f;
     }
 
-    private void LateUpdate()
+    protected void LateUpdate()
     {
         if (!textureNeedsRefresh && !(hasVisibleFire && !paused && Time.time >= nextFireVisualUpdate)) return;
         RenderNow();
         nextFireVisualUpdate = Time.time + 1f / Mathf.Max(1f, fireVisualFramesPerSecond);
     }
 
-    private void OnDestroy()
+    protected void OnDestroy()
     {
         if (runtimeSprite != null) Destroy(runtimeSprite);
         if (runtimeTexture != null) Destroy(runtimeTexture);
@@ -124,6 +124,7 @@ public sealed partial class CellWorld2D : MonoBehaviour
             for (int offset = 0; offset <= maxX - minX; offset++)
             {
                 int x = waterFirst ? minX + offset : maxX - offset;
+                if (!ContainsCell(x, y)) continue;
                 if (waterFirst) SeparateOilAt(x, y);
                 if (waterFirst)
                 {

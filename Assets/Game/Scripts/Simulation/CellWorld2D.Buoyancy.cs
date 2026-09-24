@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public sealed partial class CellWorld2D
+public partial class CellWorld2D
 {
     // Fuel is lighter than water. Swap equal amounts in two adjacent cells;
     // their total amounts stay unchanged. No searching or multi-cell displacement.

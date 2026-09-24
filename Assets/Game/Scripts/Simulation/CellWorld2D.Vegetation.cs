@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed partial class CellWorld2D
+public partial class CellWorld2D
 {
     // Sparse, anchored biomass, independent of liquid fuel. One linked entry per painted
     // plant per occupied cell also lets oversized/overlapping sprites burn independently.
@@ -30,7 +30,7 @@ public sealed partial class CellWorld2D
     internal bool RegisterPlantFuel(Vector2Int cell, BurnablePlantMap2D owner, int plant,
         float seconds, float wetSeconds)
     {
-        if (!IsReady || cell.x <= 0 || cell.y <= 0 || cell.x >= width - 1 || cell.y >= height - 1) return false;
+        if (!IsReady || !ContainsCell(cell.x, cell.y) || cell.x <= 0 || cell.y <= 0 || cell.x >= width - 1 || cell.y >= height - 1) return false;
         int index = Index(cell.x, cell.y);
         plantFuel.TryGetValue(index, out PlantFuel head);
         plantFuel[index] = new PlantFuel
@@ -66,7 +66,7 @@ public sealed partial class CellWorld2D
 
     private bool CanBurnPlant(int index)
     {
-        if (!plantFuel.TryGetValue(index, out PlantFuel entry)) return false;
+        if (!ContainsCell(index % width, index / width) || !plantFuel.TryGetValue(index, out PlantFuel entry)) return false;
         for (; entry != null; entry = entry.next)
             if (entry.remaining > 0f && entry.wetUntil <= plantSimulationTime) return true;
         return false;
@@ -128,7 +128,7 @@ public sealed partial class CellWorld2D
         for (int dx = -1; dx <= 1; dx += 2)
         {
             int nx = x + dx, ny = y + dy;
-            if (InBounds(nx, ny) && CanBurnPlant(Index(nx, ny)))
+            if (ContainsCell(nx, ny) && CanBurnPlant(Index(nx, ny)))
                 TrySpreadFire(x, y, nx, ny, dy > 0);
         }
     }
