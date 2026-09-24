@@ -1,0 +1,178 @@
+[
+  {
+    "editions": [
+      "Basic",
+      "Basic",
+      "Basic",
+      "Basic"
+    ],
+    "pass": true,
+    "log": "C:\\Users\\aboda\\Documents\\Codex\\2026-09-21\\github-plugin-github-openai-curated-remote\\work\\basic-edition\\Compile\\BBBB\\compile.log",
+    "errors": []
+  },
+  {
+    "editions": [
+      "Basic",
+      "Basic",
+      "Basic",
+      "Advanced"
+    ],
+    "pass": true,
+    "log": "C:\\Users\\aboda\\Documents\\Codex\\2026-09-21\\github-plugin-github-openai-curated-remote\\work\\basic-edition\\Compile\\BBBA\\compile.log",
+    "errors": []
+  },
+  {
+    "editions": [
+      "Basic",
+      "Basic",
+      "Advanced",
+      "Basic"
+    ],
+    "pass": true,
+    "log": "C:\\Users\\aboda\\Documents\\Codex\\2026-09-21\\github-plugin-github-openai-curated-remote\\work\\basic-edition\\Compile\\BBAB\\compile.log",
+    "errors": []
+  },
+  {
+    "editions": [
+      "Basic",
+      "Basic",
+      "Advanced",
+      "Advanced"
+    ],
+    "pass": true,
+    "log": "C:\\Users\\aboda\\Documents\\Codex\\2026-09-21\\github-plugin-github-openai-curated-remote\\work\\basic-edition\\Compile\\BBAA\\compile.log",
+    "errors": []
+  },
+  {
+    "editions": [
+      "Basic",
+      "Advanced",
+      "Basic",
+      "Basic"
+    ],
+    "pass": true,
+    "log": "C:\\Users\\aboda\\Documents\\Codex\\2026-09-21\\github-plugin-github-openai-curated-remote\\work\\basic-edition\\Compile\\BABB\\compile.log",
+    "errors": []
+  },
+  {
+    "editions": [
+      "Basic",
+      "Advanced",
+      "Basic",
+      "Advanced"
+    ],
+    "pass": true,
+    "log": "C:\\Users\\aboda\\Documents\\Codex\\2026-09-21\\github-plugin-github-openai-curated-remote\\work\\basic-edition\\Compile\\BABA\\compile.log",
+    "errors": []
+  },
+  {
+    "editions": [
+      "Basic",
+      "Advanced",
+      "Advanced",
+      "Basic"
+    ],
+    "pass": true,
+    "log": "C:\\Users\\aboda\\Documents\\Codex\\2026-09-21\\github-plugin-github-openai-curated-remote\\work\\basic-edition\\Compile\\BAAB\\compile.log",
+    "errors": []
+  },
+  {
+    "editions": [
+      "Basic",
+      "Advanced",
+      "Advanced",
+      "Advanced"
+    ],
+    "pass": true,
+    "log": "C:\\Users\\aboda\\Documents\\Codex\\2026-09-21\\github-plugin-github-openai-curated-remote\\work\\basic-edition\\Compile\\BAAA\\compile.log",
+    "errors": []
+  },
+  {
+    "editions": [
+      "Advanced",
+      "Basic",
+      "Basic",
+      "Basic"
+    ],
+    "pass": true,
+    "log": "C:\\Users\\aboda\\Documents\\Codex\\2026-09-21\\github-plugin-github-openai-curated-remote\\work\\basic-edition\\Compile\\ABBB\\compile.log",
+    "errors": []
+  },
+  {
+    "editions": [
+      "Advanced",
+      "Basic",
+      "Basic",
+      "Advanced"
+    ],
+    "pass": true,
+    "log": "C:\\Users\\aboda\\Documents\\Codex\\2026-09-21\\github-plugin-github-openai-curated-remote\\work\\basic-edition\\Compile\\ABBA\\compile.log",
+    "errors": []
+  },
+  {
+    "editions": [
+      "Advanced",
+      "Basic",
+      "Advanced",
+      "Basic"
+    ],
+    "pass": true,
+    "log": "C:\\Users\\aboda\\Documents\\Codex\\2026-09-21\\github-plugin-github-openai-curated-remote\\work\\basic-edition\\Compile\\ABAB\\compile.log",
+    "errors": []
+  },
+  {
+    "editions": [
+      "Advanced",
+      "Basic",
+      "Advanced",
+      "Advanced"
+    ],
+    "pass": true,
+    "log": "C:\\Users\\aboda\\Documents\\Codex\\2026-09-21\\github-plugin-github-openai-curated-remote\\work\\basic-edition\\Compile\\ABAA\\compile.log",
+    "errors": []
+  },
+  {
+    "editions": [
+      "Advanced",
+      "Advanced",
+      "Basic",
+      "Basic"
+    ],
+    "pass": true,
+    "log": "C:\\Users\\aboda\\Documents\\Codex\\2026-09-21\\github-plugin-github-openai-curated-remote\\work\\basic-edition\\Compile\\AABB\\compile.log",
+    "errors": []
+  },
+  {
+    "editions": [
+      "Advanced",
+      "Advanced",
+      "Basic",
+      "Advanced"
+    ],
+    "pass": true,
+    "log": "C:\\Users\\aboda\\Documents\\Codex\\2026-09-21\\github-plugin-github-openai-curated-remote\\work\\basic-edition\\Compile\\AABA\\compile.log",
+    "errors": []
+  },
+  {
+    "editions": [
+      "Advanced",
+      "Advanced",
+      "Advanced",
+      "Basic"
+    ],
+    "pass": true,
+    "log": "C:\\Users\\aboda\\Documents\\Codex\\2026-09-21\\github-plugin-github-openai-curated-remote\\work\\basic-edition\\Compile\\AAAB\\compile.log",
+    "errors": []
+  },
+  {
+    "editions": [
+      "Advanced",
+      "Advanced",
+      "Advanced",
+      "Advanced"
+    ],
+    "pass": true,
+    "log": "C:\\Users\\aboda\\Documents\\Codex\\2026-09-21\\github-plugin-github-openai-curated-remote\\work\\basic-edition\\Compile\\AAAA\\compile.log",
+    "errors": []
+  }
+]

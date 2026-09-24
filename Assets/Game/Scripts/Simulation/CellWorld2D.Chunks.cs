@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+// A chunk is a small rectangle of cells. Settled chunks sleep; edits and movement wake them.
 public sealed partial class CellWorld2D
 {
     private void AgeChunks()
@@ -71,10 +72,11 @@ public sealed partial class CellWorld2D
     private void GetChunkBounds(int x, int y,
         out int minX, out int maxX, out int minY, out int maxY)
     {
-        minX = x * chunkSize;
-        minY = y * chunkSize;
-        maxX = Mathf.Min(width - 1, minX + chunkSize - 1);
-        maxY = Mathf.Min(height - 1, minY + chunkSize - 1);
+        // The outside cell ring is a solid boundary and never needs simulation.
+        minX = Mathf.Max(1, x * chunkSize);
+        minY = Mathf.Max(1, y * chunkSize);
+        maxX = Mathf.Min(width - 2, (x + 1) * chunkSize - 1);
+        maxY = Mathf.Min(height - 2, (y + 1) * chunkSize - 1);
     }
 
     private void ClearMovementFlagsInAwakeChunks()

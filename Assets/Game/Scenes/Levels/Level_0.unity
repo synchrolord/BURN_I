@@ -204894,12 +204894,12 @@ MonoBehaviour:
   chunkStayAwakeTicks: 40
   liquidCapacity: 8
   waterViscosity: 0.05
+  fuelViscosity: 0.55
+  oilBuoyancyStrength: 1
   waterSpreadSearchDistance: 8
   waterSidewaysPasses: 3
-  fuelViscosity: 0.55
   fuelSpreadSearchDistance: 4
   fuelSidewaysPasses: 1
-  oilBuoyancyStrength: 1
   smokeCapacity: 8
   smokeRisePerTick: 4
   smokeDecayEveryTicks: 200
@@ -214451,29 +214451,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMotor2D
   moveSpeed: 12
   jumpSpeed: 16
+  coyoteTime: 0.12
+  jumpBufferTime: 0.14
   groundCheck: {fileID: 709654268}
-  groundRadius: 0.2
-  wallCheckLeft: {fileID: 580128059}
-  wallCheckRight: {fileID: 1599529929}
-  wallCheckRadius: 0.3
+  groundRadius: 2
   groundMask:
     serializedVersion: 2
     m_Bits: 8
-  wallSlideSpeed: 10
-  wallSlideRequiresInput: 0
-  wallJumpHorizontalSpeed: 20
-  wallJumpVerticalSpeed: 15
-  wallJumpControlLockDuration: 0.16
+  climbSpeed: 3.5
   animator: {fileID: 0}
   spriteRenderer: {fileID: 0}
   idleAnimationName: Idle
   runAnimationName: Run
   jumpUpAnimationName: JumUp
   jumpFallAnimationName: JumpFall
-  landAnimationName: Land
   shootAnimationName: Shoot
-  useWallSlideAnimation: 0
-  wallSlideAnimationName: WallSlide
 --- !u!114 &1556756223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214509,37 +214501,11 @@ MonoBehaviour:
     m_Bits: 8
   currentMaterial: 1
   currentNozzleIndex: 1
-  maximumProbeCount: 192
-  inheritPlayerVelocity: 0.35
-  waterSpeedMultiplier: 4
-  waterLifetimeMultiplier: 1.4
-  waterEmissionMultiplier: 2
-  waterAmountMultiplier: 4
-  waterDropWidth: 0.12
-  flameWidth: 0.45
-  spraySortingOffset: 2
-  waterGravityScale: 1.4
-  waterDrag: 0.25
-  waterDepositJitterInCells: 0.1
-  flameLift: 3
-  flameDrag: 1.8
-  flameTurbulence: 12
-  flameTurbulenceSpeed: 2.6
-  flameDepositJitterInCells: 0.75
-  leaveUnburnedFuelResidue: 0
-  unburnedFuelResidueChance: 0.05
-  unburnedFuelResidueAmount: 1
-  unlimitedResourcesForTesting: 1
-  maximumWater: 300
-  currentWater: 300
-  maximumFuel: 300
-  currentFuel: 300
   pilot:
     label: Pilot
     angleDegrees: 4
     speed: 3.2
     lifetime: 0.28
-    speedRandomness: 0.1
     radiusInCells: 0
     unitsPerDeposit: 1
     probesPerSecond: 10
@@ -214550,7 +214516,6 @@ MonoBehaviour:
     angleDegrees: 16
     speed: 6.5
     lifetime: 0.55
-    speedRandomness: 0.25
     radiusInCells: 0
     unitsPerDeposit: 1
     probesPerSecond: 26
@@ -214561,13 +214526,28 @@ MonoBehaviour:
     angleDegrees: 48
     speed: 5
     lifetime: 0.4
-    speedRandomness: 0.3
     radiusInCells: 1
     unitsPerDeposit: 1
     probesPerSecond: 34
     resourceCostPerProbe: 2
     ignitionRadiusInCells: 1
+  waterSpeedMultiplier: 4
+  waterLifetimeMultiplier: 1.4
+  waterEmissionMultiplier: 2
+  waterAmountMultiplier: 4
+  waterGravityScale: 1.4
+  flameLift: 3
+  flameDrag: 1.8
+  maximumProbeCount: 192
+  waterDropWidth: 0.12
+  flameWidth: 0.45
+  spraySortingOffset: 2
   showDebugOverlay: 1
+  unlimitedResourcesForTesting: 1
+  maximumWater: 300
+  currentWater: 300
+  maximumFuel: 300
+  currentFuel: 300
 --- !u!1 &1599529928
 GameObject:
   m_ObjectHideFlags: 0

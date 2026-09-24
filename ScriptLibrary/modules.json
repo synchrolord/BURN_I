@@ -1,0 +1,354 @@
+{
+  "01_Movement": {
+    "Basic": [
+      {
+        "path": "Assets/Game/Scripts/Player/ClimbArea2D.cs",
+        "sha256": "efeb87b3ad13c42effd271cbe02657228e0007c1d82e0e1f4b0ddca5bb76a772"
+      },
+      {
+        "path": "Assets/Game/Scripts/Player/ClimbArea2D.cs.meta",
+        "sha256": "f0fce4708102a2db5ce1652434202c34cd98bbc8f97d378e16ebe85cfb4ed98b"
+      },
+      {
+        "path": "Assets/Game/Scripts/Player/PlayerMotor2D.cs",
+        "sha256": "bb1bf651a3804fbf43f615f4f94ebc6248e2badaa458a67329c08e86b0a99d0b"
+      },
+      {
+        "path": "Assets/Game/Scripts/Player/PlayerMotor2D.cs.meta",
+        "sha256": "c78004081dcc4ac6cfb1938d628f049e164ce30ad4a1e180117c09351722ff14"
+      }
+    ],
+    "Advanced": [
+      {
+        "path": "Assets/Game/Scripts/Player/ClimbArea2D.cs",
+        "sha256": "cae05b4f61983f3e91ac67b5a3926c74aeee402f6d9ee3b7ac715ec2c6b88b00"
+      },
+      {
+        "path": "Assets/Game/Scripts/Player/ClimbArea2D.cs.meta",
+        "sha256": "f0fce4708102a2db5ce1652434202c34cd98bbc8f97d378e16ebe85cfb4ed98b"
+      },
+      {
+        "path": "Assets/Game/Scripts/Player/PlayerMotor2D.cs",
+        "sha256": "f16216d3450887009e38149bd2ed13f7e86e8c42fd70b1fd1576ab75ed60ddc2"
+      },
+      {
+        "path": "Assets/Game/Scripts/Player/PlayerMotor2D.cs.meta",
+        "sha256": "c78004081dcc4ac6cfb1938d628f049e164ce30ad4a1e180117c09351722ff14"
+      }
+    ]
+  },
+  "02_Tool": {
+    "Basic": [
+      {
+        "path": "Assets/Game/Scripts/Weapons/PressureTool2D.cs",
+        "sha256": "df4e472df7731c33a31af8582b1a151c1ce4bed12a656937d47675dc5d0750d6"
+      },
+      {
+        "path": "Assets/Game/Scripts/Weapons/PressureTool2D.cs.meta",
+        "sha256": "a3b6372436a783a6e2dda3b614e9ec05324f94704ade255e94875698ac2cc0de"
+      }
+    ],
+    "Advanced": [
+      {
+        "path": "Assets/Game/Scripts/Weapons/PressureTool2D.Input.cs",
+        "sha256": "8c851368dd55d2b702af6829954800477debc228c3a33ea9e9fa1905b79dadfb"
+      },
+      {
+        "path": "Assets/Game/Scripts/Weapons/PressureTool2D.Input.cs.meta",
+        "sha256": "4e4b06e6903e36e5f944b150529368eaf189edcfa4fa0c5bf952f058e1583ad6"
+      },
+      {
+        "path": "Assets/Game/Scripts/Weapons/PressureTool2D.Presentation.cs",
+        "sha256": "5b1b096d97c2bf09d3c1b3517329b38d603961119523642d1f052453d8dd6697"
+      },
+      {
+        "path": "Assets/Game/Scripts/Weapons/PressureTool2D.Presentation.cs.meta",
+        "sha256": "8f3e1b1785b6d2b98a4d59d5e176bd961b1d36c900d9475330e58839af2bbd42"
+      },
+      {
+        "path": "Assets/Game/Scripts/Weapons/PressureTool2D.Resources.cs",
+        "sha256": "386f53a4ed8cf998cd0c57a19b1ca5170b74117ea354ca82232888b6c3715ee6"
+      },
+      {
+        "path": "Assets/Game/Scripts/Weapons/PressureTool2D.Resources.cs.meta",
+        "sha256": "526aa3e8ee59ec1e67017dce55aa477df1c8554d0cc9aa5c93c16f0d2269b40f"
+      },
+      {
+        "path": "Assets/Game/Scripts/Weapons/PressureTool2D.Simulation.cs",
+        "sha256": "fecb3e3766f380b42735d31318e50940b7a2a9e7c11e28e289772900c32bdd17"
+      },
+      {
+        "path": "Assets/Game/Scripts/Weapons/PressureTool2D.Simulation.cs.meta",
+        "sha256": "741f489aa239aca0bd7c74e7c6c76c64fc275ff20ed11dc867385abbf4226aed"
+      },
+      {
+        "path": "Assets/Game/Scripts/Weapons/PressureTool2D.Visuals.cs",
+        "sha256": "91b9fe6e316cd2d6bb81e61881f833bb7ccc2b485a701d35f3a304c6f8d384dd"
+      },
+      {
+        "path": "Assets/Game/Scripts/Weapons/PressureTool2D.Visuals.cs.meta",
+        "sha256": "0698580d80cc55254c9a6917b3ec3693ade4964c18c69be523790de0ca7dcfef"
+      },
+      {
+        "path": "Assets/Game/Scripts/Weapons/PressureTool2D.cs",
+        "sha256": "6e711e78463bc1ef8b6ca0c2cc24a8c58b45eec9e1014906aac2ddbe70981969"
+      },
+      {
+        "path": "Assets/Game/Scripts/Weapons/PressureTool2D.cs.meta",
+        "sha256": "a3b6372436a783a6e2dda3b614e9ec05324f94704ade255e94875698ac2cc0de"
+      }
+    ]
+  },
+  "03_CellWorld": {
+    "Basic": [
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Buoyancy.cs",
+        "sha256": "be4c5a13840c3579b3060cafe3824499a280150497a1c48c82fd0463dee40015"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Buoyancy.cs.meta",
+        "sha256": "96b2b015a38d40319cbffcef5c3788f1e54015232ef1b15f32a350a83d202be3"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Chunks.cs",
+        "sha256": "85831009689836e74f3f623d607290e9951989214222a1e7bdccee79cfa73f7e"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Chunks.cs.meta",
+        "sha256": "3da64f0d81844b2fb89a974557ed4c0d2af5e07d8e2c8e22af0af61806cd27b9"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Collision.cs",
+        "sha256": "1e6f6ecff56931deb4a8c22466203f9a33647889abeddd8bfb78a813f1cf1956"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Collision.cs.meta",
+        "sha256": "94a6b29a2b9d30bc44ea1fde64e479bdeb95ebaa55282805bae38fbf300710cd"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Fire.cs",
+        "sha256": "5e0b22095fa6abb3881b989b572215ff436a7964787522c0c730ccbcc3b15c2b"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Fire.cs.meta",
+        "sha256": "db169fe818b346f656e52e77a546601a6cd46db57dd6ad6ef68acc84b0a48d25"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Grid.cs",
+        "sha256": "1577ae9342bfa6c8ffded791090211d2dc5ba53dd7cfbd8a752d945bc5c0bb51"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Grid.cs.meta",
+        "sha256": "abb17d6586f08d4dbf64ca4f0bb96c02ffab4ad69c0ea90c334c97fe0162720f"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Liquids.cs",
+        "sha256": "2a6b908e6181ac2d67dc8c7fd765c476eee386329047787451e998c97cf1a40e"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Liquids.cs.meta",
+        "sha256": "c18cf1b22cd0ee0941e107a89fb801507ac546412e41f6c94f84ba5999852df1"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Materials.cs",
+        "sha256": "52d74b420c349f49d13cd60e6bbc2f7120f55e4512548599356705048e6ef076"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Materials.cs.meta",
+        "sha256": "f497e150a1dc29c92f93100c01c2f445dea1b3599b89d0ced6d36b8718d1f570"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Rendering.cs",
+        "sha256": "2f3331b4fb917558fbb13edc9879a81b0848de970c386eb73dca1ee8b4ea9536"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Rendering.cs.meta",
+        "sha256": "e12bfb138d74c3aac0a41d25a21a8bd9e901cdc8ee5b072e389d6bf9974625c8"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Smoke.cs",
+        "sha256": "81d53283d4758b9b9520357a09e5034232fa102e771c19c78d290087117cb0e4"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Smoke.cs.meta",
+        "sha256": "9e5e18e773fb95f61309266a0cccf08d963a888c165ddc67ae89676798b5b4a2"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Vegetation.cs",
+        "sha256": "142e77f84034bac185bca9c6c54e6ddcaa3191828e9cc53d3cfb3669598576f0"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Vegetation.cs.meta",
+        "sha256": "c5efcde98ade724a3424a3600b635e755edca3382ec9c4441b2dc000f73b2ceb"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.cs",
+        "sha256": "df90c9c6335629d8b275a7aa9bf2cc554a7053fdce4ac02fed25b8a7f838f9f7"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.cs.meta",
+        "sha256": "e4e2f4c457a269d53f61af27fd4f5474ceb704a97e49e1bb64f6d4c956f27f0e"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorldDebugPainter.cs",
+        "sha256": "9cf3751138dd1577701a4e2e32e6d627c86ee9b1367d1fc6a5d4be8092147563"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorldDebugPainter.cs.meta",
+        "sha256": "1fe3223d4237801f84e351e4b0979b80e5e7628242cc82c5d4fe1f02da3d866f"
+      }
+    ],
+    "Advanced": [
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Buoyancy.cs",
+        "sha256": "0895763ae81e1a9251b97177d49c5c6b9d76f6d99bd748bd42c05bb8ec0ef64f"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Buoyancy.cs.meta",
+        "sha256": "96b2b015a38d40319cbffcef5c3788f1e54015232ef1b15f32a350a83d202be3"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Chunks.cs",
+        "sha256": "58e106976d9b4ef348c1272545c26ee5e520720e2352f8f6eb8d57b2f9090feb"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Chunks.cs.meta",
+        "sha256": "3da64f0d81844b2fb89a974557ed4c0d2af5e07d8e2c8e22af0af61806cd27b9"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Collision.cs",
+        "sha256": "e1a9dcd36096a3ca313373a17c4026245caf9bb0cceca4b78f4e2ab3db810868"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Collision.cs.meta",
+        "sha256": "94a6b29a2b9d30bc44ea1fde64e479bdeb95ebaa55282805bae38fbf300710cd"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Fire.cs",
+        "sha256": "9cc8aab1b313e663057b1d1c0aa66a0b1561970e24b64c87945d065823ac1836"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Fire.cs.meta",
+        "sha256": "db169fe818b346f656e52e77a546601a6cd46db57dd6ad6ef68acc84b0a48d25"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Grid.cs",
+        "sha256": "865605149e63030ae65aa22aba203fe27dd098580b3b97485fe3c3a7590d9c40"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Grid.cs.meta",
+        "sha256": "abb17d6586f08d4dbf64ca4f0bb96c02ffab4ad69c0ea90c334c97fe0162720f"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Liquids.cs",
+        "sha256": "dbc6f762217310f3413f5795a3e53b9ea9751213c0bf0067167045aae203b809"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Liquids.cs.meta",
+        "sha256": "c18cf1b22cd0ee0941e107a89fb801507ac546412e41f6c94f84ba5999852df1"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Materials.cs",
+        "sha256": "52d74b420c349f49d13cd60e6bbc2f7120f55e4512548599356705048e6ef076"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Materials.cs.meta",
+        "sha256": "f497e150a1dc29c92f93100c01c2f445dea1b3599b89d0ced6d36b8718d1f570"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Rendering.cs",
+        "sha256": "0db4cb877f0c6019287e74b2ded057b44b50f57edb2224f3b63b3e9806153728"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Rendering.cs.meta",
+        "sha256": "e12bfb138d74c3aac0a41d25a21a8bd9e901cdc8ee5b072e389d6bf9974625c8"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Smoke.cs",
+        "sha256": "63c526d2096079e81d7d7a4d539840d1196ac6598554606c6a4a5d68891bbb07"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Smoke.cs.meta",
+        "sha256": "9e5e18e773fb95f61309266a0cccf08d963a888c165ddc67ae89676798b5b4a2"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Vegetation.cs",
+        "sha256": "142e77f84034bac185bca9c6c54e6ddcaa3191828e9cc53d3cfb3669598576f0"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.Vegetation.cs.meta",
+        "sha256": "c5efcde98ade724a3424a3600b635e755edca3382ec9c4441b2dc000f73b2ceb"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.cs",
+        "sha256": "9ce4a047570c5b48263b59099d5fadd109a74a1eb8030b5caaea0519a7e7dc7c"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorld2D.cs.meta",
+        "sha256": "e4e2f4c457a269d53f61af27fd4f5474ceb704a97e49e1bb64f6d4c956f27f0e"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorldDebugPainter.cs",
+        "sha256": "811df31503c0ad906f2a6ce216f8a89c159020c83df603cfc9f96ba9fefbb225"
+      },
+      {
+        "path": "Assets/Game/Scripts/Simulation/CellWorldDebugPainter.cs.meta",
+        "sha256": "1fe3223d4237801f84e351e4b0979b80e5e7628242cc82c5d4fe1f02da3d866f"
+      }
+    ]
+  },
+  "04_Plants": {
+    "Basic": [
+      {
+        "path": "Assets/Game/Scripts/Vegetation/BurnablePlantMap2D.Collision.cs",
+        "sha256": "044f25c68ad997214b4c8a35fa95fc2dc2a49c3b7d84d4e7d7e8260aa75956e9"
+      },
+      {
+        "path": "Assets/Game/Scripts/Vegetation/BurnablePlantMap2D.Collision.cs.meta",
+        "sha256": "60332319ef11080d5ac800927f954b4d2383d2ec3e503d62ea4b88752248548f"
+      },
+      {
+        "path": "Assets/Game/Scripts/Vegetation/BurnablePlantMap2D.cs",
+        "sha256": "11fc51d752de167040a3f611dfeb58b32b6c5fc67d64f2f83a775d19a0d7371a"
+      },
+      {
+        "path": "Assets/Game/Scripts/Vegetation/BurnablePlantMap2D.cs.meta",
+        "sha256": "296e48ecbc45cab5380318ef587e9729e32ba94b2c4a8ddefff73dca03b0efc4"
+      },
+      {
+        "path": "Assets/Game/Scripts/Vegetation/BurnablePlantTile.cs",
+        "sha256": "000805257027ed9f1a4cb44c2698b809388b2477d2ad042abe3a91c60dfd78b6"
+      },
+      {
+        "path": "Assets/Game/Scripts/Vegetation/BurnablePlantTile.cs.meta",
+        "sha256": "6607edc5692532d6b3d7ab6d4ff66ae0612246d0caaee2b353f43fb8345d75da"
+      }
+    ],
+    "Advanced": [
+      {
+        "path": "Assets/Game/Scripts/Vegetation/BurnablePlantMap2D.Collision.cs",
+        "sha256": "32b34241f82f759d0ca25c6fa2c07e76e2ac98cd258bb5a2e5ffb5818f132e9d"
+      },
+      {
+        "path": "Assets/Game/Scripts/Vegetation/BurnablePlantMap2D.Collision.cs.meta",
+        "sha256": "60332319ef11080d5ac800927f954b4d2383d2ec3e503d62ea4b88752248548f"
+      },
+      {
+        "path": "Assets/Game/Scripts/Vegetation/BurnablePlantMap2D.cs",
+        "sha256": "c0badd52bc75fb231470f3493a8061d00f7054c34c053840ccb0a017ba054410"
+      },
+      {
+        "path": "Assets/Game/Scripts/Vegetation/BurnablePlantMap2D.cs.meta",
+        "sha256": "296e48ecbc45cab5380318ef587e9729e32ba94b2c4a8ddefff73dca03b0efc4"
+      },
+      {
+        "path": "Assets/Game/Scripts/Vegetation/BurnablePlantTile.cs",
+        "sha256": "000805257027ed9f1a4cb44c2698b809388b2477d2ad042abe3a91c60dfd78b6"
+      },
+      {
+        "path": "Assets/Game/Scripts/Vegetation/BurnablePlantTile.cs.meta",
+        "sha256": "6607edc5692532d6b3d7ab6d4ff66ae0612246d0caaee2b353f43fb8345d75da"
+      }
+    ]
+  }
+}

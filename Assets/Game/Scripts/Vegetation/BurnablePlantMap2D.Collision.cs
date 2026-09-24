@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+// This is still BurnablePlantMap2D, not another component to attach.
+// Unity normally changes Sprite collision with the artwork. These helpers keep the
+// healthy outline solid until the plant disappears, then update CellWorld obstacles.
 public sealed partial class BurnablePlantMap2D
 {
     private TilemapCollider2D plantCollider;

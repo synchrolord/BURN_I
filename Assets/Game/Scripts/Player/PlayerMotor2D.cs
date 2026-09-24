@@ -1,391 +1,205 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+// PlayerInput reads the buttons. This script moves the Rigidbody and chooses an animation.
+// The saved field names stay the same so existing scenes keep their player settings.
 [RequireComponent(typeof(Rigidbody2D))]
 public sealed class PlayerMotor2D : MonoBehaviour
 {
-    [Header("Movement")]
-    [SerializeField, Min(0f)]
-    private float moveSpeed = 6f;
+    [Header("Walking and jumping")]
+    [SerializeField] private float moveSpeed = 6f;
+    [SerializeField] private float jumpSpeed = 10f;
+    [SerializeField] private float coyoteTime = 0.12f;
+    [SerializeField] private float jumpBufferTime = 0.14f;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundRadius = 0.12f;
+    [SerializeField] private LayerMask groundMask;
+    [SerializeField] private float climbSpeed = 3.5f;
 
-    [SerializeField, Min(0f)]
-    private float jumpSpeed = 10f;
-
-    [Header("Ground Check")]
-    [SerializeField]
-    private Transform groundCheck;
-
-    [SerializeField, Min(0.01f)]
-    private float groundRadius = 0.12f;
-
-    [Header("Wall Checks")]
-    [Tooltip("Empty child placed slightly outside the middle-left side of the player collider.")]
-    [SerializeField]
-    private Transform wallCheckLeft;
-
-    [Tooltip("Empty child placed slightly outside the middle-right side of the player collider.")]
-    [SerializeField]
-    private Transform wallCheckRight;
-
-    [SerializeField, Min(0.01f)]
-    private float wallCheckRadius = 0.10f;
-
-    [SerializeField]
-    private LayerMask groundMask;
-
-    [Header("Wall Slide")]
-    [Tooltip("Maximum downward speed while sliding on a wall.")]
-    [SerializeField, Min(0f)]
-    private float wallSlideSpeed = 2.5f;
-
-    [Tooltip("When enabled, the player must hold toward the wall to slide.")]
-    [SerializeField]
-    private bool wallSlideRequiresInput = true;
-
-    [Header("Wall Jump")]
-    [SerializeField, Min(0f)]
-    private float wallJumpHorizontalSpeed = 8f;
-
-    [SerializeField, Min(0f)]
-    private float wallJumpVerticalSpeed = 10f;
-
-    [Tooltip("Briefly prevents normal horizontal input from cancelling the wall jump immediately.")]
-    [SerializeField, Range(0f, 0.5f)]
-    private float wallJumpControlLockDuration = 0.16f;
-
-    [Header("Animation")]
-    [SerializeField]
-    private Animator animator;
-
-    [SerializeField]
-    private SpriteRenderer spriteRenderer;
-
-    [Header("Animation State Names")]
-    [SerializeField]
-    private string idleAnimationName = "Idle";
-
-    [SerializeField]
-    private string runAnimationName = "Run";
-
-    [SerializeField]
-    private string jumpUpAnimationName = "JumUp";
-
-    [SerializeField]
-    private string jumpFallAnimationName = "JumpFall";
-
-    [SerializeField]
-    private string landAnimationName = "Land";
-
-    [SerializeField]
-    private string shootAnimationName = "Shoot";
-
-    [Tooltip("Turn this on only after creating an Animator state with the exact name below.")]
-    [SerializeField]
-    private bool useWallSlideAnimation;
-
-    [SerializeField]
-    private string wallSlideAnimationName = "WallSlide";
+    [Header("Existing Animator state names")]
+    [SerializeField] private Animator animator;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private string idleAnimationName = "Idle";
+    [SerializeField] private string runAnimationName = "Run";
+    [SerializeField] private string jumpUpAnimationName = "JumUp";
+    [SerializeField] private string jumpFallAnimationName = "JumpFall";
+    [SerializeField] private string shootAnimationName = "Shoot";
 
     private Rigidbody2D body;
-    private float moveInputX;
-    private bool jumpQueued;
+    private Vector2 moveInput;
     private bool isUsingTool;
-    private bool wasGrounded;
-    private float wallJumpControlLockTimer;
+    private float normalGravity;
+    private float coyoteRemaining;
+    private float jumpBufferRemaining;
+    private float ladderDetachRemaining;
     private string currentAnimation;
+    private readonly HashSet<ClimbArea2D> ladders = new HashSet<ClimbArea2D>();
 
     public bool IsGrounded { get; private set; }
-    public bool IsTouchingLeftWall { get; private set; }
-    public bool IsTouchingRightWall { get; private set; }
-    public bool IsWallSliding { get; private set; }
-    public Vector2 Velocity => body != null ? body.linearVelocity : Vector2.zero;
+    public bool IsClimbing { get; private set; }
+    public Vector2 Velocity
+    {
+        get
+        {
+            return body.linearVelocity;
+        }
+    }
 
+    // Unity calls Awake once when this player is created.
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
-
+        normalGravity = body.gravityScale;
         if (animator == null)
         {
             animator = GetComponentInChildren<Animator>();
         }
-
         if (spriteRenderer == null)
         {
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         }
     }
 
-    // PlayerInput calls this because the action is named "Move".
+    // PlayerInput calls these because the actions are named Move and Jump.
     public void OnMove(InputValue value)
     {
-        moveInputX = value.Get<Vector2>().x;
+        moveInput = value.Get<Vector2>();
     }
 
-    // PlayerInput calls this because the action is named "Jump".
     public void OnJump(InputValue value)
     {
         if (value.isPressed)
         {
-            jumpQueued = true;
+            // Remember the press briefly. No held flag means Button releases cannot get stuck.
+            jumpBufferRemaining = Mathf.Max(jumpBufferTime, Time.fixedDeltaTime);
         }
     }
 
-    // PressureTool2D calls this so movement remains responsible for animation.
     public void SetUsingTool(bool value)
     {
         isUsingTool = value;
     }
 
+    public void EnterClimbArea(ClimbArea2D area)
+    {
+        ladders.Add(area);
+    }
+
+    public void ExitClimbArea(ClimbArea2D area)
+    {
+        ladders.Remove(area);
+    }
+
+    // Unity calls FixedUpdate at a steady rate. Change physics here, not in the input callbacks.
     private void FixedUpdate()
     {
-        UpdateContactState();
-
-        wallJumpControlLockTimer = Mathf.Max(
-            0f,
-            wallJumpControlLockTimer - Time.fixedDeltaTime
-        );
-
-        if (jumpQueued)
-        {
-            TryJump();
-        }
-
-        ApplyHorizontalMovement();
-        ApplyWallSlide();
-        UpdateFacing();
-        UpdateAnimation();
-
-        jumpQueued = false;
-        wasGrounded = IsGrounded;
-    }
-
-    private void UpdateContactState()
-    {
-        IsGrounded =
-            groundCheck != null &&
-            Physics2D.OverlapCircle(
-                groundCheck.position,
-                groundRadius,
-                groundMask
-            ) != null;
-
-        IsTouchingLeftWall =
-            wallCheckLeft != null &&
-            Physics2D.OverlapCircle(
-                wallCheckLeft.position,
-                wallCheckRadius,
-                groundMask
-            ) != null;
-
-        IsTouchingRightWall =
-            wallCheckRight != null &&
-            Physics2D.OverlapCircle(
-                wallCheckRight.position,
-                wallCheckRadius,
-                groundMask
-            ) != null;
-    }
-
-    private void TryJump()
-    {
+        float step = Time.fixedDeltaTime;
+        IsGrounded = TouchesGround();
+        coyoteRemaining = Mathf.Max(0f, coyoteRemaining - step);
         if (IsGrounded)
         {
-            body.linearVelocity = new Vector2(
-                body.linearVelocity.x,
-                jumpSpeed
-            );
-
-            PlayAnimation(jumpUpAnimationName);
-            return;
+            coyoteRemaining = coyoteTime;
         }
 
-        if (!IsTouchingLeftWall && !IsTouchingRightWall)
+        if (ladders.Count == 0)
         {
-            return;
+            IsClimbing = false;
+        }
+        if (ladders.Count > 0 && Mathf.Abs(moveInput.y) > 0.1f && ladderDetachRemaining <= 0f)
+        {
+            IsClimbing = true;
         }
 
-        float jumpDirection = GetWallJumpDirection();
+        Vector2 velocity = body.linearVelocity;
+        velocity.x = moveInput.x * moveSpeed;
+        body.gravityScale = normalGravity;
+        if (IsClimbing)
+        {
+            body.gravityScale = 0f;
+            velocity.y = moveInput.y * climbSpeed;
+            IsGrounded = false;
+            coyoteRemaining = 0f;
+        }
 
-        body.linearVelocity = new Vector2(
-            jumpDirection * wallJumpHorizontalSpeed,
-            wallJumpVerticalSpeed
-        );
+        if (jumpBufferRemaining > 0f && (IsGrounded || coyoteRemaining > 0f || IsClimbing))
+        {
+            velocity.y = jumpSpeed;
+            IsGrounded = false;
+            IsClimbing = false;
+            coyoteRemaining = 0f;
+            jumpBufferRemaining = 0f;
+            ladderDetachRemaining = 0.25f;
+            body.gravityScale = normalGravity;
+        }
 
-        wallJumpControlLockTimer = wallJumpControlLockDuration;
-        PlayAnimation(jumpUpAnimationName);
+        body.linearVelocity = velocity;
+        jumpBufferRemaining = Mathf.Max(0f, jumpBufferRemaining - step);
+        ladderDetachRemaining = Mathf.Max(0f, ladderDetachRemaining - step);
+        UpdateAppearance();
     }
 
-    private float GetWallJumpDirection()
+    private bool TouchesGround()
     {
-        if (IsTouchingLeftWall && !IsTouchingRightWall)
+        // The feet can still overlap the floor on takeoff. Rising is never grounded.
+        if (groundCheck == null || body.linearVelocity.y > 0.1f)
         {
-            return 1f;
+            return false;
         }
-
-        if (IsTouchingRightWall && !IsTouchingLeftWall)
+        Collider2D[] hits = Physics2D.OverlapCircleAll(groundCheck.position, groundRadius, groundMask);
+        foreach (Collider2D hit in hits)
         {
-            return -1f;
+            if (!hit.isTrigger && hit.attachedRigidbody != body)
+            {
+                return true;
+            }
         }
-
-        // This only occurs in a very narrow gap where both checks touch walls.
-        if (Mathf.Abs(moveInputX) > 0.01f)
-        {
-            return -Mathf.Sign(moveInputX);
-        }
-
-        return spriteRenderer != null && spriteRenderer.flipX
-            ? 1f
-            : -1f;
+        return false;
     }
 
-    private void ApplyHorizontalMovement()
+    private void UpdateAppearance()
     {
-        if (wallJumpControlLockTimer > 0f)
+        if (spriteRenderer != null && moveInput.x != 0f)
         {
-            return;
+            spriteRenderer.flipX = moveInput.x < 0f;
         }
-
-        body.linearVelocity = new Vector2(
-            moveInputX * moveSpeed,
-            body.linearVelocity.y
-        );
-    }
-
-    private void ApplyWallSlide()
-    {
-        bool pressingTowardLeftWall =
-            IsTouchingLeftWall && moveInputX < -0.01f;
-
-        bool pressingTowardRightWall =
-            IsTouchingRightWall && moveInputX > 0.01f;
-
-        bool touchingAnyWall =
-            IsTouchingLeftWall || IsTouchingRightWall;
-
-        bool satisfiesInputRule = wallSlideRequiresInput
-            ? pressingTowardLeftWall || pressingTowardRightWall
-            : touchingAnyWall;
-
-        IsWallSliding =
-            !IsGrounded &&
-            body.linearVelocity.y < 0f &&
-            satisfiesInputRule;
-
-        if (!IsWallSliding)
+        string nextAnimation = idleAnimationName;
+        if (moveInput.x != 0f || (IsClimbing && moveInput.y != 0f))
         {
-            return;
+            nextAnimation = runAnimationName;
         }
-
-        if (body.linearVelocity.y < -wallSlideSpeed)
+        if (!IsGrounded && !IsClimbing)
         {
-            body.linearVelocity = new Vector2(
-                body.linearVelocity.x,
-                -wallSlideSpeed
-            );
+            nextAnimation = jumpFallAnimationName;
+            if (body.linearVelocity.y > 0f)
+            {
+                nextAnimation = jumpUpAnimationName;
+            }
+        }
+        else if (isUsingTool)
+        {
+            nextAnimation = shootAnimationName;
+        }
+        if (animator != null && nextAnimation != currentAnimation && animator.HasState(0, Animator.StringToHash(nextAnimation)))
+        {
+            animator.Play(nextAnimation);
+            currentAnimation = nextAnimation;
         }
     }
 
-    private void UpdateFacing()
+    // Restore gravity if this component is switched off while the player is on a ladder.
+    private void OnDisable()
     {
-        if (spriteRenderer == null)
+        if (body != null)
         {
-            return;
+            body.gravityScale = normalGravity;
         }
-
-        if (moveInputX > 0.01f)
-        {
-            spriteRenderer.flipX = false;
-        }
-        else if (moveInputX < -0.01f)
-        {
-            spriteRenderer.flipX = true;
-        }
-    }
-
-    private void UpdateAnimation()
-    {
-        if (animator == null)
-        {
-            return;
-        }
-
-        if (IsGrounded && !wasGrounded)
-        {
-            PlayAnimation(landAnimationName);
-            return;
-        }
-
-        if (IsWallSliding)
-        {
-            PlayAnimation(
-                useWallSlideAnimation
-                    ? wallSlideAnimationName
-                    : jumpFallAnimationName
-            );
-
-            return;
-        }
-
-        if (!IsGrounded)
-        {
-            PlayAnimation(
-                body.linearVelocity.y > 0.1f
-                    ? jumpUpAnimationName
-                    : jumpFallAnimationName
-            );
-
-            return;
-        }
-
-        if (isUsingTool)
-        {
-            PlayAnimation(shootAnimationName);
-            return;
-        }
-
-        PlayAnimation(
-            Mathf.Abs(moveInputX) > 0.01f
-                ? runAnimationName
-                : idleAnimationName
-        );
-    }
-
-    private void PlayAnimation(string animationName)
-    {
-        if (string.IsNullOrWhiteSpace(animationName) ||
-            currentAnimation == animationName)
-        {
-            return;
-        }
-
-        currentAnimation = animationName;
-        animator.Play(animationName);
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (groundCheck != null)
-        {
-            Gizmos.DrawWireSphere(
-                groundCheck.position,
-                groundRadius
-            );
-        }
-
-        if (wallCheckLeft != null)
-        {
-            Gizmos.DrawWireSphere(
-                wallCheckLeft.position,
-                wallCheckRadius
-            );
-        }
-
-        if (wallCheckRight != null)
-        {
-            Gizmos.DrawWireSphere(
-                wallCheckRight.position,
-                wallCheckRadius
-            );
-        }
+        moveInput = Vector2.zero;
+        isUsingTool = false;
+        currentAnimation = null;
+        jumpBufferRemaining = 0f;
+        coyoteRemaining = 0f;
+        IsClimbing = false;
+        ladders.Clear();
     }
 }

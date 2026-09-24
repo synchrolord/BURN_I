@@ -1,14 +1,21 @@
-[Ll]ibrary/
-[Tt]emp/
-[Oo]bj/
-[Bb]uild/
-[Bb]uilds/
-[Ll]ogs/
-[Uu]ser[Ss]ettings/
+# Only show project source and our guides/script library at the repository root.
+/*
+!/Assets/
+!/Packages/
+!/ProjectSettings/
+!/Docs/
+!/ScriptLibrary/
 
+# Keep Git configuration and root documentation.
+!/.gitignore
+!/.gitattributes
+!/*.md
+
+# Editor/OS-generated files can still appear inside an included folder.
 .vs/
 .idea/
-
 *.csproj
 *.sln
-/ValidationResults/
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,38 +1,11 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-// "partial" only means this one class is split into several smaller files.
-// Attach ONLY this CellWorld2D.cs file to the CellWorld GameObject.
+// "partial" means these files are parts of ONE class. Attach only CellWorld2D.cs.
+// Inspector fields keep their old names so existing scenes retain their settings.
 [RequireComponent(typeof(SpriteRenderer))]
 public sealed partial class CellWorld2D : MonoBehaviour
 {
-    
-    private bool managedExternally;
-
-    internal bool IsReady =>
-        water != null &&
-        fuel != null &&
-        smoke != null &&
-        fire != null &&
-        solid != null;
-
-    internal void SetManagedExternally(bool value)
-    {
-        managedExternally = value;
-        accumulator = 0f;
-    }
-
-    internal void ManagedSimulateOneTick()
-    {
-        if (paused || !IsReady)
-            return;
-
-        SimulateOneTick();
-    }
-    
-    
     [Header("Grid")]
     [SerializeField, Min(16)] private int width = 240;
     [SerializeField, Min(16)] private int height = 136;
@@ -50,29 +23,19 @@ public sealed partial class CellWorld2D : MonoBehaviour
     [SerializeField, Range(0, 4)] private int activeChunkRadius = 1;
     [SerializeField, Range(1, 200)] private int chunkStayAwakeTicks = 40;
 
-    [Header("Liquid")]
+    [Header("Basic Liquids")]
     [FormerlySerializedAs("maximumWaterPerCell")]
-    [SerializeField, Range(1, 32)]
-    private int liquidCapacity = 8;
-
-    [Tooltip("0 = runny; 1 = thick/sticky.")]
-    [SerializeField, Range(0f, 1f)]
-    private float waterViscosity = 0.05f;
-
-    [Tooltip("How far water looks sideways for somewhere it can fall.")]
-    [SerializeField, Range(1, 16)]
-    private int waterSpreadSearchDistance = 8;
-
-    [Tooltip("How aggressively water pushes sideways toward a nearby drop.")]
-    [SerializeField, Range(1, 6)] private int waterSidewaysPasses = 3;
-    [Tooltip("0 = runny; 1 = thick/sticky.")]
+    [SerializeField, Range(1, 32)] private int liquidCapacity = 8;
+    [Tooltip("Higher viscosity transfers fewer units to each neighboring cell.")]
+    [SerializeField, Range(0f, 1f)] private float waterViscosity = 0.05f;
     [SerializeField, Range(0f, 1f)] private float fuelViscosity = 0.55f;
-    [SerializeField, Range(1, 16)] private int fuelSpreadSearchDistance = 4;
-    [SerializeField, Range(1, 6)] private int fuelSidewaysPasses = 1;
-    
-    [Tooltip("How many liquid units per tick oil can exchange upward through water.")]
-    [SerializeField, Range(1, 8)]
-    private int oilBuoyancyStrength = 1;
+    [Tooltip("Fuel swaps upward with the water immediately above it, every other tick.")]
+    [SerializeField, Range(1, 8)] private int oilBuoyancyStrength = 1;
+    // Retained for archived Advanced settings. Basic only looks at immediate neighbors.
+    [SerializeField, HideInInspector] private int waterSpreadSearchDistance = 8;
+    [SerializeField, HideInInspector] private int waterSidewaysPasses = 3;
+    [SerializeField, HideInInspector] private int fuelSpreadSearchDistance = 4;
+    [SerializeField, HideInInspector] private int fuelSidewaysPasses = 1;
 
     [Header("Smoke")]
     [SerializeField, Range(1, 16)] private int smokeCapacity = 8;
@@ -104,96 +67,35 @@ public sealed partial class CellWorld2D : MonoBehaviour
     [SerializeField] private bool showSolidCells;
     [SerializeField] private Color solidDebugColor = new Color(0.2f, 0.2f, 0.2f, 0.55f);
 
-    private SpriteRenderer spriteRenderer;
-    private Texture2D runtimeTexture;
-    private Sprite runtimeSprite;
-    private Color32[] pixels;
-
-    // Each location can hold several systems at once.
-    private byte[] water;
-    private byte[] fuel;
-    private byte[] fire;   // 0, 1, 2, or 3.
-    private byte[] smoke;  // 0 to smokeCapacity.
-    private bool[] solid;
-
-    // Prevents a cell moving more than once per simulation tick.
-    private bool[] movedWater;
-    private bool[] movedFuel;
-    private bool[] movedSmoke;
-
-    // New fire is delayed until the end of the tick so it cannot cross a
-    // whole fuel line instantly.
-    private byte[] pendingFire;
-    private readonly List<int> pendingFireIndices = new List<int>(256);
-
-    private int chunkCountX;
-    private int chunkCountY;
-    private byte[] chunkAwakeTicks;
-
-    private float accumulator;
-    private int tickNumber;
-    private bool paused;
-    private bool textureNeedsRefresh;
-
     public bool IsInitialized => IsReady;
     public int Width => width;
     public int Height => height;
     public float CellSize => cellSize;
     public bool IsPaused => paused;
 
-    private void Start()
-    {
-        paused = startPaused;
-        spriteRenderer = GetComponent<SpriteRenderer>();
-
-        int count = width * height;
-        water = new byte[count];
-        fuel = new byte[count];
-        fire = new byte[count];
-        smoke = new byte[count];
-        solid = new bool[count];
-        movedWater = new bool[count];
-        movedFuel = new bool[count];
-        movedSmoke = new bool[count];
-        pendingFire = new byte[count];
-        pixels = new Color32[count];
-
-        chunkCountX = Mathf.CeilToInt(width / (float)chunkSize);
-        chunkCountY = Mathf.CeilToInt(height / (float)chunkSize);
-        chunkAwakeTicks = new byte[chunkCountX * chunkCountY];
-
-        CreateRuntimeTexture();
-        BakeSolidsFromPhysics();
-        textureNeedsRefresh = true;
-    }
+    private void Start() => InitializeGrid();
 
     private void Update()
     {
-        if (managedExternally || paused || runtimeTexture == null)
-            return;
-
+        if (managedExternally || paused || !IsReady) return;
         float step = 1f / ticksPerSecond;
         accumulator += Time.deltaTime;
         int completed = 0;
-
         while (accumulator >= step && completed < maximumTicksPerFrame)
         {
             SimulateOneTick();
             accumulator -= step;
             completed++;
         }
-
+        // Drop excess catch-up work rather than freezing after a slow frame.
         if (completed == maximumTicksPerFrame) accumulator = 0f;
     }
 
     private void LateUpdate()
     {
-        // All changes made this frame are uploaded together.
-        if (textureNeedsRefresh || (hasVisibleFire && !paused && Time.time >= nextFireVisualUpdate))
-        {
-            RenderNow();
-            nextFireVisualUpdate = Time.time + 1f / fireVisualFramesPerSecond;
-        }
+        if (!textureNeedsRefresh && !(hasVisibleFire && !paused && Time.time >= nextFireVisualUpdate)) return;
+        RenderNow();
+        nextFireVisualUpdate = Time.time + 1f / Mathf.Max(1f, fireVisualFramesPerSecond);
     }
 
     private void OnDestroy()
@@ -208,62 +110,37 @@ public sealed partial class CellWorld2D : MonoBehaviour
         AgeChunks();
         WakeChunksNearTarget();
         ClearMovementFlagsInAwakeChunks();
+        bool waterFirst = (tickNumber & 1) == 0;
 
-        // Alternate order so water or fuel does not always win ties.
-        if ((tickNumber & 1) == 0)
+        // Visit only awake chunks. Each cell follows the same short set of rules.
+        // Movement flags stop incoming liquid/smoke traveling again in this tick.
+        for (int cy = 0; cy < chunkCountY; cy++)
+        for (int column = 0; column < chunkCountX; column++)
         {
-            SimulateLiquid(
-                water,
-                fuel,
-                movedWater,
-                waterViscosity,
-                waterSpreadSearchDistance,
-                waterSidewaysPasses
-            );
-
-            SimulateLiquid(
-                fuel,
-                water,
-                movedFuel,
-                fuelViscosity,
-                fuelSpreadSearchDistance,
-                fuelSidewaysPasses
-            );
+            int cx = waterFirst ? column : chunkCountX - 1 - column;
+            if (!IsChunkAwake(cx, cy)) continue;
+            GetChunkBounds(cx, cy, out int minX, out int maxX, out int minY, out int maxY);
+            for (int y = minY; y <= maxY; y++)
+            for (int offset = 0; offset <= maxX - minX; offset++)
+            {
+                int x = waterFirst ? minX + offset : maxX - offset;
+                if (waterFirst) SeparateOilAt(x, y);
+                if (waterFirst)
+                {
+                    SimulateLiquidAt(water, fuel, movedWater, x, y, waterViscosity);
+                    SimulateLiquidAt(fuel, water, movedFuel, x, y, fuelViscosity);
+                }
+                else
+                {
+                    SimulateLiquidAt(fuel, water, movedFuel, x, y, fuelViscosity);
+                    SimulateLiquidAt(water, fuel, movedWater, x, y, waterViscosity);
+                }
+                SimulateSmokeAt(x, y);
+                SimulateFireAt(x, y);
+            }
         }
-        else
-        {
-            SimulateLiquid(
-                fuel,
-                water,
-                movedFuel,
-                fuelViscosity,
-                fuelSpreadSearchDistance,
-                fuelSidewaysPasses
-            );
-
-            SimulateLiquid(
-                water,
-                fuel,
-                movedWater,
-                waterViscosity,
-                waterSpreadSearchDistance,
-                waterSidewaysPasses
-            );
-        }
-        
-        if ((tickNumber & 1) == 0)
-        {
-            SimulateOilWaterSeparation();
-        }
-
-        SimulateSmoke();
-        SimulateFire();
-        ApplyPendingFire();
-
-        SimulateSmoke();
-        SimulateFire();
+        // New neighbors ignite next tick, so fire cannot cross a whole vine instantly.
         ApplyPendingFire();
         tickNumber++;
     }
-
 }

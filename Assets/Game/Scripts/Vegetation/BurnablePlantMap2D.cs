@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-/// <summary>One component for the whole plant Tilemap. No per-plant GameObjects or Update methods.</summary>
+// BASIC EDITION: one manager for the whole plant Tilemap.
+// Each Plant below is plain data, not a GameObject. Hundreds of tiles share this Update.
+// CellWorld burns the baked pixels and reports how much fuel each plant has lost.
 [DisallowMultipleComponent, RequireComponent(typeof(Tilemap), typeof(TilemapRenderer))]
 public sealed partial class BurnablePlantMap2D : MonoBehaviour
 {
@@ -19,7 +21,7 @@ public sealed partial class BurnablePlantMap2D : MonoBehaviour
         public Color color;
         public double capacity, consumed;
         public int stage;
-        public bool queued, finished;
+        public bool finished;
         public Bounds collisionBounds;
     }
 
@@ -27,7 +29,6 @@ public sealed partial class BurnablePlantMap2D : MonoBehaviour
     private readonly List<Plant> plants = new List<Plant>();
     private readonly Dictionary<Vector3Int, int> plantAt = new Dictionary<Vector3Int, int>();
     private readonly Dictionary<BurnablePlantTile, Tile[]> stageTiles = new Dictionary<BurnablePlantTile, Tile[]>();
-    private readonly List<int> dirtyPlants = new List<int>();
     private Coroutine initialization;
     private bool registered;
     private CellWorld2D registeredWorld;
@@ -51,6 +52,8 @@ public sealed partial class BurnablePlantMap2D : MonoBehaviour
         initialization = null;
     }
 
+    // Register the HEALTHY pixels once. Changing the visible sprite does not move the fuel.
+    // The matrix calculations support rotated tiles, sprite pivots and different pixel sizes.
     private void RegisterMap()
     {
         registeredWorld = world;
@@ -117,9 +120,6 @@ public sealed partial class BurnablePlantMap2D : MonoBehaviour
     {
         Plant plant = plants[id];
         plant.consumed = System.Math.Min(plant.capacity, plant.consumed + amount);
-        if (plant.queued) return;
-        plant.queued = true;
-        dirtyPlants.Add(id);
     }
 
     public bool TryGetBurnProgress(Vector3Int position, out float progress)
@@ -133,11 +133,11 @@ public sealed partial class BurnablePlantMap2D : MonoBehaviour
 
     private void LateUpdate()
     {
-        for (int n = 0; n < dirtyPlants.Count; n++)
+        // A plain loop is enough for hundreds of plants; it allocates nothing per frame.
+        // Only a change of burn stage replaces a Tile.
+        foreach (Plant plant in plants)
         {
-            Plant plant = plants[dirtyPlants[n]];
-            plant.queued = false;
-            if (plant.finished) continue;
+            if (plant.finished || plant.capacity <= 0 || plant.consumed <= 0) continue;
             float progress = (float)(plant.consumed / plant.capacity);
             int stage = Mathf.Min(4, Mathf.FloorToInt(progress * 5f));
             bool finished = progress >= 0.99999f;
@@ -151,10 +151,10 @@ public sealed partial class BurnablePlantMap2D : MonoBehaviour
             plant.stage = stage;
             plant.finished = finished;
         }
-        dirtyPlants.Clear();
         FlushPlantCollisionChanges();
     }
 
+    // Cache one Tile per artwork/stage. Plants reuse it instead of making one every frame.
     private void SetStage(Plant plant, int stage, bool finished = false)
     {
         int cacheIndex = finished ? 5 : stage;
@@ -217,7 +217,9 @@ public sealed partial class BurnablePlantMap2D : MonoBehaviour
         FlushPlantCollisionChanges();
         foreach (Tile[] stages in stageTiles.Values)
             foreach (Tile tile in stages) if (tile != null) Destroy(tile);
-        plants.Clear(); plantAt.Clear(); stageTiles.Clear(); dirtyPlants.Clear();
+        plants.Clear();
+        plantAt.Clear();
+        stageTiles.Clear();
         ReleasePlantCollision();
         RegisteredFuelSampleCount = 0;
         registered = false;

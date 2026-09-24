@@ -1,8 +1,42 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public sealed partial class CellWorld2D
 {
+    private void BakeSolidsFromPhysics()
+    {
+        Physics2D.SyncTransforms();
+        Array.Clear(solid, 0, solid.Length);
+
+        for (int x = 0; x < width; x++)
+        {
+            solid[Index(x, 0)] = true;
+            solid[Index(x, height - 1)] = true;
+        }
+
+        for (int y = 0; y < height; y++)
+        {
+            solid[Index(0, y)] = true;
+            solid[Index(width - 1, y)] = true;
+        }
+
+        Vector2 sampleSize = Vector2.one * (cellSize * 0.85f);
+
+        for (int y = 1; y < height - 1; y++)
+        for (int x = 1; x < width - 1; x++)
+        {
+            int i = Index(x, y);
+            solid[i] = Physics2D.OverlapBox(CellToWorld(x, y), sampleSize, 0f, solidMask.value) != null;
+
+            if (solid[i])
+            {
+                water[i] = fuel[i] = smoke[i] = 0;
+                if (!HasPlantFuel(i)) fire[i] = 0;
+            }
+        }
+    }
+
     /// <summary>Diagnostic count for the latest local collider refresh, not a full-world scan.</summary>
     public int LastLocalSolidRefreshCellCount { get; private set; }
 

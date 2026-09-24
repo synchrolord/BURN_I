@@ -2,80 +2,48 @@ using UnityEngine;
 
 public sealed partial class CellWorld2D
 {
-    private void SimulateFire()
+    private void SimulateFireAt(int x, int y)
     {
-        bool burnFuelNow = tickNumber % fuelBurnEveryTicks == 0;
-        bool decayNow = tickNumber % fireDecayEveryTicks == 0;
-        bool spreadNow = tickNumber % fireSpreadEveryTicks == 0;
-
-        for (int cy = 0; cy < chunkCountY; cy++)
-        for (int cx = 0; cx < chunkCountX; cx++)
+        int i = Index(x, y);
+        if (fire[i] == 0) return;
+        WakeCell(x, y);
+        // Water cools first, even when fuel is present.
+        if (water[i] > 0)
         {
-            if (!IsChunkAwake(cx, cy)) continue;
-            GetChunkBounds(cx, cy, out int minX, out int maxX, out int minY, out int maxY);
-            minX = Mathf.Max(1, minX); maxX = Mathf.Min(width - 2, maxX);
-            minY = Mathf.Max(1, minY); maxY = Mathf.Min(height - 2, maxY);
+            int spent = Mathf.Min(water[i], waterUsedToExtinguish);
+            water[i] -= (byte)spent;
+            fire[i] = (byte)Mathf.Max(0, fire[i] - spent);
+            WetPlant(i);
+            AddPlantSmoke(x, y, 1);
+            textureNeedsRefresh = true;
+            return;
+        }
 
-            for (int y = minY; y <= maxY; y++)
-            for (int x = minX; x <= maxX; x++)
+        bool plantBurning = BurnPlant(i, out bool firstPlantPass);
+        bool hasFuel = fuel[i] > 0;
+        if (plantBurning || hasFuel)
+        {
+            fire[i] = 3;
+            if (tickNumber % fuelBurnEveryTicks == 0)
             {
-                int i = Index(x, y);
-                if (fire[i] == 0) continue;
-                WakeCell(x, y);
-
-                // Water wins first.
-                if (water[i] > 0)
-                {
-                    int spent = Mathf.Min(water[i], waterUsedToExtinguish);
-                    water[i] -= (byte)spent;
-                    fire[i] = (byte)Mathf.Max(0, fire[i] - spent);
-                    WetPlant(i);
-                    AddPlantSmoke(x, y, 1); // Temporary steam-like effect.
-                    textureNeedsRefresh = true;
-                    continue;
-                }
-
-                bool plantBurning = BurnPlant(i, out bool firstPlantPass);
-                if (plantBurning)
-                {
-                    fire[i] = 3;
-                    if (firstPlantPass && burnFuelNow) AddPlantSmoke(x, y, smokeMadeByFire);
-                    if (spreadNow)
-                    {
-                        TrySpreadFire(x, y, x, y + 1, true);
-                        TrySpreadFire(x, y, x - 1, y, false);
-                        TrySpreadFire(x, y, x + 1, y, false);
-                        TrySpreadFire(x, y, x, y - 1, false);
-                        SpreadPlantFireDiagonally(x, y);
-                    }
-                }
-
-                // Fuel keeps fire hot and is slowly consumed.
-                if (fuel[i] > 0)
-                {
-                    if (burnFuelNow)
-                    {
-                        fuel[i]--;
-                        fire[i] = 3;
-                        AddSmokeAtCell(x, y, smokeMadeByFire);
-                        textureNeedsRefresh = true;
-                    }
-
-                    if (spreadNow)
-                    {
-                        TrySpreadFire(x, y, x, y + 1, true);
-                        TrySpreadFire(x, y, x - 1, y, false);
-                        TrySpreadFire(x, y, x + 1, y, false);
-                        TrySpreadFire(x, y, x, y - 1, false);
-                    }
-                }
-                else if (!plantBurning && decayNow)
-                {
-                    fire[i]--;
-                    AddPlantSmoke(x, y, 1);
-                    textureNeedsRefresh = true;
-                }
+                if (hasFuel) fuel[i]--;
+                if (hasFuel || firstPlantPass) AddPlantSmoke(x, y, smokeMadeByFire);
+                textureNeedsRefresh = true;
             }
+            if (tickNumber % fireSpreadEveryTicks == 0)
+            {
+                TrySpreadFire(x, y, x, y + 1, true);
+                TrySpreadFire(x, y, x - 1, y, false);
+                TrySpreadFire(x, y, x + 1, y, false);
+                TrySpreadFire(x, y, x, y - 1, false);
+                if (plantBurning) SpreadPlantFireDiagonally(x, y);
+            }
+        }
+        else if (tickNumber % fireDecayEveryTicks == 0)
+        {
+            fire[i]--;
+            AddPlantSmoke(x, y, 1);
+            textureNeedsRefresh = true;
         }
     }
 
@@ -85,86 +53,60 @@ public sealed partial class CellWorld2D
         int target = Index(toX, toY);
         bool plant = CanBurnPlant(target);
         if (fire[target] > 0 || water[target] > 0 || (!plant && (solid[target] || fuel[target] == 0))) return;
-
         float chance = fireSpreadChance + (upward ? upwardSpreadBonus : 0f);
-        if (UnityEngine.Random.value <= Mathf.Clamp01(chance)) ScheduleFire(toX, toY, 2);
-    }
-
-    private void ScheduleFire(int x, int y, byte energy)
-    {
-        int i = Index(x, y);
-        if (pendingFire[i] == 0) pendingFireIndices.Add(i);
-        pendingFire[i] = (byte)Mathf.Max(pendingFire[i], energy);
-        WakeCell(x, y);
+        if (Random.value > Mathf.Clamp01(chance)) return;
+        if (pendingFire[target] == 0) pendingFireIndices.Add(target);
+        pendingFire[target] = 2;
+        WakeCell(toX, toY);
     }
 
     private void ApplyPendingFire()
     {
-        for (int n = 0; n < pendingFireIndices.Count; n++)
+        foreach (int i in pendingFireIndices)
         {
-            int i = pendingFireIndices[n];
             fire[i] = (byte)Mathf.Max(fire[i], pendingFire[i]);
             pendingFire[i] = 0;
         }
-
         if (pendingFireIndices.Count > 0) textureNeedsRefresh = true;
         pendingFireIndices.Clear();
     }
 
-    // Gives FireLightPool2D one weighted fire center per awake chunk.
+    // FireLightPool2D reuses a few Unity lights. Each awake chunk offers one fire center.
     public int GetBrightestFireClusters(Vector2[] positions, float[] strengths, byte minimumEnergy)
     {
-        if (positions == null || strengths == null) return 0;
-        int maximumResults = Mathf.Min(positions.Length, strengths.Length);
-        if (maximumResults == 0) return 0;
-        for (int i = 0; i < maximumResults; i++) strengths[i] = 0f;
-        int resultCount = 0;
-
+        if (!IsReady || positions == null || strengths == null) return 0;
+        int limit = Mathf.Min(positions.Length, strengths.Length);
+        if (limit == 0) return 0;
+        int count = 0;
+        for (int n = 0; n < limit; n++) strengths[n] = 0f;
         for (int cy = 0; cy < chunkCountY; cy++)
         for (int cx = 0; cx < chunkCountX; cx++)
         {
             if (!IsChunkAwake(cx, cy)) continue;
             GetChunkBounds(cx, cy, out int minX, out int maxX, out int minY, out int maxY);
-            float strength = 0f, weightedX = 0f, weightedY = 0f;
-
+            float total = 0f, weightedX = 0f, weightedY = 0f;
             for (int y = minY; y <= maxY; y++)
             for (int x = minX; x <= maxX; x++)
             {
-                byte energy = fire[Index(x, y)];
+                int energy = fire[Index(x, y)];
                 if (energy < minimumEnergy) continue;
-                strength += energy;
+                total += energy;
                 weightedX += x * energy;
                 weightedY += y * energy;
             }
-
-            if (strength <= 0f) continue;
-            Vector2 position = CellToWorld(
-                Mathf.RoundToInt(weightedX / strength),
-                Mathf.RoundToInt(weightedY / strength)
-            );
-            InsertFireCluster(positions, strengths, maximumResults, ref resultCount, position, strength);
+            if (total <= 0f) continue;
+            int slot = count;
+            if (count == limit)
+            {
+                slot = 0;
+                for (int n = 1; n < limit; n++)
+                    if (strengths[n] < strengths[slot]) slot = n;
+                if (total <= strengths[slot]) continue;
+            }
+            else count++;
+            strengths[slot] = total;
+            positions[slot] = CellToWorld(Mathf.RoundToInt(weightedX / total), Mathf.RoundToInt(weightedY / total));
         }
-
-        return resultCount;
-    }
-
-    private void InsertFireCluster(Vector2[] positions, float[] strengths, int maximumResults,
-        ref int resultCount, Vector2 position, float strength)
-    {
-        if (resultCount < maximumResults)
-        {
-            positions[resultCount] = position;
-            strengths[resultCount] = strength;
-            resultCount++;
-            return;
-        }
-
-        int weakest = 0;
-        for (int i = 1; i < maximumResults; i++)
-            if (strengths[i] < strengths[weakest]) weakest = i;
-
-        if (strength <= strengths[weakest]) return;
-        positions[weakest] = position;
-        strengths[weakest] = strength;
+        return count;
     }
 }
