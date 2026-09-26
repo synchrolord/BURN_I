@@ -15,10 +15,11 @@ public sealed class PlayerAim2D : MonoBehaviour
     private Transform torchPivot;
 
     private Vector2 aimScreenPosition;
-
-    // Other scripts can read this later if needed.
+    
     public Vector2 AimDirection { get; private set; }
 
+    
+    
     private void Awake()
     {
         if (worldCamera == null)
@@ -26,8 +27,9 @@ public sealed class PlayerAim2D : MonoBehaviour
             worldCamera = Camera.main;
         }
     }
-
-    // Called by PlayerInput's "Aim" action.
+    
+    
+    //store mouse position as vector
     public void OnAim(InputValue value)
     {
         aimScreenPosition = value.Get<Vector2>();
@@ -40,7 +42,8 @@ public sealed class PlayerAim2D : MonoBehaviour
             return;
         }
 
-        // Convert mouse position from screen space to world space.
+        
+       //world camera is positioned at -10z
         float distanceFromCamera =
             -worldCamera.transform.position.z;
 
@@ -53,18 +56,17 @@ public sealed class PlayerAim2D : MonoBehaviour
                 )
             );
 
-        // We calculate aim relative to the player.
+        //calculate aim relative to the player.
         Vector2 playerPosition = transform.position;
 
-        AimDirection =
-            (Vector2)mouseWorldPosition -
-            playerPosition;
+        AimDirection = (Vector2)mouseWorldPosition - playerPosition;
 
+        //if mouse is almost exactly over player
         if (AimDirection.sqrMagnitude < 0.0001f)
         {
             return;
         }
-
+        
         AimDirection.Normalize();
 
         // Rotate the weapon.

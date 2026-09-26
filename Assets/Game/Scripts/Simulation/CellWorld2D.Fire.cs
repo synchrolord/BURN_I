@@ -71,7 +71,6 @@ public partial class CellWorld2D
         pendingFireIndices.Clear();
     }
 
-    // FireLightPool2D reuses a few Unity lights. Each awake chunk offers one fire center.
     public int GetBrightestFireClusters(Vector2[] positions, float[] strengths, byte minimumEnergy)
     {
         if (!IsReady || positions == null || strengths == null) return 0;

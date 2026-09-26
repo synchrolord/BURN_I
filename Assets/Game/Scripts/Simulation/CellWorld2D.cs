@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
-// "partial" means these files are parts of ONE class. Attach only CellWorld2D.cs.
-// Inspector fields keep their old names so existing scenes retain their settings.
 [DisallowMultipleComponent, RequireComponent(typeof(SpriteRenderer))]
 public partial class CellWorld2D : MonoBehaviour
 {

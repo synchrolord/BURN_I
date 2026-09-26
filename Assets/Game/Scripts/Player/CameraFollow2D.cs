@@ -1,4 +1,3 @@
-using Unity.AppUI.UI;
 using UnityEngine;
 
 public sealed class CameraFollow2D : MonoBehaviour

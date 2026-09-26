@@ -28,6 +28,12 @@ if (!$Module) {
     if ($choice -notin @('1','2','3','4')) { throw 'Choose 1, 2, 3 or 4.' }
     $Module = $names[[int]$choice - 1]
 }
+if ($Module -eq '01_Movement') {
+    throw 'Movement switching is retired for this ladder-free version.'
+}
+if ($Module -eq '02_Tool' -and (Test-Path -LiteralPath (Join-Path $projectRoot 'Assets/Game/Scripts/Weapons/PressureSprayVisuals.cs'))) {
+    throw 'Archived tool editions do not include the current spray helpers. Restore a complete project version through Git instead.'
+}
 $entry = $catalog.$Module
 $sourceRoot = Join-Path $PSScriptRoot "$Edition/$Module/Files"
 $sourceFiles = @($entry.$Edition)
