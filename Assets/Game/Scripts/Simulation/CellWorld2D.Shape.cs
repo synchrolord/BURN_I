@@ -4,6 +4,10 @@ using UnityEngine;
 // CellWorldPoly2D supplies a mask once at startup; gameplay reads only the baked mask.
 public partial class CellWorld2D
 {
+    //limit grid size before creating arrays and texture
+    private const int MaximumGridDimension = 4096;
+    private const long MaximumCellCount = 16L * 1024 * 1024;
+
     //optional masks for cells and chunks that belong to the room
     private bool[] roomCells;
     private bool[] roomChunks;
@@ -26,10 +30,14 @@ public partial class CellWorld2D
     //validate grid size before allocating arrays, then build the room mask
     private bool InitializeRoomShape()
     {
-        if (width < 16 || height < 16 || width > 2048 || height > 2048 ||
-            (long)width * height > 1048576 || cellSize < 0.01f || float.IsNaN(cellSize) || float.IsInfinity(cellSize))
+        //check how large a texture the graphics device supports
+        int textureLimit = SystemInfo.maxTextureSize;
+        int dimensionLimit = textureLimit > 0 ? Mathf.Min(MaximumGridDimension, textureLimit) : MaximumGridDimension;
+        if (width < 16 || height < 16 || width > dimensionLimit || height > dimensionLimit ||
+            (long)width * height > MaximumCellCount || cellSize < 0.01f || float.IsNaN(cellSize) || float.IsInfinity(cellSize))
         {
-            Debug.LogError("CellWorld needs dimensions 16–2048, at most 1,048,576 cells, and finite Cell Size >= 0.01.", this);
+            Debug.LogError($"CellWorld cannot initialize {width} x {height}. Dimensions must be 16–{dimensionLimit}, " +
+                $"with at most {MaximumCellCount:N0} cells and finite Cell Size >= 0.01.", this);
             InitializationFailed = true;
             enabled = false;
             return false;

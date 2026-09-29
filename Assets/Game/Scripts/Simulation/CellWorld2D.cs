@@ -5,6 +5,7 @@ using UnityEngine.Serialization;
 public partial class CellWorld2D : MonoBehaviour
 {
     [Header("Grid")]
+    [Tooltip("Set Width, Height and Cell Size before Play. The grid is baked once at startup.")]
     [SerializeField, Min(16)] private int width = 240;
     [SerializeField, Min(16)] private int height = 136;
     [SerializeField, Min(0.01f)] private float cellSize = 0.125f;//how the single cell is devided

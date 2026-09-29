@@ -36,6 +36,8 @@ public partial class CellWorld2D
     private Texture2D runtimeTexture;
     private Sprite runtimeSprite;
     private Color32[] pixels;
+    private int initializedWidth, initializedHeight;
+    private float initializedCellSize;
     internal bool IsReady => water != null && fuel != null && smoke != null && fire != null && solid != null;
 
     
@@ -43,6 +45,9 @@ public partial class CellWorld2D
     private void InitializeGrid()
     {
         if (!InitializeRoomShape()) return;
+        initializedWidth = width;
+        initializedHeight = height;
+        initializedCellSize = cellSize;
         
         //tickSpeed
         ticksPerSecond = Mathf.Clamp(ticksPerSecond, 1f, 60f);
@@ -92,6 +97,17 @@ public partial class CellWorld2D
 
     
     
+    //keep grid size matched to the arrays and texture while running
+    //change size before play so walls and plants are rebuilt too
+    protected void OnValidate()
+    {
+        if (!IsReady || (width == initializedWidth && height == initializedHeight && cellSize == initializedCellSize)) return;
+        width = initializedWidth;
+        height = initializedHeight;
+        cellSize = initializedCellSize;
+        Debug.LogWarning("CellWorld grid size is fixed while running. Stop Play, change Width/Height/Cell Size, then start Play again.", this);
+    }
+
     // Wold-Grid connection
     public bool TryWorldToCell(Vector2 worldPosition, out Vector2Int cell)
     {
