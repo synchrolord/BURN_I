@@ -9,11 +9,16 @@ public sealed partial class BurnablePlantMap2D
 {
     private TilemapCollider2D plantCollider;
     private CompositeCollider2D plantComposite;
+    //flag that the plant collider geometry needs rebuilding
     private bool collisionGeometryDirty;
+    //keep temporary sprite copies so they can be destroyed later
     private readonly List<Sprite> collisionSprites = new List<Sprite>();
+    //cache each plant asset's healthy collision outlines as arrays of points
     private readonly Dictionary<BurnablePlantTile, Vector2[][]> healthyShapes = new Dictionary<BurnablePlantTile, Vector2[][]>();
+    //collect affected grid cells without adding the same index twice
     private readonly HashSet<int> solidCellsToRefresh = new HashSet<int>();
 
+    //find the tilemap collider and any composite collider it uses
     private void InitializePlantCollision()
     {
         plantCollider = GetComponent<TilemapCollider2D>();
@@ -26,6 +31,7 @@ public sealed partial class BurnablePlantMap2D
         collisionGeometryDirty = plantCollider != null;
     }
 
+    //read the healthy sprite's collision outlines once and reuse them
     private Vector2[][] GetHealthyPhysicsShapes(BurnablePlantTile tile)
     {
         if (healthyShapes.TryGetValue(tile, out Vector2[][] shapes)) return shapes;
@@ -35,6 +41,7 @@ public sealed partial class BurnablePlantMap2D
         for (int i = 0; i < shapes.Length; i++)
         {
             points.Clear();
+            //copy one collision outline into its own point array
             healthy.GetPhysicsShape(i, points);
             shapes[i] = points.ToArray();
         }
@@ -42,6 +49,7 @@ public sealed partial class BurnablePlantMap2D
         return shapes;
     }
 
+    //show burned artwork while keeping the healthy collision shape until finished
     private Sprite GetPlantStageSprite(BurnablePlantTile tile, int stage, bool finished)
     {
         Sprite artwork = tile.GetStageSprite(stage);
@@ -66,14 +74,17 @@ public sealed partial class BurnablePlantMap2D
         return runtime;
     }
 
+    //find a world-space box covering this plant's possible collision area
     private Bounds GetPlantCollisionBounds(Plant plant)
     {
         Vector3 pivot = map.CellToLocalInterpolated((Vector3)plant.position + map.tileAnchor);
+        //combine the placement transforms so sprite points can be converted to world positions
         Matrix4x4 toWorld = map.transform.localToWorldMatrix * Matrix4x4.Translate(pivot)
             * map.orientationMatrix * plant.transform;
         Sprite healthy = plant.tile.GetStageSprite(0);
         Vector2 min = -healthy.pivot / healthy.pixelsPerUnit;
         Vector2 max = (healthy.rect.size - healthy.pivot) / healthy.pixelsPerUnit;
+        //expand the box around all sprite corners and collision points
         Bounds bounds = new Bounds(toWorld.MultiplyPoint3x4(min), Vector3.zero);
         bounds.Encapsulate(toWorld.MultiplyPoint3x4(new Vector2(min.x, max.y)));
         bounds.Encapsulate(toWorld.MultiplyPoint3x4(new Vector2(max.x, min.y)));
@@ -91,6 +102,7 @@ public sealed partial class BurnablePlantMap2D
         return bounds;
     }
 
+    //mark collision geometry as changed and queue nearby grid cells for rechecking
     private void QueueCollisionRefresh(Plant plant)
     {
         if (plantCollider == null || registeredWorld == null || plant.tile.CollisionType == Tile.ColliderType.None) return;
@@ -98,6 +110,7 @@ public sealed partial class BurnablePlantMap2D
         registeredWorld.CollectSolidRefreshCells(plant.collisionBounds, solidCellsToRefresh);
     }
 
+    //apply queued collider changes before refreshing the grid's blocked cells
     private void FlushPlantCollisionChanges()
     {
         if (plantCollider != null && plantCollider.isActiveAndEnabled && (collisionGeometryDirty || plantCollider.hasTilemapChanges))
@@ -108,10 +121,12 @@ public sealed partial class BurnablePlantMap2D
         }
         if (registeredWorld != null && solidCellsToRefresh.Count > 0)
             registeredWorld.RefreshSolidCells(solidCellsToRefresh);
+        //clear the queue and reset the change flag after refreshing
         solidCellsToRefresh.Clear();
         collisionGeometryDirty = false;
     }
 
+    //destroy the temporary sprites and forget cached collision data
     private void ReleasePlantCollision()
     {
         foreach (Sprite sprite in collisionSprites) if (sprite != null) Destroy(sprite);

@@ -200804,7 +200804,7 @@ Transform:
   m_GameObject: {fileID: 580128058}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.62500036, y: 0.875, z: 0}
+  m_LocalPosition: {x: -0.677, y: 0.892, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -204858,7 +204858,7 @@ Transform:
   m_GameObject: {fileID: 1034520936}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -27.4, y: -43, z: 0}
+  m_LocalPosition: {x: -27.2, y: -42.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -204888,7 +204888,7 @@ MonoBehaviour:
   ticksPerSecond: 20
   maximumTicksPerFrame: 3
   activityTarget: {fileID: 1556756209}
-  simulateAllChunks: 0
+  simulateAllChunks: 1
   chunkSize: 32
   activeChunkRadius: 1
   chunkStayAwakeTicks: 40
@@ -213952,7 +213952,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 22.5
+  orthographic size: 11.25
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -213977,7 +213977,7 @@ Transform:
   m_GameObject: {fileID: 1247774252}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 90, y: 30, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -214055,8 +214055,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.PixelPerfectCamera
   m_ComponentVersion: 1
   m_AssetsPPU: 16
-  m_RefResolutionX: 1920
-  m_RefResolutionY: 1080
+  m_RefResolutionX: 640
+  m_RefResolutionY: 360
   m_CropFrame: 0
   m_GridSnapping: 2
   m_FilterMode: 0
@@ -214077,7 +214077,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f18839eba7e1dbe47a3f32b56ae83c80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SprayPreview2D
-  previewRenderer: {fileID: 0}
 --- !u!114 &1247774260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214443,7 +214442,6 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 8
-  climbSpeed: 3.5
   animator: {fileID: 0}
   spriteRenderer: {fileID: 0}
   idleAnimationName: Idle
@@ -214478,57 +214476,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e9bf8fa0ca6c42428371e783686d6c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PressureTool2D
+  currentSprayType: 1
+  nozzleMode: 1
+  jet:
+    label: Jet
+    spreadAngleDegrees: 16
+    shotSpeed: 6.5
+    shotLifetimeSeconds: 0.55
+    waterUnitsPerShot: 1
+    shotsPerSecond: 26
+    supplyCostPerShot: 1
+    ignitionRadiusCells: 1
+  pilot:
+    label: Pilot
+    spreadAngleDegrees: 4
+    shotSpeed: 3.2
+    shotLifetimeSeconds: 0.28
+    waterUnitsPerShot: 1
+    shotsPerSecond: 10
+    supplyCostPerShot: 1
+    ignitionRadiusCells: 0
+  wide:
+    label: Wide
+    spreadAngleDegrees: 48
+    shotSpeed: 5
+    shotLifetimeSeconds: 0.4
+    waterUnitsPerShot: 1
+    shotsPerSecond: 34
+    supplyCostPerShot: 2
+    ignitionRadiusCells: 1
   cellWorld: {fileID: 1034520938}
   muzzle: {fileID: 130633959}
   playerMotor: {fileID: 1556756218}
   obstacleMask:
     serializedVersion: 2
     m_Bits: 8
-  currentMaterial: 1
-  currentNozzleIndex: 1
-  pilot:
-    label: Pilot
-    angleDegrees: 4
-    speed: 3.2
-    lifetime: 0.28
-    radiusInCells: 0
-    unitsPerDeposit: 1
-    probesPerSecond: 10
-    resourceCostPerProbe: 1
-    ignitionRadiusInCells: 0
-  jet:
-    label: Jet
-    angleDegrees: 16
-    speed: 6.5
-    lifetime: 0.55
-    radiusInCells: 0
-    unitsPerDeposit: 1
-    probesPerSecond: 26
-    resourceCostPerProbe: 1
-    ignitionRadiusInCells: 1
-  wide:
-    label: Wide
-    angleDegrees: 48
-    speed: 5
-    lifetime: 0.4
-    radiusInCells: 1
-    unitsPerDeposit: 1
-    probesPerSecond: 34
-    resourceCostPerProbe: 2
-    ignitionRadiusInCells: 1
   waterSpeedMultiplier: 4
   waterLifetimeMultiplier: 1.4
-  waterEmissionMultiplier: 2
-  waterAmountMultiplier: 4
+  waterShotRateMultiplier: 2
+  waterUnitsMultiplier: 4
   waterGravityScale: 1.4
   flameLift: 3
   flameDrag: 1.8
-  maximumProbeCount: 192
-  waterDropWidth: 0.12
-  flameWidth: 0.45
+  maximumShotCount: 192
+  waterShotWidth: 0.12
+  flameShotWidth: 0.45
   spraySortingOffset: 2
   showDebugOverlay: 1
-  unlimitedResourcesForTesting: 1
+  unlimitedResourcesForTesting: 0
   maximumWater: 300
   currentWater: 300
   maximumFuel: 300
@@ -214558,7 +214553,7 @@ Transform:
   m_GameObject: {fileID: 1599529928}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.37499967, y: 0.875, z: 0}
+  m_LocalPosition: {x: 0.476, y: 0.89, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -217638,11 +217633,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 965012237666206120, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 97.18313
+      value: 65.3
       objectReference: {fileID: 0}
     - target: {fileID: 965012237666206120, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 23.49812
+      value: 6.9
       objectReference: {fileID: 0}
     - target: {fileID: 965012237666206120, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: m_LocalPosition.z

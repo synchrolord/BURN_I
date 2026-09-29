@@ -6,7 +6,6 @@ public sealed class FireLightPool2D : MonoBehaviour
     [SerializeField]
     private CellWorld2D cellWorld;
 
-    [Tooltip("Create a few reusable Spot Light 2D objects and assign them here.")]
     [SerializeField]
     private Light2D[] lights;
 
@@ -19,14 +18,14 @@ public sealed class FireLightPool2D : MonoBehaviour
     [SerializeField]
     private Color fireLightColor =
         new Color(1f, 0.42f, 0.10f, 1f);
-
+    
     [SerializeField, Min(0f)]
     private float minimumIntensity = 0.35f;
 
     [SerializeField, Min(0f)]
     private float maximumIntensity = 1.35f;
 
-    [Tooltip("Larger values make each burning chunk brighter.")]
+
     [SerializeField, Min(0.001f)]
     private float intensityPerFireStrength = 0.04f;
 
@@ -39,6 +38,7 @@ public sealed class FireLightPool2D : MonoBehaviour
 
     private void Awake()
     {
+        //setup lights and disable all of them
         int count = lights == null ? 0 : lights.Length;
 
         clusterPositions = new Vector2[count];
@@ -55,13 +55,10 @@ public sealed class FireLightPool2D : MonoBehaviour
 
     private void Update()
     {
-        if (cellWorld == null || !cellWorld.IsInitialized ||
-            lights == null ||
-            lights.Length == 0)
-        {
-            return;
-        }
+        if (cellWorld == null || !cellWorld.IsInitialized || lights == null || lights.Length == 0)
+        { return;  }
 
+        //timer to refresh lighting
         timer -= Time.deltaTime;
 
         if (timer > 0f)
@@ -73,8 +70,10 @@ public sealed class FireLightPool2D : MonoBehaviour
         RefreshLights();
     }
 
+    
     private void RefreshLights()
     {
+        //get cells with highest fire powers
         int clusterCount = cellWorld.GetBrightestFireClusters(
             clusterPositions,
             clusterStrengths,
@@ -83,6 +82,7 @@ public sealed class FireLightPool2D : MonoBehaviour
 
         for (int i = 0; i < lights.Length; i++)
         {
+            
             Light2D light2D = lights[i];
 
             if (light2D == null)
@@ -90,12 +90,14 @@ public sealed class FireLightPool2D : MonoBehaviour
                 continue;
             }
 
+            //disable unused lights when there are fewer fire clusters
             if (i >= clusterCount)
             {
                 light2D.enabled = false;
                 continue;
             }
 
+            //move this light to its cluster while keeping the same z position
             Vector2 position = clusterPositions[i];
 
             light2D.transform.position = new Vector3(
@@ -104,12 +106,14 @@ public sealed class FireLightPool2D : MonoBehaviour
                 light2D.transform.position.z
             );
 
+            //set the fire color and limit brightness based on cluster strength
             light2D.color = fireLightColor;
             light2D.intensity = Mathf.Clamp(
                 clusterStrengths[i] * intensityPerFireStrength,
                 minimumIntensity,
                 maximumIntensity
             );
+            //vary brightness over time with a different flicker pattern for each light
             light2D.intensity *= Mathf.Lerp(1f - flickerAmount, 1f + flickerAmount,
                 Mathf.PerlinNoise(i * 3.7f, Time.time * 8f));
 

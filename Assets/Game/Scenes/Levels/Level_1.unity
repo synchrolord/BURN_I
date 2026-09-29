@@ -153971,9 +153971,9 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 8
-  currentMaterial: 1
+  currentSprayType: 1
   currentNozzleIndex: 1
-  maximumProbeCount: 192
+  maximumShotCount: 192
   inheritPlayerVelocity: 0.35
   waterGravityScale: 1.4
   waterDrag: 0.25
@@ -153993,37 +153993,37 @@ MonoBehaviour:
   currentFuel: 300
   pilot:
     label: Pilot
-    angleDegrees: 4
-    speed: 3.2
-    lifetime: 0.28
+    spreadAngleDegrees: 4
+    shotSpeed: 3.2
+    shotLifetimeSeconds: 0.28
     speedRandomness: 0.1
     radiusInCells: 0
-    unitsPerDeposit: 1
-    probesPerSecond: 10
-    resourceCostPerProbe: 1
-    ignitionRadiusInCells: 0
+    waterUnitsPerShot: 1
+    shotsPerSecond: 10
+    supplyCostPerShot: 1
+    ignitionRadiusCells: 0
   jet:
     label: Jet
-    angleDegrees: 16
-    speed: 6.5
-    lifetime: 0.55
+    spreadAngleDegrees: 16
+    shotSpeed: 6.5
+    shotLifetimeSeconds: 0.55
     speedRandomness: 0.25
     radiusInCells: 0
-    unitsPerDeposit: 1
-    probesPerSecond: 26
-    resourceCostPerProbe: 1
-    ignitionRadiusInCells: 1
+    waterUnitsPerShot: 1
+    shotsPerSecond: 26
+    supplyCostPerShot: 1
+    ignitionRadiusCells: 1
   wide:
     label: Wide
-    angleDegrees: 48
-    speed: 5
-    lifetime: 0.4
+    spreadAngleDegrees: 48
+    shotSpeed: 5
+    shotLifetimeSeconds: 0.4
     speedRandomness: 0.3
     radiusInCells: 1
-    unitsPerDeposit: 1
-    probesPerSecond: 34
-    resourceCostPerProbe: 2
-    ignitionRadiusInCells: 1
+    waterUnitsPerShot: 1
+    shotsPerSecond: 34
+    supplyCostPerShot: 2
+    ignitionRadiusCells: 1
   showDebugOverlay: 1
 --- !u!1 &1599529928
 GameObject:

@@ -65,20 +65,19 @@
                     "interactions": "",
                     "initialStateCheck": false,
                     "priority": 0
+                },
+                {
+                    "name": "fillR",
+                    "type": "Button",
+                    "id": "08a7b3a3-e73e-4f5d-bf69-f285313e379b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "4d891a31-5dcb-41c6-8720-f016d9f0a315",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "2D Vector",
                     "id": "fae429bf-503a-43ac-b6cf-472be63135df",
@@ -186,6 +185,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "NozzleScroll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cca098ee-2215-401c-9857-a443aef92055",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "fillR",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

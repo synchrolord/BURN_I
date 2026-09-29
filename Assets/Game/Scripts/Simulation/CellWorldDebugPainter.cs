@@ -20,6 +20,7 @@ public sealed class CellWorldDebugPainter : MonoBehaviour
 
     private void Awake() { if (worldCamera == null) worldCamera = Camera.main; }
 
+    //read brush input and limit how often material gets painted
     private void Update()
     {
         if (cellWorld == null || worldCamera == null || Mouse.current == null || Keyboard.current == null) return;
@@ -27,6 +28,7 @@ public sealed class CellWorldDebugPainter : MonoBehaviour
         stampTimer -= Time.unscaledDeltaTime;
         bool paint = Mouse.current.leftButton.isPressed;
         bool erase = Mouse.current.rightButton.isPressed;
+        //reset the timer so the next brush press paints immediately
         if (!paint && !erase) { stampTimer = 0f; return; }
         if (stampTimer > 0f) return;
         Vector2 position = GetMouseWorldPosition();
@@ -35,6 +37,7 @@ public sealed class CellWorldDebugPainter : MonoBehaviour
         stampTimer = stampInterval;
     }
 
+    //apply the selected material to a circle around the mouse
     private void Paint(Vector2 position)
     {
         switch (paintMode)
@@ -46,6 +49,7 @@ public sealed class CellWorldDebugPainter : MonoBehaviour
         }
     }
 
+    //switch brush materials and handle simulation debug controls
     private void HandleKeyboard()
     {
         Keyboard keys = Keyboard.current;
@@ -61,6 +65,7 @@ public sealed class CellWorldDebugPainter : MonoBehaviour
             Debug.Log($"Water: {cellWorld.GetTotalWaterUnits()} | Fuel: {cellWorld.GetTotalFuelUnits()} | Awake chunks: {cellWorld.GetActiveChunkCount()}");
     }
 
+    //convert the mouse's screen position to the grid's world plane
     private Vector2 GetMouseWorldPosition()
     {
         Vector2 screen = Mouse.current.position.ReadValue();
@@ -68,6 +73,7 @@ public sealed class CellWorldDebugPainter : MonoBehaviour
         return worldCamera.ScreenToWorldPoint(new Vector3(screen.x, screen.y, distance));
     }
 
+    //show the current brush mode and available shortcuts
     private void OnGUI()
     {
         if (!showHelpText) return;

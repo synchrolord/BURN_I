@@ -3,69 +3,95 @@ using UnityEngine;
 
 public partial class CellWorld2D
 {
-    // One travelled segment, with its endpoint moved outside any wall it hits.
-    public struct SprayPath
+    // One traveled segment
+    public struct ShotPath
     {
-        public Vector2 start, end, surface;
-        public bool blocked;
+        public Vector2 startPosition;
+        public Vector2 endPosition;
+        public Vector2 insideSurfacePosition;
+        public bool hitObstacle;
     }
+    //use Raycast to detect collision of shots with environment
+    private readonly List<RaycastHit2D> shotHits = new List<RaycastHit2D>(16);
 
-    private readonly List<RaycastHit2D> sprayHits = new List<RaycastHit2D>(16);
-
-    public SprayPath TraceSpray(Vector2 start, Vector2 end, LayerMask obstacles, Transform source)
+    
+    //tace path of shots.
+    public ShotPath TraceShotPath(Vector2 startPosition, Vector2 endPosition, LayerMask obstacleLayers, Transform shooter)
     {
-        SprayPath path = new SprayPath { start = start, end = end };
-        ContactFilter2D filter = new ContactFilter2D();
-        filter.SetLayerMask(obstacles);
-        filter.useTriggers = false;
-        Physics2D.Linecast(start, end, filter, sprayHits);
-
-        // Unity returns nearest first. Ignore the player and its attached objects.
-        foreach (RaycastHit2D hit in sprayHits)
+        //construct a path struct for referencing
+        ShotPath path = new ShotPath
         {
-            if (source != null && hit.collider.transform.IsChildOf(source)) continue;
-            path.blocked = true;
-            path.end = hit.point + hit.normal * cellSize * 0.55f;
-            path.surface = hit.point - hit.normal * cellSize * 0.5f;
+            startPosition = startPosition,
+            endPosition = endPosition
+        };
+        
+        //set the obstacle layer as collision for materials
+        ContactFilter2D filter = new ContactFilter2D();
+        filter.SetLayerMask(obstacleLayers);
+        filter.useTriggers = false;
+        Physics2D.Linecast(startPosition, endPosition, filter, shotHits);
+
+        // 
+        foreach (RaycastHit2D hit in shotHits)
+        {
+            //ignore if it is the players collider
+            if (shooter != null && hit.collider.transform.IsChildOf(shooter)) continue;
+            path.hitObstacle = true;
+            path.endPosition = hit.point + hit.normal * (cellSize * 0.55f);
+            path.insideSurfacePosition = hit.point - hit.normal * (cellSize * 0.5f);
             break;
         }
         return path;
     }
 
-    // Return the water still travelling. A finished shot deposits what remains.
-    public int ApplyWaterSpray(SprayPath path, int amount, bool finished)
+    
+    
+    
+    //
+    public int ApplyWaterShot(ShotPath path, int remainingWaterUnits, bool lifetimeExpired)
     {
-        int steps = SpraySteps(path);
-        for (int i = 1; i <= steps && amount > 0; i++)
+        
+        int sampleCount = GetPathSampleCount(path);
+        for (int i = 1; i <= sampleCount && remainingWaterUnits > 0; i++)
         {
-            Vector2 point = Vector2.Lerp(path.start, path.end, i / (float)steps);
+            //use water if it overlaps fire
+            Vector2 point = Vector2.Lerp(path.startPosition, path.endPosition, i / (float)sampleCount);
             if (GetFireEnergy(point) > 0)
-                amount -= ApplyWaterImpact(point, amount);
+                remainingWaterUnits -= ApplyWaterImpact(point, remainingWaterUnits);
         }
 
-        if (path.blocked) amount -= ApplyPlantWaterImpact(path.surface, amount);
-        if (path.blocked || finished)
+        //wet plants at the wall contact before depositing leftover water
+        if (path.hitObstacle) remainingWaterUnits -= ApplyPlantWaterImpact(path.insideSurfacePosition, remainingWaterUnits);
+        //try to deposit the remaining water when the shot hits something or expires
+        if (path.hitObstacle || lifetimeExpired)
         {
-            ApplyWaterImpact(path.end, amount);
+            ApplyWaterImpact(path.endPosition, remainingWaterUnits);
             return 0;
         }
-        return amount;
+        return remainingWaterUnits;
     }
 
-    public void ApplyFlameSpray(SprayPath path, int radius)
+    //ignite cells along the flame's path and plants at the contact surface
+    public void ApplyFlameShot(ShotPath path, int ignitionRadiusCells)
     {
-        int steps = SpraySteps(path);
-        for (int i = 1; i <= steps; i++)
+        int sampleCount = GetPathSampleCount(path);
+        for (int i = 1; i <= sampleCount; i++)
         {
-            Vector2 point = Vector2.Lerp(path.start, path.end, i / (float)steps);
-            Ignite(point, radius);
+            Vector2 point = Vector2.Lerp(path.startPosition, path.endPosition, i / (float)sampleCount);
+            Ignite(point, ignitionRadiusCells);
         }
-        if (path.blocked) Ignite(path.surface, radius);
+        if (path.hitObstacle)
+        {
+            Ignite(path.insideSurfacePosition, ignitionRadiusCells);
+        }
     }
 
-    private int SpraySteps(SprayPath path)
+    //sample the traveled segment at intervals no larger than half a cell
+    private int GetPathSampleCount(ShotPath path)
     {
-        // Half-cell spacing keeps fast sprays from skipping fire or plants.
-        return Mathf.Max(1, Mathf.CeilToInt(Vector2.Distance(path.start, path.end) / (cellSize * 0.5f)));
+        return Mathf.Max(
+            1,
+            
+            Mathf.CeilToInt(Vector2.Distance(path.startPosition, path.endPosition) / (cellSize * 0.5f)));
     }
 }

@@ -19,6 +19,7 @@ public sealed class CellWorldPoly2D : CellWorld2D
     // Unity calls Reset when the component is added in the Editor.
     private void Reset() { ResetOutlineToGrid(); }
 
+    //replace the outline with the full grid rectangle before play
     public void ResetOutlineToGrid()
     {
         if (Application.isPlaying) return;
@@ -27,6 +28,7 @@ public sealed class CellWorldPoly2D : CellWorld2D
         outline = new[] { Vector2.zero, new Vector2(right, 0), new Vector2(right, top), new Vector2(0, top) };
     }
 
+    //build a yes-or-no room mask by testing each interior cell center
     protected override bool TryCreateCellMask(out bool[] mask)
     {
         mask = null;
@@ -42,6 +44,7 @@ public sealed class CellWorldPoly2D : CellWorld2D
         for (int x = 1; x < Width - 1; x++)
         {
             Vector2 center = new Vector2((x + 0.5f) * CellSize, (y + 0.5f) * CellSize);
+            //test the center in local world units, then store the result at its grid index
             bool inside = PointInside(center);
             mask[x + y * Width] = inside;
             foundCell |= inside;
@@ -59,13 +62,16 @@ public sealed class CellWorldPoly2D : CellWorld2D
         {
             Vector2 a = outline[previous], b = outline[i];
             if (OnSegment(a, b, point)) return true;
+            //skip edges whose endpoints are both above or both below this horizontal ray
             if ((a.y > point.y) == (b.y > point.y)) continue;
             float crossingX = a.x + (point.y - a.y) * (b.x - a.x) / (b.y - a.y);
+            //flip inside status for each edge crossing to the right of the point
             if (point.x < crossingX) inside = !inside;
         }
         return inside;
     }
 
+    //reject invalid outlines and return a readable reason
     public bool TryValidateOutline(out string error)
     {
         error = "";
@@ -83,6 +89,7 @@ public sealed class CellWorldPoly2D : CellWorld2D
                 error = "Every corner must have finite X and Y values.";
                 return false;
             }
+            //keep all polygon corners inside the grid's local rectangle
             if (a.x < 0 || a.y < 0 || a.x > Width * CellSize || a.y > Height * CellSize)
             {
                 error = "Keep corners inside the grid rectangle. Increase Width/Height or move the outline points.";
@@ -94,6 +101,7 @@ public sealed class CellWorldPoly2D : CellWorld2D
                 return false;
             }
             area += a.x * b.y - b.x * a.y;
+            //check that separate edges do not cross or touch
             for (int j = i + 1; j < outline.Length; j++)
             {
                 if (j == (i + 1) % outline.Length || (j + 1) % outline.Length == i) continue;
@@ -104,6 +112,7 @@ public sealed class CellWorldPoly2D : CellWorld2D
                 }
             }
         }
+        //reject outlines that collapse to a line or have almost no area
         if (Mathf.Abs(area) < 0.000001f)
         {
             error = "The outline has no area. Its corners cannot all lie on one line.";
@@ -112,11 +121,13 @@ public sealed class CellWorldPoly2D : CellWorld2D
         return true;
     }
 
+    //use the sign to tell which side of a line the point lies on
     private static float Cross(Vector2 a, Vector2 b, Vector2 point)
     {
         return (b.x - a.x) * (point.y - a.y) - (b.y - a.y) * (point.x - a.x);
     }
 
+    //check that the point lies on the line and between its endpoints
     private static bool OnSegment(Vector2 a, Vector2 b, Vector2 point)
     {
         return Mathf.Abs(Cross(a, b, point)) < 0.000001f &&
@@ -124,6 +135,7 @@ public sealed class CellWorldPoly2D : CellWorld2D
             point.y >= Mathf.Min(a.y, b.y) && point.y <= Mathf.Max(a.y, b.y);
     }
 
+    //detect touching endpoints or two segments crossing each other
     private static bool EdgesIntersect(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
     {
         if (OnSegment(a, b, c) || OnSegment(a, b, d) || OnSegment(c, d, a) || OnSegment(c, d, b)) return true;

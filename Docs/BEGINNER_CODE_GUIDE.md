@@ -24,7 +24,7 @@ Advanced wall jumps/sliding, swimming, variable jump height, acceleration/decele
 1. **Player/CameraFollow2D.cs:** a short introduction to following a Transform.
 2. **Player/PlayerMotor2D.cs:** read input, check the ground, set Rigidbody velocity, choose an animation.
 3. **Player/PlayerAim2D.cs:** turn the mouse position into a direction.
-4. **Weapons/PressureTool2D.cs:** select a nozzle, launch a drop, move it, apply its impact.
+4. **Weapons/PressureTool2D.cs:** select a nozzle, launch a shot, move it, and let CellWorld apply its effects. Follow [the current pressure-tool study guide](PRESSURE_TOOL_STUDY.md) for the shot/cell/particle vocabulary.
 5. **Vegetation/BurnablePlantTile.cs:** a small data asset holding plant sprites and settings.
 
 Start with those five. CellWorld's grid math and plant collision geometry are infrastructure; you do not need to understand them to tune movement, make plant artwork, or build a level. They are retained because the existing plant masks, collisions and sprite transforms need them.

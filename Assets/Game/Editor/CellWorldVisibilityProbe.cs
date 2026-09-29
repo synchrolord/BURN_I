@@ -23,7 +23,7 @@ public static class CellWorldVisibilityProbe
         foreach (PressureTool2D tool in Resources.FindObjectsOfTypeAll<PressureTool2D>())
         {
             if (!tool.gameObject.scene.IsValid()) continue;
-            text.AppendLine($"TOOL {tool.name} material={tool.CurrentMaterial} held={tool.IsSpraying} airborne={tool.ActiveProbeCount} water={tool.CurrentWater} fuel={tool.CurrentFuel}");
+            text.AppendLine($"TOOL {tool.name} sprayType={tool.CurrentSprayType} held={tool.IsSpraying} airborne={tool.ActiveShotCount} water={tool.CurrentWater} fuel={tool.CurrentFuel}");
         }
         foreach (Camera camera in Camera.allCameras)
             text.AppendLine($"CAMERA {camera.name} pos={camera.transform.position} culling={camera.cullingMask}");

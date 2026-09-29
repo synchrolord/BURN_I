@@ -4,11 +4,13 @@ using UnityEngine;
 
 public partial class CellWorld2D
 {
+    //build the blocked-cell array from the current Unity colliders
     private void BakeSolidsFromPhysics()
     {
         Physics2D.SyncTransforms();
         Array.Clear(solid, 0, solid.Length);
 
+        //close the outside ring so materials stay inside the grid
         for (int x = 0; x < width; x++)
         {
             solid[Index(x, 0)] = true;
@@ -21,16 +23,19 @@ public partial class CellWorld2D
             solid[Index(width - 1, y)] = true;
         }
 
+        //check a slightly smaller box inside each cell
         Vector2 sampleSize = Vector2.one * (cellSize * 0.85f);
 
         for (int y = 1; y < height - 1; y++)
         for (int x = 1; x < width - 1; x++)
         {
             int i = Index(x, y);
+            //block cells outside the room or overlapping the solid layers
             solid[i] = !ContainsCell(x, y) || Physics2D.OverlapBox(CellToWorld(x, y), sampleSize, 0f, solidMask.value) != null;
 
             if (solid[i])
             {
+                //clear materials from walls, but allow registered plants to keep fire
                 water[i] = fuel[i] = smoke[i] = 0;
                 if (!ContainsCell(x, y) || !HasPlantFuel(i)) fire[i] = 0;
             }
@@ -40,6 +45,7 @@ public partial class CellWorld2D
     /// <summary>Diagnostic count for the latest local collider refresh, not a full-world scan.</summary>
     public int LastLocalSolidRefreshCellCount { get; private set; }
 
+    //collect the unique grid cells near a changed collider
     internal void CollectSolidRefreshCells(Bounds worldBounds, HashSet<int> cells)
     {
         if (!IsReady) return;
@@ -54,6 +60,7 @@ public partial class CellWorld2D
                 y == 0 ? worldBounds.min.y : worldBounds.max.y, worldBounds.center.z));
             min = Vector2.Min(min, local); max = Vector2.Max(max, local);
         }
+        //convert the affected area to cell coordinates and keep it inside the border
         int minX = Mathf.Max(1, Mathf.FloorToInt(min.x / cellSize));
         int maxX = Mathf.Min(width - 2, Mathf.FloorToInt(max.x / cellSize));
         int minY = Mathf.Max(1, Mathf.FloorToInt(min.y / cellSize));
@@ -62,6 +69,7 @@ public partial class CellWorld2D
         for (int x = minX; x <= maxX; x++) cells.Add(Index(x, y));
     }
 
+    //recheck only the cells affected by collision changes
     internal void RefreshSolidCells(HashSet<int> cells)
     {
         if (!IsReady) return;
@@ -73,6 +81,7 @@ public partial class CellWorld2D
             int x = i % width, y = i / width;
             bool blocked = !ContainsCell(x, y) || x == 0 || y == 0 || x == width - 1 || y == height - 1 ||
                 Physics2D.OverlapBox(CellToWorld(x, y), sampleSize, 0f, solidMask.value) != null;
+            //leave unchanged cells alone and update cells whose blocked state changed
             if (solid[i] == blocked) continue;
             solid[i] = blocked;
             if (blocked)

@@ -7,7 +7,7 @@ public partial class CellWorld2D : MonoBehaviour
     [Header("Grid")]
     [SerializeField, Min(16)] private int width = 240;
     [SerializeField, Min(16)] private int height = 136;
-    [SerializeField, Min(0.01f)] private float cellSize = 0.125f;
+    [SerializeField, Min(0.01f)] private float cellSize = 0.125f;//how the single cell is devided
     [SerializeField] private LayerMask solidMask;
 
     [Header("Simulation")]
@@ -71,14 +71,17 @@ public partial class CellWorld2D : MonoBehaviour
     public float CellSize => cellSize;
     public bool IsPaused => paused;
 
+    //create grid arrays and visuals once when play starts
     protected void Start() => InitializeGrid();
 
+    //collect frame time and run the simulation at its own tick speed
     protected void Update()
     {
         if (managedExternally || paused || !IsReady) return;
         float step = 1f / ticksPerSecond;
         accumulator += Time.deltaTime;
         int completed = 0;
+        //catch up on waiting ticks, up to the limit for this frame
         while (accumulator >= step && completed < maximumTicksPerFrame)
         {
             SimulateOneTick();
@@ -89,6 +92,7 @@ public partial class CellWorld2D : MonoBehaviour
         if (completed == maximumTicksPerFrame) accumulator = 0f;
     }
 
+    //redraw changed cells or refresh visible fire flicker
     protected void LateUpdate()
     {
         if (!textureNeedsRefresh && !(hasVisibleFire && !paused && Time.time >= nextFireVisualUpdate)) return;
@@ -96,18 +100,22 @@ public partial class CellWorld2D : MonoBehaviour
         nextFireVisualUpdate = Time.time + 1f / Mathf.Max(1f, fireVisualFramesPerSecond);
     }
 
+    //destroy the sprite and texture created for this grid
     protected void OnDestroy()
     {
         if (runtimeSprite != null) Destroy(runtimeSprite);
         if (runtimeTexture != null) Destroy(runtimeTexture);
     }
 
+    //update all active cells by one simulation step
     private void SimulateOneTick()
     {
+        //advance plant timers using simulation time
         plantSimulationTime += 1.0 / ticksPerSecond;
         AgeChunks();
         WakeChunksNearTarget();
         ClearMovementFlagsInAwakeChunks();
+        //alternate liquid priority and horizontal scan direction every tick
         bool waterFirst = (tickNumber & 1) == 0;
 
         // Visit only awake chunks. Each cell follows the same short set of rules.
@@ -123,6 +131,7 @@ public partial class CellWorld2D : MonoBehaviour
             {
                 int x = waterFirst ? minX + offset : maxX - offset;
                 if (!ContainsCell(x, y)) continue;
+                //swap fuel above water every other tick
                 if (waterFirst) SeparateOilAt(x, y);
                 if (waterFirst)
                 {
@@ -134,6 +143,7 @@ public partial class CellWorld2D : MonoBehaviour
                     SimulateLiquidAt(fuel, water, movedFuel, x, y, fuelViscosity);
                     SimulateLiquidAt(water, fuel, movedWater, x, y, waterViscosity);
                 }
+                //process smoke and fire after moving the liquids
                 SimulateSmokeAt(x, y);
                 SimulateFireAt(x, y);
             }

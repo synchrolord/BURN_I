@@ -5,73 +5,68 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public sealed class PressureTool2D : MonoBehaviour
 {
-    public enum ToolMaterial { Water, Flame }
+    public enum SprayType { Water, Flame }
 
     [System.Serializable]
-
-    //allow different weapon nozzles
     private class NozzleSettings
     {
         public string label = "Jet";
-        [Range(0, 70)] public float angleDegrees = 16;
-        [Min(0.1f)] public float speed = 6.5f;
-        [Min(0.05f)] public float lifetime = 0.55f;
-        [Range(0, 4)] public int radiusInCells;
-        [Min(1)] public int unitsPerDeposit = 1;
-        [Min(1)] public float probesPerSecond = 26;
-        [Min(0)] public int resourceCostPerProbe = 1;
-        [Range(0, 3)] public int ignitionRadiusInCells = 1;
+        [Range(0, 70)] public float spreadAngleDegrees = 16;
+        [Min(0.1f)] public float shotSpeed = 6.5f;
+        [Min(0.05f)] public float shotLifetimeSeconds = 0.55f;
+        [Min(1)] public int waterUnitsPerShot = 1;
+        [Min(1)] public float shotsPerSecond = 26;
+        [Min(0)] public int supplyCostPerShot = 1;
+        [Range(0, 4)] public int ignitionRadiusCells = 1;
     }
 
     [Header("Starting mode and nozzles")]
-    [SerializeField] private ToolMaterial currentMaterial = ToolMaterial.Water;
-    [SerializeField, Range(0, 2)] private int currentNozzleIndex = 1;
+    [SerializeField] private SprayType currentSprayType = SprayType.Water;
+    [SerializeField, Range(0, 2)] private int nozzleMode = 1;
 
-    //nozzle types
+    // Nozzle settings.
     [SerializeField] private NozzleSettings jet = new NozzleSettings();
-
     [SerializeField] private NozzleSettings pilot = new NozzleSettings
     { label = "Pilot",
-        angleDegrees = 4,
-        speed = 3.2f,
-        lifetime = 0.28f,
-        probesPerSecond = 10,
-        ignitionRadiusInCells = 0 };
-
+        spreadAngleDegrees = 4,
+        shotSpeed = 3.2f,
+        shotLifetimeSeconds = 0.28f,
+        shotsPerSecond = 10,
+        ignitionRadiusCells = 0 };
     [SerializeField] private NozzleSettings wide = new NozzleSettings
     { label = "Wide",
-        angleDegrees = 48,
-        speed = 5,
-        lifetime = 0.4f,
-        probesPerSecond = 34,
-        radiusInCells = 1,
-        resourceCostPerProbe = 2 };
+        spreadAngleDegrees = 48,
+        shotSpeed = 5,
+        shotLifetimeSeconds = 0.4f,
+        shotsPerSecond = 34,
+        supplyCostPerShot = 2 };
 
-    //weapon shoots "drops" of water or fire
-    internal class Drop
+    
+    // A shot is one moving portion of water or flame. A cell is one square of the world grid.
+    internal class SprayShot
     {
-        public ToolMaterial material;
+        public SprayType sprayType;
         public Vector2 position;
         public Vector2 velocity;
-        public float life;
-        public float startingLife;
-        public int water;
-        public int fireRadius;
+        public float remainingLifetimeSeconds;
+        public float initialLifetimeSeconds;
+        public int remainingWaterUnits;
+        public int ignitionRadiusCells;
     }
 
-    //gameObjects required
+    
     [Header("References")]
     [SerializeField] private CellWorld2D cellWorld;
     [SerializeField] private Transform muzzle;
     [SerializeField] private PlayerMotor2D playerMotor;
     [SerializeField] private LayerMask obstacleMask;
 
-    //material settings
+    // Water and flame tuning.
     [Header("Water")]
     [SerializeField, Min(1)] private float waterSpeedMultiplier = 4;
     [SerializeField, Min(0.1f)] private float waterLifetimeMultiplier = 1.4f;
-    [SerializeField, Min(0.1f)] private float waterEmissionMultiplier = 2;
-    [SerializeField, Min(1)] private int waterAmountMultiplier = 4;
+    [SerializeField, Min(0.1f)] private float waterShotRateMultiplier = 2;
+    [SerializeField, Min(1)] private int waterUnitsMultiplier = 4;
     [SerializeField, Min(0)] private float waterGravityScale = 1.4f;
 
     [Header("Flame")]
@@ -79,9 +74,9 @@ public sealed class PressureTool2D : MonoBehaviour
     [SerializeField, Min(0)] private float flameDrag = 1.8f;
 
     [Header("Appearance and performance")]
-    [SerializeField, Range(32, 512)] private int maximumProbeCount = 192;
-    [SerializeField, Min(0.02f)] private float waterDropWidth = 0.12f;
-    [SerializeField, Min(0.02f)] private float flameWidth = 0.45f;
+    [SerializeField, Range(32, 512)] private int maximumShotCount = 192;
+    [SerializeField, Min(0.02f)] private float waterShotWidth = 0.12f;
+    [SerializeField, Min(0.02f)] private float flameShotWidth = 0.45f;
     [SerializeField] private int spraySortingOffset = 2;
     [SerializeField] private bool showDebugOverlay = true;
 
@@ -92,17 +87,17 @@ public sealed class PressureTool2D : MonoBehaviour
     [SerializeField, Min(1)] private int maximumFuel = 300;
     [SerializeField, Min(0)] private int currentFuel = 300;
 
-    // Like Java's ArrayList: this contains only drops that are still flying.
-    private readonly List<Drop> drops = new List<Drop>();
-    private PressureSprayVisuals drawing;
+    private readonly List<SprayShot> activeShots = new List<SprayShot>();
+    private Collider2D playerCollider;
+    private PressureSprayVisuals sprayVisuals;
     private InputAction sprayAction;
-    private bool sprayHeld;
-    private float launchBudget;
+    private bool isSprayHeld;
+    private float shotsToLaunch;
 
-    //getters
-    public bool IsSpraying => sprayHeld;
-    public int ActiveProbeCount => drops.Count;
-    public ToolMaterial CurrentMaterial => currentMaterial;
+    //readable variables for other classes
+    public bool IsSpraying => isSprayHeld;
+    public int ActiveShotCount => activeShots.Count;
+    public SprayType CurrentSprayType => currentSprayType;
     public int CurrentWater => currentWater;
     public int MaximumWater => maximumWater;
     public int CurrentFuel => currentFuel;
@@ -110,13 +105,18 @@ public sealed class PressureTool2D : MonoBehaviour
 
     private void Awake()
     {
+        //find player's components
         if (playerMotor == null) playerMotor = GetComponent<PlayerMotor2D>();
-        maximumProbeCount = Mathf.Clamp(maximumProbeCount, 32, 512);
+        playerCollider = GetComponent<Collider2D>();
+        
+        //initiate Tool variables 
+        maximumShotCount = Mathf.Clamp(maximumShotCount, 32, 512);
         currentWater = Mathf.Clamp(currentWater, 0, maximumWater);
         currentFuel = Mathf.Clamp(currentFuel, 0, maximumFuel);
-        drawing = new PressureSprayVisuals(transform, cellWorld, maximumProbeCount, spraySortingOffset);
+        sprayVisuals = new PressureSprayVisuals(transform, cellWorld, maximumShotCount, spraySortingOffset);
     }
 
+    
     private void Update()
     {
         if (cellWorld == null || !cellWorld.IsInitialized || muzzle == null)
@@ -125,159 +125,215 @@ public sealed class PressureTool2D : MonoBehaviour
             return;
         }
 
-        MoveDrops(Time.deltaTime);
-        LaunchDrops(Time.deltaTime);
-        drawing.Draw(drops, waterDropWidth, flameWidth);
+        //update current shots/create new shots
+        MoveShots(Time.deltaTime);
+        LaunchShots(Time.deltaTime);
+        sprayVisuals.Draw(activeShots, waterShotWidth, flameShotWidth);
     }
 
+    //pressing left mouse button
     public void OnSpray(InputValue value)
     {
 
         InputAction action = GetComponent<PlayerInput>().actions.FindAction("Spray");
         if (sprayAction != action)
         {
-            if (sprayAction != null) sprayAction.canceled -= ReleaseSpray;
-            sprayAction = action;
-            if (sprayAction != null) sprayAction.canceled += ReleaseSpray;
+             
         }
         SetSpraying(value.isPressed);
     }
     private void ReleaseSpray(InputAction.CallbackContext context) => SetSpraying(false);
-
+    //start of a spray
     public void SetSpraying(bool pressed)
     {
-        if (pressed && !sprayHeld)
+        if (pressed && !isSprayHeld)//new spray
         {
-            launchBudget = 1; // The first shot is immediate.
+            shotsToLaunch = 1; // The first shot is immediate.
         }
-        sprayHeld = pressed;
-        if (!pressed) launchBudget = 0;
-        if (!pressed && playerMotor != null) playerMotor.SetUsingTool(false);
+        isSprayHeld = pressed;
+        if (!pressed) shotsToLaunch = 0;
+        if (!pressed && playerMotor != null)
+        {
+            playerMotor.SetUsingTool(false);//change payer state
+        }
+           
     }
-
-    //button material switching
-    public void ToggleMaterial() =>
-        currentMaterial = currentMaterial == ToolMaterial.Water
-        ? ToolMaterial.Flame
-        : ToolMaterial.Water;
+    
+    public void ToggleSprayType() =>
+        currentSprayType = currentSprayType == SprayType.Water
+        ? SprayType.Flame
+        : SprayType.Water;
+    
+    
+    
+    //pressing "Q"
     public void OnSwitchMaterial(InputValue value)
-    { if (value.isPressed) ToggleMaterial(); }
-    public void OnSwitch_matterials(InputValue value) => OnSwitchMaterial(value);
+    { if (value.isPressed) ToggleSprayType(); }
+    
+    
 
-    //manual material switching
-    public void UseWater() => currentMaterial = ToolMaterial.Water;
-    public void UseFlame() => currentMaterial = ToolMaterial.Flame;
+    // switch materials funcs for CellWorld2D
+    public void UseWater() => currentSprayType = SprayType.Water;
+    public void UseFlame() => currentSprayType = SprayType.Flame;
 
-    //switch nozzles with mouse wheel
+    
+    
+    // Switch nozzles with the mouse wheel.
     public void OnNozzleScroll(InputValue value)
     {
+        //increment between nozzles wit mouse wheel.
         float scroll = value.Get<Vector2>().y;
         if (scroll != 0)
-            currentNozzleIndex =
-                (currentNozzleIndex + (scroll > 0 ? 1 : 2)) % 3;
+            nozzleMode =
+                (nozzleMode + (scroll > 0 ? 1 : 2)) % 3;
     }
-    private NozzleSettings CurrentNozzle()
+    private NozzleSettings GetCurrentNozzleSettings()
     {
-        if (currentNozzleIndex == 0) return pilot;
-        if (currentNozzleIndex == 2) return wide;
+        if (nozzleMode == 0) return pilot;
+        if (nozzleMode == 2) return wide;
         return jet;
     }
 
-    private void LaunchDrops(float seconds)
+    
+    
+    private void LaunchShots(float elapsedSeconds)
     {
-        NozzleSettings nozzle = CurrentNozzle();
-        int cost = Mathf.Max(0, nozzle.resourceCostPerProbe);
-        bool canSpray = sprayHeld && HasSupply(cost);
+        //initialize settings for this shot
+        NozzleSettings nozzleSettings = GetCurrentNozzleSettings();
+        int supplyCostPerShot = Mathf.Max(0, nozzleSettings.supplyCostPerShot);
+        
+        //check if player is allowed to shoot
+        bool canSpray = isSprayHeld && HasSupply(supplyCostPerShot);
         if (playerMotor != null) playerMotor.SetUsingTool(canSpray);
         if (!canSpray) return;
 
-        bool water = currentMaterial == ToolMaterial.Water;
-        float rate = nozzle.probesPerSecond * (water ? waterEmissionMultiplier : 1);
-        launchBudget = Mathf.Min(launchBudget + rate * seconds, 12);
+        //check current matterial type and change setting to water if needed
+        bool isWater = currentSprayType == SprayType.Water;
+        float shotsPerSecond = nozzleSettings.shotsPerSecond * (isWater ? waterShotRateMultiplier : 1);
+        shotsToLaunch = Mathf.Min(shotsToLaunch + shotsPerSecond * elapsedSeconds, 12);
 
-        while (launchBudget >= 1 && drops.Count < maximumProbeCount && HasSupply(cost))
+        
+      
+        Vector2 shotStartPosition = muzzle.position;
+        
+        //detect if Tool is inside wall
+        if (playerCollider != null)
+            
+            //vector returned stops at the wall to prevent shooting inside wall.
+            shotStartPosition = cellWorld.TraceShotPath(playerCollider.bounds.center,
+                muzzle.position, obstacleMask, transform).endPosition;
+
+        
+        //start shooting if shot queue has fuel available
+        while (shotsToLaunch >= 1 && activeShots.Count < maximumShotCount && HasSupply(supplyCostPerShot))
         {
-            // Fire with a random angle within the nozzle's spread.
-            float angle = Random.Range(-nozzle.angleDegrees / 2, nozzle.angleDegrees / 2);
-            Vector2 direction = Quaternion.Euler(0, 0, angle) * muzzle.right;
-            float lifetime = Mathf.Max(0.05f, nozzle.lifetime * (water ? waterLifetimeMultiplier : 1));
-            drops.Add(new Drop
+            // choose random angle within chosen range, and make it relative to muzzle not world
+            float angleDegrees = Random.Range(-nozzleSettings.spreadAngleDegrees / 2, nozzleSettings.spreadAngleDegrees / 2);
+            Vector2 shotDirection = Quaternion.Euler(0, 0, angleDegrees) * muzzle.right;
+            float shotLifetimeSeconds = Mathf.Max(0.05f, nozzleSettings.shotLifetimeSeconds * (isWater ? waterLifetimeMultiplier : 1));
+            
+            
+            
+            //create new single SprayShot inside activeShots list.
+            activeShots.Add(new SprayShot
             {
-                material = currentMaterial,
-                position = muzzle.position,
-                velocity = direction * nozzle.speed * (water ? waterSpeedMultiplier : 1),
-                life = lifetime,
-                startingLife = lifetime,
-                water = Mathf.Max(1, nozzle.unitsPerDeposit * waterAmountMultiplier),
-                fireRadius = Mathf.Max(nozzle.radiusInCells, nozzle.ignitionRadiusInCells)
+                sprayType = currentSprayType,
+                position = shotStartPosition,
+                velocity = shotDirection * nozzleSettings.shotSpeed * (isWater ? waterSpeedMultiplier : 1),
+                remainingLifetimeSeconds = shotLifetimeSeconds,
+                initialLifetimeSeconds = shotLifetimeSeconds,
+                remainingWaterUnits = Mathf.Max(1, nozzleSettings.waterUnitsPerShot * waterUnitsMultiplier),
+                ignitionRadiusCells = nozzleSettings.ignitionRadiusCells
             });
 
+            
+            
+            //subtract fuel from player if not in debugMode and shorten shot queue.
             if (!unlimitedResourcesForTesting)
             {
-                if (water) currentWater -= cost;
-                else currentFuel -= cost;
+                if (isWater) currentWater -= supplyCostPerShot;
+                else currentFuel -= supplyCostPerShot;
             }
-            launchBudget--;
+            shotsToLaunch--;
         }
     }
 
-    private bool HasSupply(int cost)
+    
+    private bool HasSupply(int supplyCostPerShot)
     {
-        int amount = currentMaterial == ToolMaterial.Water ? currentWater : currentFuel;
-        return unlimitedResourcesForTesting || amount >= cost;
+        //Prevent player from shooting if they dont have enough fuel for next shot
+        int availableSupply = currentSprayType == SprayType.Water ? currentWater : currentFuel;
+        return unlimitedResourcesForTesting || availableSupply >= supplyCostPerShot;
     }
 
-    private void MoveDrops(float seconds)
+    
+    private void MoveShots(float elapsedSeconds)
     {
-        // Work backwards so removing a finished drop cannot skip the next one.
-        for (int i = drops.Count - 1; i >= 0; i--)
+        // Update evey shot
+        for (int i = activeShots.Count - 1; i >= 0; i--)
         {
-            Drop drop = drops[i];
-            float step = Mathf.Min(seconds, drop.life);
-            bool water = drop.material == ToolMaterial.Water;
-            if (water) drop.velocity += Physics2D.gravity * waterGravityScale * step;
+            SprayShot shot = activeShots[i];
+            float stepSeconds = Mathf.Min(elapsedSeconds, shot.remainingLifetimeSeconds);
+            bool isWater = shot.sprayType == SprayType.Water;
+            if (isWater) shot.velocity += Physics2D.gravity * (waterGravityScale * stepSeconds);
             else
             {
-                drop.velocity += Vector2.up * flameLift * step;
-                drop.velocity /= 1 + flameDrag * step;
+                shot.velocity += Vector2.up * (flameLift * stepSeconds);
+                shot.velocity /= 1 + flameDrag * stepSeconds;
             }
 
-            Vector2 end = drop.position + drop.velocity * step;
-            CellWorld2D.SprayPath path = cellWorld.TraceSpray(drop.position, end, obstacleMask, transform);
-            drop.position = path.end;
-            drop.life -= step;
+            
+            //ensure shot is confined within cellWorld
+            Vector2 intendedEndPosition = shot.position + (shot.velocity * stepSeconds);
+            CellWorld2D.ShotPath path = cellWorld.TraceShotPath(shot.position, intendedEndPosition, obstacleMask, transform);
+            shot.position = path.endPosition;
+            shot.remainingLifetimeSeconds -= stepSeconds;
+            
+            
 
-            if (water) drop.water = cellWorld.ApplyWaterSpray(path, drop.water, drop.life <= 0);
-            else cellWorld.ApplyFlameSpray(path, drop.fireRadius);
+            if (isWater)
+            {
+                shot.remainingWaterUnits = cellWorld.ApplyWaterShot(
+                    path,
+                    shot.remainingWaterUnits,
+                    shot.remainingLifetimeSeconds <= 0);
+            }
+            
+            else cellWorld.ApplyFlameShot(path, shot.ignitionRadiusCells);
 
-            if (path.blocked || drop.life <= 0 || (water && drop.water <= 0))
-                drops.RemoveAt(i);
+            //kill shot
+            if (path.hitObstacle || shot.remainingLifetimeSeconds <= 0 || (isWater && shot.remainingWaterUnits <= 0))
+                activeShots.RemoveAt(i);
         }
     }
 
-    //add Resources to player
+    
+    
+    // Refill the player's supplies.
     public void AddWaterResource(int amount) => currentWater = Mathf.Clamp(currentWater + Mathf.Max(0, amount), 0, maximumWater);
     public void AddFuelResource(int amount) => currentFuel = Mathf.Clamp(currentFuel + Mathf.Max(0, amount), 0, maximumFuel);
     public void RefillAllResources() { currentWater = maximumWater; currentFuel = maximumFuel; }
+
 
     private void OnDisable()
     {
         SetSpraying(false);
         if (sprayAction != null) sprayAction.canceled -= ReleaseSpray;
         sprayAction = null;
-        drops.Clear();
-        if (drawing != null) drawing.Clear();
+        activeShots.Clear();
+        if (sprayVisuals != null) sprayVisuals.Clear();
     }
 
     private void OnDestroy()
     {
-        if (drawing != null) drawing.Destroy();
+        if (sprayVisuals != null) sprayVisuals.Destroy();
     }
 
     private void OnGUI()
     {
         if (!showDebugOverlay) return;
         string supply = unlimitedResourcesForTesting ? "Infinite supplies" : $"Water: {currentWater}/{maximumWater} | Fuel: {currentFuel}/{maximumFuel}";
-        GUI.Box(new Rect(12, 80, 420, 48), $"{currentMaterial} | {CurrentNozzle().label} | Q: switch | Scroll: nozzle\n{supply}");
+        GUI.Box(new Rect(12, 80, 420, 48), $"{currentSprayType} | {GetCurrentNozzleSettings().label} | Q: switch | Scroll: nozzle\n{supply}");
     }
+ 
 }
