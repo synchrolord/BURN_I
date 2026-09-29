@@ -3,7 +3,7 @@
 !/Assets/
 !/Packages/
 !/ProjectSettings/
-!/Docs/
+/Docs/
 !/ScriptLibrary/
 
 # Keep Git configuration and root documentation.
