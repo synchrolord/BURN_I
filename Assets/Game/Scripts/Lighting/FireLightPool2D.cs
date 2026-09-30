@@ -120,4 +120,20 @@ public sealed class FireLightPool2D : MonoBehaviour
             light2D.enabled = true;
         }
     }
+    public void SetWorld(CellWorld2D world)
+    {
+        if (cellWorld == world) return;
+
+        cellWorld = world;
+        timer = 0f;
+
+        //remove lighting from the previous room
+        if (lights == null) return;
+
+        foreach (Light2D light in lights)
+        {
+            if (light != null)
+                light.enabled = false;
+        }
+    }
 }

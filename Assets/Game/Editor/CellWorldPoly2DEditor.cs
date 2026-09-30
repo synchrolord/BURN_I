@@ -3,14 +3,14 @@ using UnityEngine;
 
 // Editor-only controls. The runtime component contains the actual simulation boundary.
 [CustomEditor(typeof(CellWorldPoly2D))]
-public sealed class CellWorldPoly2DEditor : Editor
+public sealed class CellWorldPoly2DEditor : CellWorld2DEditor
 {
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-        using (new EditorGUI.DisabledScope(true))
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("m_Script"));
-        DrawPropertiesExcluding(serializedObject, "m_Script", "outline");
+        
+        DrawGridProperties("outline");
+        
         using (new EditorGUI.DisabledScope(Application.isPlaying))
             EditorGUILayout.PropertyField(serializedObject.FindProperty("outline"), true);
         serializedObject.ApplyModifiedProperties();

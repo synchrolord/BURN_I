@@ -336,4 +336,32 @@ public sealed class PressureTool2D : MonoBehaviour
         GUI.Box(new Rect(12, 80, 420, 48), $"{currentSprayType} | {GetCurrentNozzleSettings().label} | Q: switch | Scroll: nozzle\n{supply}");
     }
  
+    
+    
+    public void SetWorld(CellWorld2D world)
+    {
+        //nothing to change if we are still in the same room
+        if (cellWorld == world) return;
+
+        cellWorld = world;
+
+        //remove flying shots belonging to the previous room
+        activeShots.Clear();
+
+        if (sprayVisuals != null)
+        {
+            sprayVisuals.Clear();
+            sprayVisuals.SetWorld(world, spraySortingOffset);
+        }
+
+        //continue immediately if the player is holding spray
+        shotsToLaunch = isSprayHeld ? 1f : 0f;
+
+        if (playerMotor != null)
+            playerMotor.SetUsingTool(false);
+    }
+    
+    
+    
+    
 }

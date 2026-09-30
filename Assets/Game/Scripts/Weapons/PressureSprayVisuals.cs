@@ -40,13 +40,7 @@ internal sealed class PressureSprayVisuals
         
         
         //get Renderer from cellWorld2D
-        if (cellWorld != null)
-        {
-            SpriteRenderer worldRenderer = cellWorld.GetComponent<SpriteRenderer>();
-            particleRenderer.sortingLayerID = worldRenderer.sortingLayerID;
-            particleRenderer.sortingOrder = worldRenderer.sortingOrder + sortingOrderOffset;
-        }
-        particleSystem.Pause();
+        SetWorld(cellWorld, sortingOrderOffset);
     }
 
     
@@ -83,6 +77,23 @@ internal sealed class PressureSprayVisuals
         particleSystem.SetParticles(particleBuffer, activeShots.Count);
     }
 
+    
+    
+    public void SetWorld(CellWorld2D world, int sortingOrderOffset)
+    {
+        if (world == null) return;
+
+        SpriteRenderer worldRenderer = world.GetComponent<SpriteRenderer>();
+
+        ParticleSystemRenderer particleRenderer =
+            particleSystem.GetComponent<ParticleSystemRenderer>();
+
+        particleRenderer.sortingLayerID = worldRenderer.sortingLayerID;
+        particleRenderer.sortingOrder =
+            worldRenderer.sortingOrder + sortingOrderOffset;
+    }
+    
+    
     
     public void Clear()
     {

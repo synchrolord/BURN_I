@@ -70,6 +70,32 @@ public partial class CellWorld2D : MonoBehaviour
     public int Height => height;
     public float CellSize => cellSize;
     public bool IsPaused => paused;
+    
+    
+    
+    
+    //whether the room manager wants this world updating
+    private bool roomActive = true;
+
+    public bool IsRoomActive => roomActive;
+
+    public void SetRoomActive(bool active)
+    {
+        //avoid resetting the timer when nothing changed
+        if (roomActive == active) return;
+
+        roomActive = active;
+        accumulator = 0f;
+
+        //refresh the image when returning to this room
+        if (active)
+            textureNeedsRefresh = true;
+    }
+    
+    
+    
+    
+    
 
     //create grid arrays and visuals once when play starts
     protected void Start() => InitializeGrid();
@@ -77,7 +103,7 @@ public partial class CellWorld2D : MonoBehaviour
     //collect frame time and run the simulation at its own tick speed
     protected void Update()
     {
-        if (managedExternally || paused || !IsReady) return;
+        if (!roomActive || managedExternally || paused || !IsReady) return;
         float step = 1f / ticksPerSecond;
         accumulator += Time.deltaTime;
         int completed = 0;
@@ -95,9 +121,16 @@ public partial class CellWorld2D : MonoBehaviour
     //redraw changed cells or refresh visible fire flicker
     protected void LateUpdate()
     {
-        if (!textureNeedsRefresh && !(hasVisibleFire && !paused && Time.time >= nextFireVisualUpdate)) return;
+        if (!roomActive || !IsReady) return;
+
+        if (!textureNeedsRefresh &&
+            !(hasVisibleFire && !paused && Time.time >= nextFireVisualUpdate))
+            return;
+
         RenderNow();
-        nextFireVisualUpdate = Time.time + 1f / Mathf.Max(1f, fireVisualFramesPerSecond);
+
+        nextFireVisualUpdate =
+            Time.time + 1f / Mathf.Max(1f, fireVisualFramesPerSecond);
     }
 
     //destroy the sprite and texture created for this grid
@@ -110,6 +143,8 @@ public partial class CellWorld2D : MonoBehaviour
     //update all active cells by one simulation step
     private void SimulateOneTick()
     {
+        if (!roomActive) return;
+        
         //advance plant timers using simulation time
         plantSimulationTime += 1.0 / ticksPerSecond;
         AgeChunks();
