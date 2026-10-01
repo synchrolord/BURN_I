@@ -18,6 +18,7 @@ public sealed class PressureTool2D : MonoBehaviour
         [Min(1)] public float shotsPerSecond = 26;
         [Min(0)] public int supplyCostPerShot = 1;
         [Range(0, 4)] public int ignitionRadiusCells = 1;
+        
     }
 
     [Header("Starting mode and nozzles")]
@@ -86,6 +87,8 @@ public sealed class PressureTool2D : MonoBehaviour
     [SerializeField, Min(0)] private int currentWater = 300;
     [SerializeField, Min(1)] private int maximumFuel = 300;
     [SerializeField, Min(0)] private int currentFuel = 300;
+    
+    public string CurrentNozzleLabel => GetCurrentNozzleSettings().label;
 
     private readonly List<SprayShot> activeShots = new List<SprayShot>();
     private Collider2D playerCollider;

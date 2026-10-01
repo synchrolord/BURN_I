@@ -1,5 +1,4 @@
-using Unity.VisualScripting;
-using UnityEditor.UIElements;
+
 using UnityEngine;
 
    
@@ -50,7 +49,7 @@ using UnityEngine;
             }
             else
             {
-                if (pressureTool.CurrentFuel>pressureTool.MaximumFuel) return false;
+                if (pressureTool.CurrentFuel>=pressureTool.MaximumFuel) return false;
                 pressureTool.AddFuelResource(amount);
             }
             return true;
