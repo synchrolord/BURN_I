@@ -46,14 +46,8 @@ public sealed class PlayerMotor2D : MonoBehaviour
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
-        if (animator == null)
-        {
-            animator = GetComponentInChildren<Animator>();
-        }
-        if (spriteRenderer == null)
-        {
-            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        }
+        if (animator == null) { animator = GetComponentInChildren<Animator>(); }
+        if (spriteRenderer == null){ spriteRenderer = GetComponentInChildren<SpriteRenderer>();}
     }
 
  
