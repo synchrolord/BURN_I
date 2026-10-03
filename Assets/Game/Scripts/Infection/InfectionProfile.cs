@@ -2,8 +2,7 @@ using System;
 using UnityEngine;
 [CreateAssetMenu(fileName = "Infection Profile", menuName = "Infection Profile")]
 
-public class InfectionProfile : MonoBehaviour
-{
+public class InfectionProfile : ScriptableObject{
 
     public const int InfectionCount =5;
 

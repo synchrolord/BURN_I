@@ -1,7 +1,4 @@
 using System;
-using Unity.Burst;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -9,7 +6,7 @@ public class PlayerVitals2D : MonoBehaviour
 {
 
     [Header("Health and infiction")] [SerializeField, Min(1f)]
-    private float maxHealth;
+    private float maxHealth = 100f; 
 
     [SerializeField] private InfectionProfile profile;
     [SerializeField, Range(0, 4)] private int infectionStage;
@@ -137,25 +134,18 @@ public class PlayerVitals2D : MonoBehaviour
         if (IsDead) return;
 
         wetSeconds = Mathf.Max(0f, wetSeconds - seconds);
-        sampleTimer -= Time.deltaTime;
-        if (sampleTimer <= 0f)
-        {
-            sampleTimer = sampleInterval;
-            SampleEnvironment();
-        }
+        
+        
 
         if (IsBurning)
         {
-            float burnTime = Mathf.Max(seconds, burningSeconds);
+            float burnTime = Mathf.Min(seconds, burningSeconds);
             burningSeconds = Mathf.Max(0f, burningSeconds - seconds);
             ApplyFireDamage(fireDamagePerSecond * burnTime);
 
         }
 
-        smokeExposure = denseSmoke ? smokeExposure + seconds : 0f;
-        if (IsInSmoke && !IsDead)
-            ApplyDamage(smokeDamagePerSecond * seconds * DamageScale);
-        RefreshBurningFeedback();
+    
 
 
     }
@@ -254,7 +244,8 @@ public class PlayerVitals2D : MonoBehaviour
         if (IsDead || amount <= 0) return 0f;
         float damageTaken = Mathf.Min(currentHealth, amount);
         currentHealth -= damageTaken;
-        flashSeconds -= damageFlashSeconds;
+        flashSeconds = damageFlashSeconds;
+        invincibilitySeconds = invincibilityFrames;
 
         Damaged?.Invoke(damageTaken);
 
@@ -306,40 +297,7 @@ public class PlayerVitals2D : MonoBehaviour
             visionLight.pointLightInnerRadius = baseVisionInnerRadius * scale;
         }
     }
-
-
-    private void SampleEnvironment()
-    {
-        Bounds bounds = bodyCollider != null
-            ? bodyCollider.bounds
-            : new Bounds(transform.position, new Vector3(0.5f, 1f, 0f));
-        Vector2 center = bounds.center;
-        Vector2 extents = (Vector2)bounds.extents * 0.85f;
-        int fire = 0;
-        int water = 0;
-        // Five fixed samples create no temporary arrays or per-frame scene searches.
-        SamplePoint(center, ref fire, ref water);
-        SamplePoint(center + Vector2.left * extents.x, ref fire, ref water);
-        SamplePoint(center + Vector2.right * extents.x, ref fire, ref water);
-        SamplePoint(center + Vector2.down * extents.y, ref fire, ref water);
-        Vector2 head = center + Vector2.up * extents.y;
-        SamplePoint(head, ref fire, ref water);
-        CellWorld2D headWorld = CellWorld2D.FindAt(head);
-        denseSmoke = headWorld != null && headWorld.GetSmokeUnits(head) >= damagingSmokeUnits;
-
-        // Wetting wins when water and flame touch the body during the same sample.
-        if (water > 0) SetWet(wetProtectionSeconds);
-        else if (fire > 0) Ignite(burnDuration);
-    }
-
-    private static void SamplePoint(Vector2 point, ref int fire, ref int water)
-    {
-        CellWorld2D world = CellWorld2D.FindAt(point);
-        if (world == null) return;
-        fire = Mathf.Max(fire, world.GetFireEnergy(point));
-        water = Mathf.Max(water, world.GetWaterUnits(point));
-    }
-
+    
     private void RefreshBurningFeedback()
     {
         bool burning = IsBurning;
