@@ -215155,6 +215155,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8287651541475554759, guid: 5f2c4d412d0377347be7503d661350b7, type: 3}
   m_PrefabInstance: {fileID: 968163195}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1449185518 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6357791618588677595, guid: 401281f3904942b4294888bf4d13987c, type: 3}
+  m_PrefabInstance: {fileID: 4650062973356166504}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1521784610
 GameObject:
   m_ObjectHideFlags: 0
@@ -217147,6 +217158,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8287651541475554759, guid: 33fe0e25978431645b0a61b736a801f1, type: 3}
   m_PrefabInstance: {fileID: 1989737820}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1707889544 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7439312722339342642, guid: 401281f3904942b4294888bf4d13987c, type: 3}
+  m_PrefabInstance: {fileID: 4650062973356166504}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &1715951065
 GameObject:
   m_ObjectHideFlags: 0
@@ -217777,7 +217799,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71e9b2e0f248fec42a3caf944ef425ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerVitals2D
-  maxHealth: 0
+  maxHealth: 100
   profile: {fileID: 0}
   infectionStage: 0
   invincibilityFrames: 0
@@ -218086,6 +218108,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2695748546078138763, guid: 401281f3904942b4294888bf4d13987c, type: 3}
+      propertyPath: healthFill
+      value: 
+      objectReference: {fileID: 1707889544}
+    - target: {fileID: 2695748546078138763, guid: 401281f3904942b4294888bf4d13987c, type: 3}
+      propertyPath: healthText
+      value: 
+      objectReference: {fileID: 1449185518}
+    - target: {fileID: 2695748546078138763, guid: 401281f3904942b4294888bf4d13987c, type: 3}
+      propertyPath: playerVitals
+      value: 
+      objectReference: {fileID: 2012715356}
+    - target: {fileID: 2695748546078138763, guid: 401281f3904942b4294888bf4d13987c, type: 3}
       propertyPath: pressureTool
       value: 
       objectReference: {fileID: 1556756224}
@@ -218253,11 +218287,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4545612304982520890, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 84.82
+      value: 85.463
       objectReference: {fileID: 0}
     - target: {fileID: 4545612304982520890, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 24.25
+      value: 23.346
       objectReference: {fileID: 0}
     - target: {fileID: 4545612304982520890, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: m_LocalPosition.z

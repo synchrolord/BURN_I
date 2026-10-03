@@ -18,12 +18,35 @@ public sealed class ResourceHUD : MonoBehaviour
     [Header("Selected tool")]
     [SerializeField] private TMP_Text modeText;
 
+    
+    
+
+
+    [Header("Health")]
+    
+    [SerializeField] private PlayerVitals2D playerVitals;
+    [SerializeField] private Image healthFill;
+    [SerializeField] private TMP_Text healthText;
+    
     private void Start()
     {
-        if (pressureTool == null ||
-            waterFill == null || waterText == null ||
-            fuelFill == null || fuelText == null ||
-            modeText == null)
+        
+        
+        if (
+            waterFill == null || 
+            fuelFill == null || 
+            pressureTool == null ||
+            
+            waterText == null || 
+            fuelText == null ||
+            modeText == null||
+            
+            
+            playerVitals == null ||
+            healthFill == null || 
+            healthText == null 
+            
+            ) 
         {
             Debug.LogError(
                 "ResourceHUD: assign all references in the Inspector.",
@@ -48,6 +71,14 @@ public sealed class ResourceHUD : MonoBehaviour
             "Fuel",
             pressureTool.CurrentFuel,
             pressureTool.MaximumFuel);
+        
+        
+        RefreshBar(
+            healthFill,
+            healthText,
+            "Health",
+            playerVitals.CurrentHealth,
+            playerVitals.MaxHealth);
 
         modeText.text =
             $"{pressureTool.CurrentSprayType} | " +
@@ -58,17 +89,18 @@ public sealed class ResourceHUD : MonoBehaviour
         Image fill,
         TMP_Text label,
         string resourceName,
-        int current,
-        int maximum)
+        float current,
+        float maximum)
     {
         float fraction = 0f;
 
-        if (maximum > 0)
-        {
-            fraction = (float)current / maximum;
-        }
+        if (maximum > 0f)
+            fraction = current / maximum;
 
         fill.fillAmount = Mathf.Clamp01(fraction);
-        label.text = $"{resourceName}: {current} / {maximum}";
+
+        label.text =
+            $"{resourceName}: {Mathf.CeilToInt(current)} / " +
+            $"{Mathf.CeilToInt(maximum)}";
     }
 }
