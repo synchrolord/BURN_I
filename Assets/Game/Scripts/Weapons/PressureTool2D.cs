@@ -21,6 +21,8 @@ public sealed class PressureTool2D : MonoBehaviour
         
     }
 
+    
+    
     [Header("Starting mode and nozzles")]
     [SerializeField] private SprayType currentSprayType = SprayType.Water;
     [SerializeField, Range(0, 2)] private int nozzleMode = 1;
@@ -61,7 +63,7 @@ public sealed class PressureTool2D : MonoBehaviour
     [SerializeField] private Transform muzzle;
     [SerializeField] private PlayerMotor2D playerMotor;
     [SerializeField] private LayerMask obstacleMask;
-
+    [SerializeField] private PlayerVitals2D playerVitals;
     // Water and flame tuning.
     [Header("Water")]
     [SerializeField, Min(1)] private float waterSpeedMultiplier = 4;
@@ -108,6 +110,10 @@ public sealed class PressureTool2D : MonoBehaviour
 
     private void Awake()
     {
+        
+        
+        if (playerVitals == null)
+            playerVitals = GetComponent<PlayerVitals2D>();
         //find player's components
         if (playerMotor == null) playerMotor = GetComponent<PlayerMotor2D>();
         playerCollider = GetComponent<Collider2D>();
@@ -122,11 +128,18 @@ public sealed class PressureTool2D : MonoBehaviour
     
     private void Update()
     {
+        
         if (cellWorld == null || !cellWorld.IsInitialized || muzzle == null)
         {
             if (playerMotor != null) playerMotor.SetUsingTool(false);
             return;
         }
+        
+        
+        // Cancel held spray input immediately when the player dies.
+        if (playerVitals != null && playerVitals.IsDead)
+            SetSpraying(false);
+        
 
         //update current shots/create new shots
         MoveShots(Time.deltaTime);
@@ -146,9 +159,17 @@ public sealed class PressureTool2D : MonoBehaviour
         SetSpraying(value.isPressed);
     }
     private void ReleaseSpray(InputAction.CallbackContext context) => SetSpraying(false);
+    
+    
     //start of a spray
     public void SetSpraying(bool pressed)
     {
+        
+        
+        if (playerVitals != null && playerVitals.IsDead)
+            pressed = false;
+        
+        
         if (pressed && !isSprayHeld)//new spray
         {
             shotsToLaunch = 1; // The first shot is immediate.
