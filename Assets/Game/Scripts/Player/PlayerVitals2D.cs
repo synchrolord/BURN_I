@@ -156,8 +156,17 @@ public class PlayerVitals2D : MonoBehaviour
         if (characterRenderer != null)
         {
             var stage = CurrentStage;
-            bool hasStageArt = stage.animationSprites != null && stage.animationSprites.Length > 0;
-            Color stageTint = originalTint * (hasStageArt ? Color.white : stage.placeHolderTint);
+            
+
+            // has its own complete animation override.
+            bool hasStageArt = stage.animationOverride != null;
+
+            Color stageTint =
+                originalTint *
+                (hasStageArt ? Color.white : stage.placeHolderTint);
+            
+            
+            
             float flash = flashSeconds > 0f ? (ReducedFlashing ? 0.15f : 0.65f) : 0f;
             characterRenderer.color = Color.Lerp(stageTint, damageTint, flash);
         }

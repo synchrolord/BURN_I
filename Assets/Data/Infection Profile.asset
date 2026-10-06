@@ -19,8 +19,7 @@ MonoBehaviour:
     aggroMultiplier: 1
     movementMultiplier: 1
     fireDamageMultiplier: 1
-    spriteSheet: {fileID: 0}
-    animationSprites: []
+    animationOverride: {fileID: 0}
     placeHolderTint: {r: 1, g: 1, b: 1, a: 1}
   - name: Exposed
     healthMultiplier: 0.95
@@ -28,8 +27,7 @@ MonoBehaviour:
     aggroMultiplier: 0.85
     movementMultiplier: 0.975
     fireDamageMultiplier: 1.2
-    spriteSheet: {fileID: 0}
-    animationSprites: []
+    animationOverride: {fileID: 22100000, guid: 30995ffacc4be504ca2374b63b2823e5, type: 2}
     placeHolderTint: {r: 0.8875, g: 0.9625, b: 0.8625, a: 1}
   - name: Rooted
     healthMultiplier: 0.9
@@ -37,8 +35,7 @@ MonoBehaviour:
     aggroMultiplier: 0.7
     movementMultiplier: 0.95
     fireDamageMultiplier: 1.4
-    spriteSheet: {fileID: 0}
-    animationSprites: []
+    animationOverride: {fileID: 0}
     placeHolderTint: {r: 0.775, g: 0.925, b: 0.725, a: 1}
   - name: Overgrown
     healthMultiplier: 0.85
@@ -46,8 +43,7 @@ MonoBehaviour:
     aggroMultiplier: 0.54999995
     movementMultiplier: 0.925
     fireDamageMultiplier: 1.6
-    spriteSheet: {fileID: 0}
-    animationSprites: []
+    animationOverride: {fileID: 0}
     placeHolderTint: {r: 0.6625, g: 0.88750005, b: 0.5875, a: 1}
   - name: Lost
     healthMultiplier: 0.8
@@ -55,10 +51,5 @@ MonoBehaviour:
     aggroMultiplier: 0.39999998
     movementMultiplier: 0.9
     fireDamageMultiplier: 1.8
-    spriteSheet: {fileID: 0}
-    animationSprites: []
+    animationOverride: {fileID: 0}
     placeHolderTint: {r: 0.55, g: 0.85, b: 0.45, a: 1}
-  baseAnimationSprites: []
-  frameSize: {x: 40, y: 40}
-  sheetColumns: 8
-  sheetPivot: {x: 0.5, y: 0}
