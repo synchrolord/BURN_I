@@ -78,6 +78,8 @@ GameObject:
   - component: {fileID: 4963776260120267364}
   - component: {fileID: 5356355531755023391}
   - component: {fileID: 5459563950617237514}
+  - component: {fileID: 4209448177274357688}
+  - component: {fileID: 4547994943949416811}
   m_Layer: 6
   m_Name: PLayer
   m_TagString: Untagged
@@ -220,6 +222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMotor2D
   moveSpeed: 12
+  sprintMultiplier: 2
   jumpSpeed: 16
   coyoteTime: 0.12
   jumpBufferTime: 0.14
@@ -228,13 +231,11 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 8
+  apexVelocityThreshold: 1
+  landingPoseSeconds: 0.1
+  playerVitals: {fileID: 0}
   animator: {fileID: 0}
   spriteRenderer: {fileID: 0}
-  idleAnimationName: Idle
-  runAnimationName: Run
-  jumpUpAnimationName: JumUp
-  jumpFallAnimationName: JumpFall
-  shootAnimationName: Shoot
 --- !u!114 &5356355531755023391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,6 +315,54 @@ MonoBehaviour:
   currentWater: 300
   maximumFuel: 300
   currentFuel: 300
+--- !u!114 &4209448177274357688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012792728053545839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71e9b2e0f248fec42a3caf944ef425ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerVitals2D
+  maxHealth: 100
+  profile: {fileID: 0}
+  infectionStage: 0
+  invincibilityFrames: 0
+  sampleInterval: 0.1
+  fireDamagePerSecond: 8
+  smokeDamagePerSecond: 8
+  dangerousSmokeDensity: 4
+  smokeGraceSeconds: 1.5
+  burnDuration: 2
+  wetProtectionSeconds: 1.5
+  fireDamageToCure: 30
+  characterRenderer: {fileID: 0}
+  visionLight: {fileID: 0}
+  burningLight: {fileID: 0}
+  burningVisual: {fileID: 0}
+  damageTint: {r: 1, g: 0.35, b: 0.3, a: 1}
+  damageFlashSeconds: 0.12
+  damageAudio: {fileID: 0}
+  damageClip: {fileID: 0}
+  burningAudio: {fileID: 0}
+  burningLoop: {fileID: 0}
+--- !u!114 &4547994943949416811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012792728053545839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61fe501d5d889324f8b2f08b74820498, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerRespawn2D
+  respawnPoint: {fileID: 0}
+  respawnDelay: 1.5
 --- !u!1 &2223576177532432259
 GameObject:
   m_ObjectHideFlags: 0

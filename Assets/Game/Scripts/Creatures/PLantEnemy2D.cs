@@ -83,16 +83,18 @@ public sealed class PlantEnemy2D : MonoBehaviour
 
         float distanceToPlayer = GetDistanceToPlayer();
 
-        if (distanceToPlayer <= agroDistance)
-        {
-            ChasePlayer();
-            return;
-        }
+
         
         if (distanceToPlayer <= attackRange)
         {
             StopMoving();
             TryAttack();
+            return;
+        }
+        
+        if (distanceToPlayer <= agroDistance)
+        {
+            ChasePlayer();
             return;
         }
 
