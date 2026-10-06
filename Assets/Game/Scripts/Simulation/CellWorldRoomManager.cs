@@ -66,4 +66,8 @@ public sealed class CellWorldRoomManager : MonoBehaviour
         if (fireLightPool != null)
             fireLightPool.SetWorld(CurrentWorld);
     }
+    
+    
+    
+    
 }

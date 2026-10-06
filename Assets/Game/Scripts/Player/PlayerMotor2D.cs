@@ -199,9 +199,13 @@ public sealed class PlayerMotor2D : MonoBehaviour
             moveInput.x * moveSpeed * sprintMultiplier
             : moveInput.x * moveSpeed;
 
-  
         
         
+        
+        
+        
+        
+
         //when to allow jumping
         if (jumpBufferRemaining > 0f && (IsGrounded || coyoteRemaining > 0f ))
         {

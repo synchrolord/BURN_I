@@ -22,7 +22,9 @@ public partial class CellWorld2D
             textureNeedsRefresh = true;
             return;
         }
-
+        
+        
+        
         
         //try burning plant if it exists
         bool plantBurning = BurnPlant(i, out bool firstPlantPass);
