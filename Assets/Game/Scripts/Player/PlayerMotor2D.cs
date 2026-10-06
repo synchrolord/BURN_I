@@ -4,47 +4,97 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D))]
 public sealed class PlayerMotor2D : MonoBehaviour
 {
+    
+    
+    
     [Header("Walking and jumping")]
     [SerializeField] private float moveSpeed = 6f;
+    [SerializeField] private float sprintMultiplier = 2f;
     [SerializeField] private float jumpSpeed = 10f;
     [SerializeField] private float coyoteTime = 0.12f;
     [SerializeField] private float jumpBufferTime = 0.14f;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundRadius = 0.12f;
     [SerializeField] private LayerMask groundMask;
+    
+    private bool isRunning = false;
+    
+    
 
+    
+    [Header("Animation timing")]
+    [SerializeField, Min(0f)]
+    private float apexVelocityThreshold = 1f;
+
+    [SerializeField, Min(0f)]
+    private float landingPoseSeconds = 0.1f;
+
+    private bool wasGrounded;
+    private float landingPoseRemaining;
+    
+    [SerializeField] private PlayerVitals2D playerVitals;
+    
+    
+    
     [Header("Existing Animator state names")]
     [SerializeField] private Animator animator;
     [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private string idleAnimationName = "Idle";
-    [SerializeField] private string runAnimationName = "Run";
-    [SerializeField] private string jumpUpAnimationName = "JumUp";
-    [SerializeField] private string jumpFallAnimationName = "JumpFall";
-    [SerializeField] private string shootAnimationName = "Shoot";
+    
+    private static readonly int IdleAnimation =
+        Animator.StringToHash("Idle");
+
+    private static readonly int RunAnimation =
+        Animator.StringToHash("Run");
+
+    private static readonly int JumpUpAnimation =
+        Animator.StringToHash("JumpUp");
+
+    private static readonly int JumpFallAnimation =
+        Animator.StringToHash("JumpFall");
+
+    private static readonly int ShootAnimation =
+        Animator.StringToHash("Shoot");
+    
+    private static readonly int JumpApexAnimation =
+        Animator.StringToHash("JumpApex");
+
+    private static readonly int LandAnimation =
+        Animator.StringToHash("Land");
+    
+    private static readonly int DeadAnimation =
+        Animator.StringToHash("Dead");
+    
+    private static readonly int SprintAnimation= 
+        Animator.StringToHash("Sprint");
 
     private Rigidbody2D body;
     private Vector2 moveInput;
     private bool isUsingTool;
     private float coyoteRemaining;
     private float jumpBufferRemaining;
-    private string currentAnimation;
+    private int currentAnimation;
 
 
+    
     public bool IsGrounded { get; private set; }
     
-    //get velocity every update
-    public Vector2 Velocity
+    
+    
+    
+    
+    private void Start()
     {
-        get
-        {
-            return body.linearVelocity;
-        }
+        IsGrounded = TouchesGround();
+        wasGrounded = IsGrounded;
     }
 
 
     //set up body, animator, and spriteRenderer.
     private void Awake()
     {
+        if (playerVitals == null)
+            playerVitals = GetComponent<PlayerVitals2D>();
+        
         body = GetComponent<Rigidbody2D>();
         if (animator == null) { animator = GetComponentInChildren<Animator>(); }
         if (spriteRenderer == null){ spriteRenderer = GetComponentInChildren<SpriteRenderer>();}
@@ -55,6 +105,19 @@ public sealed class PlayerMotor2D : MonoBehaviour
     public void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
+    }
+
+    public void OnRun(InputValue value)
+    {
+        // value.isPressed is true when held, false when released
+        if (value.isPressed)
+        {
+            isRunning = true;
+        }
+        else
+        {
+            isRunning = false;
+        }
     }
 
     //store jump input for some time to allow queueing jumps.
@@ -99,7 +162,31 @@ public sealed class PlayerMotor2D : MonoBehaviour
         
         
         float step = Time.fixedDeltaTime;
-        IsGrounded = TouchesGround();
+        
+        if (playerVitals != null && playerVitals.IsDead)
+        {
+            moveInput = Vector2.zero;
+
+            body.linearVelocity = new Vector2(
+                0f,
+                body.linearVelocity.y
+            );
+
+            UpdateAppearance();
+            return;
+        }
+        
+        
+        bool groundedNow = TouchesGround();
+
+        if (!wasGrounded && groundedNow)
+            landingPoseRemaining = landingPoseSeconds;
+
+        IsGrounded = groundedNow;
+        landingPoseRemaining =
+            Mathf.Max(0f, landingPoseRemaining - step);
+        
+        
         coyoteRemaining = Mathf.Max(0f, coyoteRemaining - step);
         
         if (IsGrounded)
@@ -107,7 +194,13 @@ public sealed class PlayerMotor2D : MonoBehaviour
         
         //reset players velocity, gravity
         Vector2 velocity = body.linearVelocity;
-        velocity.x = moveInput.x * moveSpeed;
+        
+        velocity.x = isRunning ? 
+            moveInput.x * moveSpeed * sprintMultiplier
+            : moveInput.x * moveSpeed;
+
+  
+        
         
         //when to allow jumping
         if (jumpBufferRemaining > 0f && (IsGrounded || coyoteRemaining > 0f ))
@@ -125,6 +218,7 @@ public sealed class PlayerMotor2D : MonoBehaviour
         //decrement jumpBufferRemaining and ladderDetachRemaining
         jumpBufferRemaining = Mathf.Max(0f, jumpBufferRemaining - step);
         UpdateAppearance();
+        wasGrounded = IsGrounded;
     }
 
 
@@ -132,46 +226,65 @@ public sealed class PlayerMotor2D : MonoBehaviour
     //handles switching to appropriate animation using player state
     private void UpdateAppearance()
     {
-        //Mirror sprite if player moving in negative direction
-        if (spriteRenderer != null && moveInput.x != 0f)
+        if (playerVitals != null && playerVitals.IsDead)
+        {
+            PlayAnimation(DeadAnimation);
+            return;
+        }
+
+        if (spriteRenderer != null &&
+            Mathf.Abs(moveInput.x) > 0.01f)
         {
             spriteRenderer.flipX = moveInput.x < 0f;
         }
-        
-        
-        //start with defualt idle animation and switch to relevant animation
-        string nextAnimation = idleAnimationName;
-        
-        
-        //Running
-        if (moveInput.x != 0f || (moveInput.y != 0f))
-        {
-            nextAnimation = runAnimationName;
-        }
-        
-        //Jumping
+
+        int nextAnimation;
+
         if (!IsGrounded)
         {
-            nextAnimation = jumpFallAnimationName;
-            if (body.linearVelocity.y > 0f)
-            {
-                nextAnimation = jumpUpAnimationName;
-            }
+            float verticalSpeed = body.linearVelocity.y;
+
+            if (verticalSpeed > apexVelocityThreshold)
+                nextAnimation = JumpUpAnimation;
+            else if (verticalSpeed < -apexVelocityThreshold)
+                nextAnimation = JumpFallAnimation;
+            else
+                nextAnimation = JumpApexAnimation;
         }
-        
-        //Using tool
+        else if (landingPoseRemaining > 0f)
+        {
+            nextAnimation = LandAnimation;
+        }
         else if (isUsingTool)
         {
-            nextAnimation = shootAnimationName;
+            nextAnimation = ShootAnimation;
         }
-        
-        //if animator exists, Animation Exists, Aanimation differs from current animation, 
-        if (animator != null && animator.HasState(0, Animator.StringToHash(nextAnimation))&& nextAnimation != currentAnimation )
+        else if (Mathf.Abs(body.linearVelocity.x) > 0.05f)
         {
-            animator.Play(nextAnimation);
-            currentAnimation = nextAnimation;
+            nextAnimation = RunAnimation;
         }
+        else
+        {
+            nextAnimation = IdleAnimation;
+        }
+
+        PlayAnimation(nextAnimation);
     }
+    
+                
+    private void PlayAnimation(int animation)                                                                                           
+    {
+        if (animator == null ||
+            animation == currentAnimation ||
+            !animator.HasState(0, animation))
+        {
+            return;
+        }
+
+        animator.Play(animation);
+        currentAnimation = animation;
+    }
+    
 
     
    
@@ -180,7 +293,7 @@ public sealed class PlayerMotor2D : MonoBehaviour
 
         moveInput = Vector2.zero;
         isUsingTool = false;
-        currentAnimation = null;
+        currentAnimation = 0;
         jumpBufferRemaining = 0f;
         coyoteRemaining = 0f;
     }

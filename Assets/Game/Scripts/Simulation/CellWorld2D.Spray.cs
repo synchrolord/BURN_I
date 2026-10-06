@@ -31,6 +31,7 @@ public partial class CellWorld2D
         filter.useTriggers = false;
         Physics2D.Linecast(startPosition, endPosition, filter, shotHits);
 
+        
         // 
         foreach (RaycastHit2D hit in shotHits)
         {

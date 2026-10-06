@@ -9,7 +9,7 @@ public sealed class PlantEnemy2D : MonoBehaviour
         Spitter
     }
     
-
+        
     [Header("Body")]
     [SerializeField] private EnemyType enemyType;
     [SerializeField] private SpriteRenderer spriteRenderer;
@@ -26,6 +26,16 @@ public sealed class PlantEnemy2D : MonoBehaviour
     [SerializeField, Min(0f)] private float attackRange = 0.8f;
     [SerializeField, Min(0f)] private float attackDamage = 10f;
     [SerializeField, Min(0.05f)] private float attackCooldown = 1f;
+    
+    
+    
+    [Header("Ledge Checking")]
+    [SerializeField] private LayerMask mask;
+    
+    [SerializeField, Min(0.01f)] private float wallCheckDistance = 0.1f;
+
+    [SerializeField, Min(0.05f)] private float ledgeCheckDepth = 0.5f;
+    
 
     private Rigidbody2D body;
     private PlayerVitals2D player;
@@ -57,6 +67,7 @@ public sealed class PlantEnemy2D : MonoBehaviour
             Mathf.Max(0f, attackCooldownRemaining - Time.deltaTime);
     }
 
+    
     private void FixedUpdate()
     {
         if (enemyType != EnemyType.Walker)
@@ -73,6 +84,12 @@ public sealed class PlantEnemy2D : MonoBehaviour
 
         float distanceToPlayer = GetDistanceToPlayer();
 
+        if (distanceToPlayer <= agroDistance)
+        {
+            ChasePlayer();
+            return;
+        }
+        
         if (distanceToPlayer <= attackRange)
         {
             StopMoving();
@@ -80,11 +97,7 @@ public sealed class PlantEnemy2D : MonoBehaviour
             return;
         }
 
-        if (distanceToPlayer <= agroDistance)
-        {
-            ChasePlayer();
-            return;
-        }
+
 
         Patrol();
     }
