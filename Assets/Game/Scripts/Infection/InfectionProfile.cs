@@ -20,7 +20,7 @@ public class InfectionProfile : ScriptableObject{
         [Min(0.1f)] public float movementMultiplier = 1f;
         [Min(0.1f)] public float fireDamageMultiplier = 1f;
         
-        
+        //custom sprites for every infection state
         public Texture2D spriteSheet;
         public  Sprite[] animationSprites=Array.Empty<Sprite>();
         public Color placeHolderTint = Color.white;

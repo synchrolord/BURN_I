@@ -195,6 +195,23 @@ public sealed class PlayerMotor2D : MonoBehaviour
         //reset players velocity, gravity
         Vector2 velocity = body.linearVelocity;
         
+        
+        
+        //Speed Modifiers
+        
+        //infection stage debuff
+        float infectionSpeedMultiplier =
+            playerVitals != null
+                ? playerVitals.CurrentStage.movementMultiplier
+                : 1f;
+
+        //sprinting
+        float sprintSpeedMultiplier =
+            isRunning ? sprintMultiplier : 1f;
+        
+        
+        
+        
         velocity.x = isRunning ? 
             moveInput.x * moveSpeed * sprintMultiplier
             : moveInput.x * moveSpeed;

@@ -82,6 +82,12 @@ public sealed class PlantEnemy2D : MonoBehaviour
         }
 
         float distanceToPlayer = GetDistanceToPlayer();
+        
+        
+        //enemies notice player harder when infected
+        float effectiveAggroDistance =
+            agroDistance *
+            player.CurrentStage.aggroMultiplier;
 
 
         
@@ -92,7 +98,7 @@ public sealed class PlantEnemy2D : MonoBehaviour
             return;
         }
         
-        if (distanceToPlayer <= agroDistance)
+        if (distanceToPlayer <= effectiveAggroDistance)
         {
             ChasePlayer();
             return;
