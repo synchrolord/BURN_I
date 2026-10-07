@@ -17,16 +17,27 @@ public sealed class ResourceHUD : MonoBehaviour
 
     [Header("Selected tool")]
     [SerializeField] private TMP_Text modeText;
-
     
-    
-
 
     [Header("Health")]
     
     [SerializeField] private PlayerVitals2D playerVitals;
     [SerializeField] private Image healthFill;
     [SerializeField] private TMP_Text healthText;
+    
+    [Header("Animation")]
+    [SerializeField] private Animator animator;
+
+    [SerializeField, Min(0f)]
+    private float attackAnimationSeconds = 0.4f;
+
+    
+    
+    
+    
+    
+    
+    
     
     private void Start()
     {

@@ -35,6 +35,31 @@ public sealed class PlantEnemy2D : MonoBehaviour
     [SerializeField, Min(0.01f)] private float wallCheckDistance = 0.1f;
     [SerializeField, Min(0.05f)] private float ledgeCheckDepth = 0.5f;
     
+    
+    
+    
+    //Animation
+    [Header("Animation")]
+    [SerializeField]float attackAnimationSeconds;
+    [SerializeField] Animator animator;
+
+    private static readonly int IdleAnimation =
+        Animator.StringToHash("Idle");
+
+    private static readonly int MoveAnimation =
+        Animator.StringToHash("Move");
+
+    private static readonly int AttackAnimation =
+        Animator.StringToHash("Attack");
+
+    private static readonly int DeadAnimation =
+        Animator.StringToHash("Dead");
+
+    private int currentAnimation;
+    private float attackAnimationRemaining;
+    
+    
+    
 
     private Rigidbody2D body;
     private PlayerVitals2D player;
@@ -45,6 +70,12 @@ public sealed class PlantEnemy2D : MonoBehaviour
 
     private void Awake()
     {
+        
+        
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
+        
+        
         body = GetComponent<Rigidbody2D>();
 
         if (spriteRenderer == null)
@@ -62,6 +93,13 @@ public sealed class PlantEnemy2D : MonoBehaviour
 
     private void Update()
     {
+        
+        
+        attackAnimationRemaining = Mathf.Max(
+            0f,
+            attackAnimationRemaining - Time.deltaTime
+        );
+        
         attackCooldownRemaining =
             Mathf.Max(0f, attackCooldownRemaining - Time.deltaTime);
     }
@@ -69,6 +107,30 @@ public sealed class PlantEnemy2D : MonoBehaviour
     
     private void FixedUpdate()
     {
+        if (enemyType != EnemyType.Walker)
+        {
+            StopMoving();
+            PlayAnimation(IdleAnimation);
+            return;
+            
+        }
+        
+        if (player == null || player.IsDead)
+        {
+            StopMoving();
+            PlayAnimation(IdleAnimation);
+            return;
+        }
+
+        
+        if (attackAnimationRemaining > 0f)
+        {
+            StopMoving();
+            return;
+        }
+        
+        
+        
         if (enemyType != EnemyType.Walker)
         {
             StopMoving();
@@ -94,7 +156,10 @@ public sealed class PlantEnemy2D : MonoBehaviour
         if (distanceToPlayer <= attackRange)
         {
             StopMoving();
-            TryAttack();
+
+            if (!TryAttack())
+                PlayAnimation(IdleAnimation);
+
             return;
         }
         
@@ -126,6 +191,7 @@ public sealed class PlantEnemy2D : MonoBehaviour
             MoveHorizontal(patrolDirection, moveSpeed);
         else
             StopMoving();
+            PlayAnimation(IdleAnimation);
     }
     private void ChasePlayer()
     {
@@ -138,15 +204,23 @@ public sealed class PlantEnemy2D : MonoBehaviour
             MoveHorizontal(direction, agroSpeed);
         else
             StopMoving();
+        PlayAnimation(IdleAnimation);
     }
 
-    private void TryAttack()
+    private bool TryAttack()
     {
         if (attackCooldownRemaining > 0f)
-            return;
+            return false;
 
+        // Apply the hit and briefly lock the attack animation.
         player.TakeDamage(attackDamage);
+
         attackCooldownRemaining = attackCooldown;
+        
+        attackAnimationRemaining = attackAnimationSeconds;
+
+        PlayAnimation(AttackAnimation);
+        return true;
     }
 
     private void MoveHorizontal(float direction, float speed)
@@ -158,6 +232,8 @@ public sealed class PlantEnemy2D : MonoBehaviour
 
         if (spriteRenderer != null && direction != 0f)
             spriteRenderer.flipX = direction < 0f;
+        
+        PlayAnimation(MoveAnimation);
     }
 
     private void StopMoving()
@@ -173,6 +249,7 @@ public sealed class PlantEnemy2D : MonoBehaviour
             transform.position,
             player.transform.position
         );
+        
     }
 
     private bool CanMove(float direction)
@@ -210,6 +287,21 @@ public sealed class PlantEnemy2D : MonoBehaviour
         return !wallAhead && groundAhead;
 
     }
+    
+    
+    private void PlayAnimation(int animation)
+    {
+        if (animator == null ||
+            animation == currentAnimation ||
+            !animator.HasState(0, animation))
+        {
+            return;
+        }
+
+        animator.Play(animation);
+        currentAnimation = animation;
+    }
+    
     
     
     
