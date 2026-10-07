@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 6652993547707778549}
   - component: {fileID: 7142946827370951454}
   - component: {fileID: 349784805409626603}
+  - component: {fileID: 9051275372192886630}
   m_Layer: 9
   m_Name: Visual
   m_TagString: Untagged
@@ -251,3 +252,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &9051275372192886630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6022528773882412775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0f91f5f8ed65b64b9e389c3fae25c88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureHealth2D
+  maxHealth: 30
+  deathDelay: 0.5
+  animator: {fileID: 349784805409626603}
+  behaviour: {fileID: 8511525086972793026}

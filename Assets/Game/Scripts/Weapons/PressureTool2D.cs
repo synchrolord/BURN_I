@@ -64,7 +64,8 @@ public sealed class PressureTool2D : MonoBehaviour
     [SerializeField] private PlayerMotor2D playerMotor;
     [SerializeField] private LayerMask obstacleMask;
     [SerializeField] private PlayerVitals2D playerVitals;
-    // Water and flame tuning.
+    
+
     [Header("Water")]
     [SerializeField, Min(1)] private float waterSpeedMultiplier = 4;
     [SerializeField, Min(0.1f)] private float waterLifetimeMultiplier = 1.4f;
@@ -89,6 +90,11 @@ public sealed class PressureTool2D : MonoBehaviour
     [SerializeField, Min(0)] private int currentWater = 300;
     [SerializeField, Min(1)] private int maximumFuel = 300;
     [SerializeField, Min(0)] private int currentFuel = 300;
+    
+    
+    [Header("Creature damage")]
+    [SerializeField] private LayerMask creatureMask;
+    [SerializeField, Min(0f)] private float flameDamagePerShot = 2f;
     
     public string CurrentNozzleLabel => GetCurrentNozzleSettings().label;
 
@@ -298,23 +304,71 @@ public sealed class PressureTool2D : MonoBehaviour
         {
             SprayShot shot = activeShots[i];
             float stepSeconds = Mathf.Min(elapsedSeconds, shot.remainingLifetimeSeconds);
+            
+            //get shot Type
             bool isWater = shot.sprayType == SprayType.Water;
-            if (isWater) shot.velocity += Physics2D.gravity * (waterGravityScale * stepSeconds);
-            else
-            {
+            
+            //Water {Gravity}
+            if (isWater) shot.velocity += 
+                Physics2D.gravity * (waterGravityScale * stepSeconds);
+            
+            //Fire {Lift}
+            else{
                 shot.velocity += Vector2.up * (flameLift * stepSeconds);
-                shot.velocity /= 1 + flameDrag * stepSeconds;
-            }
+                shot.velocity /= 1 + flameDrag * stepSeconds; }
 
+            
             
             //ensure shot is confined within cellWorld
-            Vector2 intendedEndPosition = shot.position + (shot.velocity * stepSeconds);
-            CellWorld2D.ShotPath path = cellWorld.TraceShotPath(shot.position, intendedEndPosition, obstacleMask, transform);
+            Vector2 shotStartPosition = shot.position;
+            Vector2 intendedEndPosition =
+                shotStartPosition + shot.velocity * stepSeconds;
+
+            //trace path of shot
+            CellWorld2D.ShotPath path =
+                cellWorld.TraceShotPath(
+                    shotStartPosition,
+                    intendedEndPosition,
+                    obstacleMask,
+                    transform
+                );
+
+            
+            RaycastHit2D creatureHit = default;
+
+            //fire only behaviour
+            if (!isWater)
+            {
+                //check if creature has been hit by fire shot
+                creatureHit = Physics2D.Linecast(
+                    shotStartPosition,
+                    path.endPosition,
+                    creatureMask
+                );
+
+                //use collision information to get which enemy was hit
+                if (creatureHit.collider != null)
+                {
+                    CreatureHealth2D health =
+                        creatureHit.collider
+                            .GetComponentInParent<CreatureHealth2D>();
+
+                    //enemy takes fire damage
+                    if (health != null)
+                        health.TakeFireDamage(flameDamagePerShot);
+
+                    //creature becomes the new endpoint for shot
+                    path.endPosition = creatureHit.point;
+                    path.hitObstacle = false;
+                }
+            }
+
             shot.position = path.endPosition;
             shot.remainingLifetimeSeconds -= stepSeconds;
-            
-            
+            bool hitCreature = creatureHit.collider != null;
 
+            
+            //apply water into the cellWorld
             if (isWater)
             {
                 shot.remainingWaterUnits = cellWorld.ApplyWaterShot(
@@ -322,11 +376,14 @@ public sealed class PressureTool2D : MonoBehaviour
                     shot.remainingWaterUnits,
                     shot.remainingLifetimeSeconds <= 0);
             }
-            
+            //apply Fire into the cellWorld
             else cellWorld.ApplyFlameShot(path, shot.ignitionRadiusCells);
 
-            //kill shot
-            if (path.hitObstacle || shot.remainingLifetimeSeconds <= 0 || (isWater && shot.remainingWaterUnits <= 0))
+            
+            
+            //kill shot if it is interrupted 
+            if (path.hitObstacle||hitCreature || shot.remainingLifetimeSeconds <= 0 ||
+                (isWater && shot.remainingWaterUnits <= 0))
                 activeShots.RemoveAt(i);
         }
     }

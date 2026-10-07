@@ -216355,7 +216355,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1420153855}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Enemies
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -219895,6 +219895,10 @@ PrefabInstance:
     - target: {fileID: 5459563950617237514, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: showDebugOverlay
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5459563950617237514, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
+      propertyPath: creatureMask.m_Bits
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 5459563950617237514, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: unlimitedResourcesForTesting

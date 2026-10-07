@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8401349639627149939}
   - component: {fileID: 8511525086972793026}
   - component: {fileID: 4113620592467780481}
+  - component: {fileID: 5378263922095376385}
   m_Layer: 9
   m_Name: Walker
   m_TagString: Untagged
@@ -136,6 +137,22 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.7595978, y: 2.0724566}
   m_EdgeRadius: 0
+--- !u!114 &5378263922095376385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5633550519022820784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0f91f5f8ed65b64b9e389c3fae25c88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureHealth2D
+  maxHealth: 30
+  deathDelay: 0.5
+  animator: {fileID: 349784805409626603}
+  behaviour: {fileID: 8511525086972793026}
 --- !u!1 &6022528773882412775
 GameObject:
   m_ObjectHideFlags: 0
