@@ -35,7 +35,7 @@ MonoBehaviour:
     aggroMultiplier: 0.7
     movementMultiplier: 0.95
     fireDamageMultiplier: 1.4
-    animationOverride: {fileID: 0}
+    animationOverride: {fileID: 22100000, guid: 8541d27071ac27e4ca632dcbc2945250, type: 2}
     placeHolderTint: {r: 0.775, g: 0.925, b: 0.725, a: 1}
   - name: Overgrown
     healthMultiplier: 0.85

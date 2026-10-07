@@ -49,7 +49,7 @@ public class InfectionProfile : ScriptableObject{
     {
         string[] names = { "Healthy", "Exposed", "Rooted", "Overgrown", "Lost" };
         var result = new InfectionStage[InfectionCount];
-
+        
         for (int i = 0; i < result.Length; i++)
         {
             result[i] = new InfectionStage()
