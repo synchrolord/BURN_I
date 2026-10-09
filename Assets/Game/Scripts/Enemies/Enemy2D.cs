@@ -104,6 +104,11 @@ public sealed class PlantEnemy2D : MonoBehaviour
         
         attackCooldownRemaining =
             Mathf.Max(0f, attackCooldownRemaining - Time.deltaTime);
+
+        if (enemyType == EnemyType.Walker)
+            UpdateWalker();
+        else
+            UpdateSpitter();
     }
 
     
@@ -162,41 +167,27 @@ public sealed class PlantEnemy2D : MonoBehaviour
         
         Patrol();
     }
-    public void UpdateSpitter()
+    private void UpdateSpitter()
     {
+        StopMoving();
+        FacePlayer();
 
-        float distanceToPlayer = GetDistanceToPlayer();
-
-        //enemies notice player harder when infected
         float effectiveSpitRange =
-            spitRange * 
-            player.CurrentStage.aggroMultiplier;
-        
-        float effectiveAggroDistance =
-            agroDistance * player.CurrentStage.aggroMultiplier;
+            spitRange * player.CurrentStage.aggroMultiplier;
 
-        if (distanceToPlayer <= effectiveSpitRange)
+        if (GetDistanceToPlayer() > effectiveSpitRange)
         {
-            StopMoving();
-            FacePlayer();
-            TrySpit();
-            
+            PlayAnimation(IdleAnimation);
+            return;
         }
-        
-        
+
         if (attackCooldownRemaining > 0f)
         {
             PlayAnimation(IdleAnimation);
             return;
         }
-        
-        if (distanceToPlayer <= effectiveAggroDistance)
-        {
-            ChasePlayer();
-            return;
-        }
 
-        Patrol();
+        TrySpit();
     }
     
     
