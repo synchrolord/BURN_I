@@ -253,10 +253,11 @@ public sealed class PlayerMotor2D : MonoBehaviour
             return;
         }
 
-        if (spriteRenderer != null &&
-            Mathf.Abs(moveInput.x) > 0.01f)
+        if (Mathf.Abs(moveInput.x) > 0.01f)
         {
-            spriteRenderer.flipX = moveInput.x < 0f;
+            Vector3 scale = transform.localScale;
+            scale.x = Mathf.Abs(scale.x) * (moveInput.x < 0f ? -1f : 1f);
+            transform.localScale = scale;
         }
 
         int nextAnimation;
