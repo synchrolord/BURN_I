@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class PlayerVitals2D : MonoBehaviour
+public class PlayerVitals2D : MonoBehaviour, Damageable2D
 {
 
     [Header("Health and infiction")] [SerializeField, Min(1f)]

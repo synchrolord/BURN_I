@@ -9,7 +9,6 @@ public sealed class PlantEnemy2D : MonoBehaviour
         Spitter
     }
     
-        
     [Header("Body")]
     [SerializeField] private EnemyType enemyType;
     [SerializeField] private SpriteRenderer spriteRenderer;
@@ -26,7 +25,7 @@ public sealed class PlantEnemy2D : MonoBehaviour
     [SerializeField, Min(0f)] private float attackRange = 0.8f;
     [SerializeField, Min(0f)] private float attackDamage = 10f;
     [SerializeField, Min(0.05f)] private float attackCooldown = 1f;
-    
+    [SerializeField] private Transform facingRoot;
     
     
     [Header("Ledge Checking")]
@@ -35,7 +34,10 @@ public sealed class PlantEnemy2D : MonoBehaviour
     [SerializeField, Min(0.01f)] private float wallCheckDistance = 0.1f;
     [SerializeField, Min(0.05f)] private float ledgeCheckDepth = 0.5f;
     
-    
+    [Header("Spitter")]
+    [SerializeField] private Projectile2D spitPrefab;
+    [SerializeField] private Transform shotOrigin;
+    [SerializeField, Min(0f)] private float spitRange = 7f;
     
     
     //Animation
@@ -107,14 +109,10 @@ public sealed class PlantEnemy2D : MonoBehaviour
     
     private void FixedUpdate()
     {
-        if (enemyType != EnemyType.Walker)
-        {
-            StopMoving();
-            PlayAnimation(IdleAnimation);
-            return;
-            
-        }
+
+
         
+        // enemies stop when player dies
         if (player == null || player.IsDead)
         {
             StopMoving();
@@ -122,27 +120,21 @@ public sealed class PlantEnemy2D : MonoBehaviour
             return;
         }
 
-        
+        // Keep  enemy still until its attack animation finishes.
         if (attackAnimationRemaining > 0f)
         {
             StopMoving();
             return;
         }
-        
-        
-        
-        if (enemyType != EnemyType.Walker)
-        {
-            StopMoving();
-            return;
-        }
 
-        if (player == null || player.IsDead)
-        {
-            StopMoving();
-            return;
-        }
+       
+       
+        
+    }
 
+
+    public void UpdateWalker()
+    {
         float distanceToPlayer = GetDistanceToPlayer();
         
         
@@ -150,12 +142,11 @@ public sealed class PlantEnemy2D : MonoBehaviour
         float effectiveAggroDistance =
             agroDistance *
             player.CurrentStage.aggroMultiplier;
-
-
         
         if (distanceToPlayer <= attackRange)
         {
             StopMoving();
+            FacePlayer();
 
             if (!TryAttack())
                 PlayAnimation(IdleAnimation);
@@ -168,30 +159,74 @@ public sealed class PlantEnemy2D : MonoBehaviour
             ChasePlayer();
             return;
         }
+        
+        Patrol();
+    }
+    public void UpdateSpitter()
+    {
 
+        float distanceToPlayer = GetDistanceToPlayer();
 
+        //enemies notice player harder when infected
+        float effectiveSpitRange =
+            spitRange * 
+            player.CurrentStage.aggroMultiplier;
+        
+        float effectiveAggroDistance =
+            agroDistance * player.CurrentStage.aggroMultiplier;
+
+        if (distanceToPlayer <= effectiveSpitRange)
+        {
+            StopMoving();
+            FacePlayer();
+            TrySpit();
+            
+        }
+        
+        
+        if (attackCooldownRemaining > 0f)
+        {
+            PlayAnimation(IdleAnimation);
+            return;
+        }
+        
+        if (distanceToPlayer <= effectiveAggroDistance)
+        {
+            ChasePlayer();
+            return;
+        }
 
         Patrol();
     }
-
+    
+    
     private void Patrol()
     {
         float distanceFromStart =
             transform.position.x - startingX;
+        
+      if (distanceFromStart >= patrolDistance)
+              patrolDirection = -1f;
+      else if (distanceFromStart <= -patrolDistance)
+          patrolDirection = 1f;
+      
+      
+      if (!CanMove(patrolDirection))
+          patrolDirection *= -1f;
+        
+        
+      if (CanMove(patrolDirection))
+      {
+          MoveHorizontal(patrolDirection, moveSpeed);
+      }
 
-        if (distanceFromStart >= patrolDistance)
-            patrolDirection = -1f;
-        else if (distanceFromStart <= -patrolDistance)
-            patrolDirection = 1f;
-
-        if (!CanMove(patrolDirection))
-            patrolDirection *= -1f;
-
-        if (CanMove(patrolDirection))
-            MoveHorizontal(patrolDirection, moveSpeed);
-        else
-            StopMoving();
-            PlayAnimation(IdleAnimation);
+      else
+      {
+          StopMoving();
+          PlayAnimation(IdleAnimation);
+      }
+      
+      
     }
     private void ChasePlayer()
     {
@@ -199,14 +234,20 @@ public sealed class PlantEnemy2D : MonoBehaviour
             player.transform.position.x -
             transform.position.x
         );
+        
 
         if (CanMove(direction))
             MoveHorizontal(direction, agroSpeed);
         else
+        {
             StopMoving();
-        PlayAnimation(IdleAnimation);
+            FacePlayer();
+            PlayAnimation(IdleAnimation);
+        }
     }
 
+    
+    
     private bool TryAttack()
     {
         if (attackCooldownRemaining > 0f)
@@ -222,17 +263,44 @@ public sealed class PlantEnemy2D : MonoBehaviour
         PlayAnimation(AttackAnimation);
         return true;
     }
+    private void TrySpit()
+    {
+        if (attackCooldownRemaining > 0f)
+            return ;
 
+        if (spitPrefab == null || shotOrigin == null)
+            return ;
+
+        
+        Projectile2D shot = Instantiate(
+            spitPrefab,
+            shotOrigin.position,
+            Quaternion.identity
+        );
+
+        Vector2 shotDirection =
+            player.BodyCenter - (Vector2)shotOrigin.position;
+
+        shot.Launch(shotDirection);
+
+        attackCooldownRemaining = attackCooldown;
+        attackAnimationRemaining = attackAnimationSeconds;
+
+        PlayAnimation(AttackAnimation);
+    }
+
+    
+    
+    
     private void MoveHorizontal(float direction, float speed)
     {
+        FaceDirection(direction);
+
         body.linearVelocity = new Vector2(
             direction * speed,
             body.linearVelocity.y
         );
 
-        if (spriteRenderer != null && direction != 0f)
-            spriteRenderer.flipX = direction < 0f;
-        
         PlayAnimation(MoveAnimation);
     }
 
@@ -302,7 +370,24 @@ public sealed class PlantEnemy2D : MonoBehaviour
         currentAnimation = animation;
     }
     
+    private void FacePlayer()
+    {
+        FaceDirection(
+            player.transform.position.x - transform.position.x
+        );
+    }
     
+    private void FaceDirection(float directionX)
+    {
+        if (facingRoot == null || Mathf.Abs(directionX) < 0.01f)
+            return;
+
+        Vector3 scale = facingRoot.localScale;
+
+        scale.x = Mathf.Abs(scale.x) * Mathf.Sign(directionX);
+
+        facingRoot.localScale = scale;
+    }
     
     
 }

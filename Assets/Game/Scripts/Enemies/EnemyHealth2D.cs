@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class CreatureHealth2D : MonoBehaviour
+public class CreatureHealth2D : MonoBehaviour,Damageable2D
 {
     [Header("Health")]
     [SerializeField, Min(1f)] private float maxHealth = 30f;
