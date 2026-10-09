@@ -105,10 +105,7 @@ public sealed class PlantEnemy2D : MonoBehaviour
         attackCooldownRemaining =
             Mathf.Max(0f, attackCooldownRemaining - Time.deltaTime);
 
-        if (enemyType == EnemyType.Walker)
-            UpdateWalker();
-        else
-            UpdateSpitter();
+
     }
 
     
@@ -131,15 +128,17 @@ public sealed class PlantEnemy2D : MonoBehaviour
             StopMoving();
             return;
         }
-
-       
-       
         
+        
+        if (enemyType == EnemyType.Walker)
+            UpdateWalker();
+        else
+            UpdateSpitter();
+
     }
 
 
-    public void UpdateWalker()
-    {
+        private void UpdateWalker(){
         float distanceToPlayer = GetDistanceToPlayer();
         
         
