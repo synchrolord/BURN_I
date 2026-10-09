@@ -154,6 +154,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CreatureHealth2D
   maxHealth: 30
+  spriteRenderer: {fileID: 7142946827370951454}
+  damageColor: {r: 1, g: 0.25, b: 0.2, a: 1}
+  damageFlashSeconds: 0.12
   deathDelay: 0.5
   animator: {fileID: 349784805409626603}
   behaviour: {fileID: 8511525086972793026}
