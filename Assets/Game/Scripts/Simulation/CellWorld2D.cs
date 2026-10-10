@@ -64,7 +64,7 @@ public partial class CellWorld2D : MonoBehaviour
     [SerializeField] private bool startPaused;
     [SerializeField] private bool showSolidCells;
     [SerializeField] private Color solidDebugColor = new Color(0.2f, 0.2f, 0.2f, 0.55f);
-
+    [SerializeField] private bool showInactiveWorldsForDebug;
     public bool IsInitialized => IsReady;
     public int Width => width;
     public int Height => height;
@@ -84,17 +84,17 @@ public partial class CellWorld2D : MonoBehaviour
         //avoid resetting the timer when nothing changed
         if (roomActive == active) return;
 
-        roomActive = active;
-        accumulator = 0f;
-
+        if (spriteRenderer != null)
+            spriteRenderer.enabled =
+                roomActive || showInactiveWorldsForDebug;
+        
         //refresh the image when returning to this room
-        if (active)
+        if (roomActive)
             textureNeedsRefresh = true;
     }
     
     
-    
-    
+
     
 
     //create grid arrays and visuals once when play starts

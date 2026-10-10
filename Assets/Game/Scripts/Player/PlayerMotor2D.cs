@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -16,6 +17,15 @@ public sealed class PlayerMotor2D : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundRadius = 0.12f;
     [SerializeField] private LayerMask groundMask;
+    
+    
+    
+    [Header("Wall Checking")]
+    [SerializeField] private Transform leftCheck;
+    [SerializeField] private Transform rightCheck;
+    [SerializeField] private float wallCheckRadius = 0.1f;
+
+    public bool IsTouchingWall { get; private set; }
     
     private bool isRunning = false;
     
@@ -149,6 +159,34 @@ public sealed class PlayerMotor2D : MonoBehaviour
         return false;
     }
     
+    
+    
+    private bool TouchesWall()
+    {
+        return CheckWall(leftCheck) || CheckWall(rightCheck);
+    }
+
+    private bool CheckWall(Transform check)
+    {
+        if (check == null)
+            return false;
+
+        Collider2D[] hits = Physics2D.OverlapCircleAll(
+            check.position,
+            wallCheckRadius,
+            groundMask
+        );
+
+        foreach (Collider2D hit in hits)
+        {
+            if (!hit.isTrigger && hit.attachedRigidbody != body)
+                return true;
+        }
+
+        return false;
+    }
+    
+    
     public void SetUsingTool(bool value)
     {
         isUsingTool = value;
@@ -178,6 +216,8 @@ public sealed class PlayerMotor2D : MonoBehaviour
         
         
         bool groundedNow = TouchesGround();
+        
+        IsTouchingWall = TouchesWall();
 
         if (!wasGrounded && groundedNow)
             landingPoseRemaining = landingPoseSeconds;
@@ -224,13 +264,14 @@ public sealed class PlayerMotor2D : MonoBehaviour
         
 
         //when to allow jumping
-        if (jumpBufferRemaining > 0f && (IsGrounded || coyoteRemaining > 0f ))
+        if (jumpBufferRemaining > 0f &&
+            (IsGrounded || IsTouchingWall || coyoteRemaining > 0f))
         {
             velocity.y = jumpSpeed;
+
             IsGrounded = false;
             coyoteRemaining = 0f;
             jumpBufferRemaining = 0f;
-          
         }
 
         //set players velocity to calculated vector

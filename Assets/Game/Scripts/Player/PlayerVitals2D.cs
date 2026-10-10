@@ -9,7 +9,7 @@ public class PlayerVitals2D : MonoBehaviour, Damageable2D
     private float maxHealth = 100f; 
 
     [SerializeField] private InfectionProfile profile;
-    [SerializeField, Range(0, 4)] private int infectionStage;
+    [SerializeField, Range(0, 5)] private int infectionStage;
 
     [SerializeField] private float invincibilityFrames;
 

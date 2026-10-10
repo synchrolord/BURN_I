@@ -88,6 +88,8 @@ public partial class CellWorld2D
         CreateRuntimeTexture();
         BakeSolidsFromPhysics();
         textureNeedsRefresh = true;
+        
+        RenderNow();
     }
 
     

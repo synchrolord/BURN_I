@@ -5,9 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Game/Scenes/Levels/Level_0.unity
-    guid: cd8db65401ed36c43b2c7b58c1d62e70
+    guid: 29fc6926b5e972bf9c93a4966c6008ed
+  - enabled: 1
+    path: Assets/Game/Scenes/Levels/StartScreen.unity
+    guid: 146b2412c542f6d47a6575a747ad5199
+  - enabled: 1
+    path: Assets/Game/Scenes/Levels/Level_Alpha.unity
+    guid: f6cbb67a42c1892489f87f88a8c98a9a
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 498b19058156df6459c6cf88543bdfff, type: 3}

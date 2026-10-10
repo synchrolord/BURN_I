@@ -18,7 +18,7 @@ MonoBehaviour:
   - {fileID: -1660518912, guid: 961596340294fac4ebbf61e4a44e47ac, type: 3}
   - {fileID: 422895687, guid: 961596340294fac4ebbf61e4a44e47ac, type: 3}
   - {fileID: 422895687, guid: 961596340294fac4ebbf61e4a44e47ac, type: 3}
-  burnSeconds: 6
+  burnSeconds: 3
   wetSeconds: 2
   disappearWhenBurned: 1
   collisionType: 1

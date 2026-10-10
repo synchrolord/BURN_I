@@ -47,7 +47,10 @@ public partial class CellWorld2D
             //hide cells outside a polygon room
             if (roomCells != null && !roomCells[i]) { pixels[i] = new Color32(0, 0, 0, 0); continue; }
             //draw debug walls first, then fire, smoke, liquids, or empty space
+            
             if (showSolidCells && solid[i]) pixels[i] = solidDebugColor;
+            
+            
             else if (fire[i] > 0)
             {
                 pixels[i] = FireColor(i);

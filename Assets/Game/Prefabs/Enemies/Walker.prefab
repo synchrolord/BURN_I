@@ -78,12 +78,12 @@ MonoBehaviour:
   enemyType: 0
   spriteRenderer: {fileID: 7142946827370951454}
   moveSpeed: 1.23
-  agroSpeed: 2.5
+  agroSpeed: 4
   patrolDistance: 2
   agroDistance: 5
   attackRange: 0.8
   attackDamage: 10
-  attackCooldown: 1
+  attackCooldown: 0.05
   facingRoot: {fileID: 6652993547707778549}
   mask:
     serializedVersion: 2

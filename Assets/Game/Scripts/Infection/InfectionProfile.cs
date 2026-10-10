@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InfectionProfile : ScriptableObject{
 
-    public const int InfectionCount =5;
+    public const int InfectionCount =6;
 
     [Serializable]
     
@@ -47,7 +47,7 @@ public class InfectionProfile : ScriptableObject{
     //create all custom infection stages
     public static InfectionStage[] CreateDefaultStages()
     {
-        string[] names = { "Healthy", "Exposed", "Rooted", "Overgrown", "Lost" };
+        string[] names = { "Healthy", "Exposed", "Rooted", "Overgrown", "Lost", "Consumed" };
         var result = new InfectionStage[InfectionCount];
         
         for (int i = 0; i < result.Length; i++)

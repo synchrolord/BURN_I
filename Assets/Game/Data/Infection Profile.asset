@@ -35,7 +35,7 @@ MonoBehaviour:
     aggroMultiplier: 0.7
     movementMultiplier: 0.95
     fireDamageMultiplier: 1.4
-    animationOverride: {fileID: 22100000, guid: 8541d27071ac27e4ca632dcbc2945250, type: 2}
+    animationOverride: {fileID: 22100000, guid: 53bb97a4b18aa3447a4da2395d7989af, type: 2}
     placeHolderTint: {r: 0.775, g: 0.925, b: 0.725, a: 1}
   - name: Overgrown
     healthMultiplier: 0.85
@@ -43,13 +43,21 @@ MonoBehaviour:
     aggroMultiplier: 0.54999995
     movementMultiplier: 0.925
     fireDamageMultiplier: 1.6
-    animationOverride: {fileID: 0}
+    animationOverride: {fileID: 22100000, guid: 8541d27071ac27e4ca632dcbc2945250, type: 2}
     placeHolderTint: {r: 0.6625, g: 0.88750005, b: 0.5875, a: 1}
   - name: Lost
-    healthMultiplier: 0.8
+    healthMultiplier: 0.3
     visionMultiplier: 0.6
     aggroMultiplier: 0.39999998
-    movementMultiplier: 0.9
+    movementMultiplier: 0.23
     fireDamageMultiplier: 1.8
-    animationOverride: {fileID: 0}
+    animationOverride: {fileID: 22100000, guid: 1c486eb81ca645647a4bd722ed7ece5d, type: 2}
+    placeHolderTint: {r: 0.55, g: 0.85, b: 0.45, a: 1}
+  - name: Consumed
+    healthMultiplier: 0.1
+    visionMultiplier: 0.6
+    aggroMultiplier: 0.39999998
+    movementMultiplier: 0.4
+    fireDamageMultiplier: 1.8
+    animationOverride: {fileID: 22100000, guid: b070faedc95b12d469b2750f6acf47ac, type: 2}
     placeHolderTint: {r: 0.55, g: 0.85, b: 0.45, a: 1}
