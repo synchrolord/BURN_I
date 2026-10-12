@@ -170,13 +170,13 @@ public partial class CellWorld2D : MonoBehaviour
                 if (waterFirst) SeparateOilAt(x, y);
                 if (waterFirst)
                 {
-                    SimulateLiquidAt(water, fuel, movedWater, x, y, waterViscosity);
-                    SimulateLiquidAt(fuel, water, movedFuel, x, y, fuelViscosity);
+                    SimulateLiquidAt(water, movedWater, x, y, waterViscosity);
+                    SimulateLiquidAt(fuel, movedFuel, x, y, fuelViscosity);
                 }
                 else
                 {
-                    SimulateLiquidAt(fuel, water, movedFuel, x, y, fuelViscosity);
-                    SimulateLiquidAt(water, fuel, movedWater, x, y, waterViscosity);
+                    SimulateLiquidAt(fuel, movedFuel, x, y, fuelViscosity);
+                    SimulateLiquidAt(water, movedWater, x, y, waterViscosity);
                 }
                 //process smoke and fire after moving the liquids
                 SimulateSmokeAt(x, y);

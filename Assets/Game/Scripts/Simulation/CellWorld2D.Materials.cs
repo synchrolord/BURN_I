@@ -5,9 +5,9 @@ public partial class CellWorld2D
 {
     //add materials with AddLiquidCircle
     public int AddWater(Vector2 position, int radius, int amountPerCell) =>
-        IsReady ? AddLiquidCircle(water, fuel, position, radius, amountPerCell) : 0;
+        IsReady ? AddLiquidCircle(water, position, radius, amountPerCell) : 0;
     public int AddFuel(Vector2 position, int radius, int amountPerCell) =>
-        IsReady ? AddLiquidCircle(fuel, water, position, radius, amountPerCell) : 0;
+        IsReady ? AddLiquidCircle(fuel, position, radius, amountPerCell) : 0;
     public int AddSmoke(Vector2 position, int radius, int amountPerCell)
     {
         if (!IsReady || !TryWorldToCell(position, out Vector2Int center)) return 0;

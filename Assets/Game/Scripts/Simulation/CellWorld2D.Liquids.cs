@@ -2,14 +2,22 @@ using UnityEngine;
 
 public partial class CellWorld2D
 {
+    
+    private int GetTotalLiquid(int index)
+    {
+        return water[index] + fuel[index];
+    }
+    
     // Basic rule: fall down, try the two lower diagonals, then level with neighbors.
     // Water and fuel share capacity, so moving one never overwrites the other.
-    private void SimulateLiquidAt(byte[] liquid, byte[] other, bool[] moved, int x, int y, float viscosity)
+    private void SimulateLiquidAt(byte[] liquid, bool[] moved, int x, int y, float viscosity)
     {
+        
         int i = Index(x, y);
         //skip over irritant cells
         if (solid[i] || liquid[i] == 0 || moved[i]) return;
         moved[i] = true;
+        
         
         //how much liquid is allowed to move every tick
         int downFlow = Mathf.Max(1, Mathf.RoundToInt(liquidCapacity * (1f - viscosity * 0.75f)));
@@ -19,34 +27,56 @@ public partial class CellWorld2D
         
         //water movement logic hierarchy
         //Down
-        MoveLiquid(liquid, other, moved, x, y, x, y - 1, downFlow);
+        MoveLiquid(liquid, moved, x, y, x, y - 1, downFlow);
         
         //diagonally
         if (!solid[Index(x + direction, y)])
-            MoveLiquid(liquid, other, moved, x, y, x + direction, y - 1, downFlow);
+            MoveLiquid(liquid, moved, x, y, x + direction, y - 1, downFlow);
         
         if (!solid[Index(x - direction, y)])
-            MoveLiquid(liquid, other, moved, x, y, x - direction, y - 1, downFlow);
+            MoveLiquid(liquid, moved, x, y, x - direction, y - 1, downFlow);
         
         
         //left and right
-        LevelLiquid(liquid, other, moved, x, y, x + direction, sideFlow);
-        LevelLiquid(liquid, other, moved, x, y, x - direction, sideFlow);
+        LevelLiquid(liquid, moved, x, y, x + direction, sideFlow);
+        LevelLiquid(liquid, moved, x, y, x - direction, sideFlow);
     }
 
     //handle homogenizing liquid close by
-    private void LevelLiquid(byte[] liquid, byte[] other, bool[] moved, int x, int y, int nextX, int maximum)
+    private void LevelLiquid(
+        byte[] liquid,
+        bool[] moved,
+        int x,
+        int y,
+        int nextX,
+        int maximum)
     {
-        int from = Index(x, y), to = Index(nextX, y);
-        int difference = liquid[from] + other[from] - liquid[to] - other[to];
-        // With whole units, a difference of one is already as level as we can get.
+        if (!InBounds(nextX, y))
+            return;
+
+        int from = Index(x, y);
+        int to = Index(nextX, y);
+
+        int difference =
+            GetTotalLiquid(from) -
+            GetTotalLiquid(to);
+
         if (difference > 1)
-            MoveLiquid(liquid, other, moved, x, y, nextX, y, Mathf.Min(maximum, difference / 2));
+        {
+            MoveLiquid(
+                liquid,
+                moved,
+                x,
+                y,
+                nextX,
+                y,
+                Mathf.Min(maximum, difference / 2));
+        }
     }
 
     
     /// handling movement of liquids between neighboring cells
-    private void MoveLiquid(byte[] liquid, byte[] other, bool[] moved,
+    private void MoveLiquid(byte[] liquid, bool[] moved,
         int x, int y, int nextX, int nextY, int requested)
     {
         if (!InBounds(nextX, nextY)) return;
@@ -54,8 +84,7 @@ public partial class CellWorld2D
         if (solid[to]) return;
         
         //how mcuh space is inside neighboring cell
-        int space = liquidCapacity - liquid[to] - other[to];
-        
+        int space = liquidCapacity - GetTotalLiquid(to);        
         //amount transferred
         int amount = Mathf.Min(liquid[from], Mathf.Min(requested, space));
         if (amount <= 0) return;
@@ -72,7 +101,7 @@ public partial class CellWorld2D
     }
 
     
-    private int AddLiquidCircle(byte[] liquid, byte[] other, Vector2 position, int radius, int amountPerCell)
+    private int AddLiquidCircle(byte[] liquid, Vector2 position, int radius, int amountPerCell)
     {
         if (amountPerCell <= 0 || !TryWorldToCell(position, out Vector2Int center)) return 0;
         radius = Mathf.Max(0, radius);
@@ -87,7 +116,7 @@ public partial class CellWorld2D
             if (solid[i]) continue;
             
             //avoid overfilling cells
-            int accepted = Mathf.Min(amountPerCell, liquidCapacity - liquid[i] - other[i]);
+            int accepted = Mathf.Min(amountPerCell, liquidCapacity - GetTotalLiquid(i));            
             if (accepted <= 0) continue;
             
             
