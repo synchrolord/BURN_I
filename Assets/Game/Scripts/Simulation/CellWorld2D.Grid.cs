@@ -5,7 +5,7 @@ public partial class CellWorld2D
 {
     
     //initialize all possible materials arrays in a cell
-    private byte[] water, fuel, smoke, fire;
+    private byte[] water, fuel, acid, smoke, fire;
     /*
         Single cell can store an amount of each material
         cell #25
@@ -19,7 +19,7 @@ public partial class CellWorld2D
     private bool[] solid;
     
     //flags to mark materials that have already moved this simulation step
-    private bool[] movedWater, movedFuel, movedSmoke;
+    private bool[] movedWater, movedFuel, movedAcid, movedSmoke;
     
     //fire waiting to be applied, avoid instantaneous burning.
     private byte[] pendingFire;
@@ -36,7 +36,11 @@ public partial class CellWorld2D
     private Texture2D runtimeTexture;
     private Sprite runtimeSprite;
     private Color32[] pixels;
-    internal bool IsReady => water != null && fuel != null && smoke != null && fire != null && solid != null;
+    internal bool IsReady =>
+        
+        water != null && fuel != null && acid != null &&  
+        smoke != null && fire != null &&
+        solid != null;
 
     
     
@@ -67,16 +71,22 @@ public partial class CellWorld2D
         int count = width * height;
         
         //fill arrays with 0s
+        solid = new bool[count];
+        pixels = new Color32[count];
+
         water = new byte[count];
+        acid = new byte[count];
         fuel = new byte[count];
         smoke = new byte[count];
         fire = new byte[count];
-        solid = new bool[count];
+        
+        
+        
         movedWater = new bool[count];
+        movedAcid = new bool[count];
         movedFuel = new bool[count];
         movedSmoke = new bool[count];
         pendingFire = new byte[count];
-        pixels = new Color32[count];
         
         //how many chunks to cove Grid
         chunkCountX = Mathf.CeilToInt(width / (float)chunkSize);

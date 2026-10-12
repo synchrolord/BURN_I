@@ -27,6 +27,9 @@ public partial class CellWorld2D : MonoBehaviour
     [Tooltip("Higher viscosity transfers fewer units to each neighboring cell.")]
     [SerializeField, Range(0f, 1f)] private float waterViscosity = 0.05f;
     [SerializeField, Range(0f, 1f)] private float fuelViscosity = 0.55f;
+    [SerializeField, Range(0f, 1f)] private float acidViscosity = 0.15f;
+    
+    
     [Tooltip("Fuel swaps upward with the water immediately above it, every other tick.")]
     [SerializeField, Range(1, 8)] private int oilBuoyancyStrength = 1;
     // Retained for archived Advanced settings. Basic only looks at immediate neighbors.
@@ -55,6 +58,8 @@ public partial class CellWorld2D : MonoBehaviour
     [SerializeField] private Color deepWaterColor = new Color(0.03f, 0.22f, 0.65f, 0.95f);
     [SerializeField] private Color shallowFuelColor = new Color(0.50f, 0.28f, 0.06f, 0.45f);
     [SerializeField] private Color deepFuelColor = new Color(0.92f, 0.48f, 0.05f, 0.90f);
+    [SerializeField] private Color shallowAcidColor = new Color(0.35f, 0.85f, 0.18f, 0.50f);
+    [SerializeField] private Color deepAcidColor = new Color(0.55f, 1f, 0.15f, 0.95f);
     [SerializeField] private Color smokeColor = new Color(0.30f, 0.31f, 0.34f, 0.72f);
     [SerializeField] private Color weakFireColor = new Color(0.90f, 0.18f, 0.03f, 1f);
     [SerializeField] private Color mediumFireColor = new Color(1f, 0.48f, 0.03f, 1f);
@@ -151,33 +156,29 @@ public partial class CellWorld2D : MonoBehaviour
         WakeChunksNearTarget();
         ClearMovementFlagsInAwakeChunks();
         //alternate liquid priority and horizontal scan direction every tick
-        bool waterFirst = (tickNumber & 1) == 0;
+        bool scanForward = (tickNumber & 1) == 0;
 
         // Visit only awake chunks. Each cell follows the same short set of rules.
         // Movement flags stop incoming liquid/smoke traveling again in this tick.
         for (int cy = 0; cy < chunkCountY; cy++)
         for (int column = 0; column < chunkCountX; column++)
         {
-            int cx = waterFirst ? column : chunkCountX - 1 - column;
+            int cx = scanForward ? column : chunkCountX - 1 - column;
             if (!IsChunkAwake(cx, cy)) continue;
             GetChunkBounds(cx, cy, out int minX, out int maxX, out int minY, out int maxY);
             for (int y = minY; y <= maxY; y++)
             for (int offset = 0; offset <= maxX - minX; offset++)
             {
-                int x = waterFirst ? minX + offset : maxX - offset;
-                if (!ContainsCell(x, y)) continue;
-                //swap fuel above water every other tick
-                if (waterFirst) SeparateOilAt(x, y);
-                if (waterFirst)
+                int x = scanForward ? minX + offset : maxX - offset;
+                if (!ContainsCell(x, y))
+                    continue;
+
+                if (scanForward)
                 {
-                    SimulateLiquidAt(water, movedWater, x, y, waterViscosity);
-                    SimulateLiquidAt(fuel, movedFuel, x, y, fuelViscosity);
+                    SeparateOilAt(x, y);
+
                 }
-                else
-                {
-                    SimulateLiquidAt(fuel, movedFuel, x, y, fuelViscosity);
-                    SimulateLiquidAt(water, movedWater, x, y, waterViscosity);
-                }
+                SimulateLiquidsAt(x,y);
                 //process smoke and fire after moving the liquids
                 SimulateSmokeAt(x, y);
                 SimulateFireAt(x, y);
@@ -187,4 +188,28 @@ public partial class CellWorld2D : MonoBehaviour
         ApplyPendingFire();
         tickNumber++;
     }
+    private void SimulateLiquidsAt(int x, int y)
+    {
+        switch (tickNumber % 3)
+        {
+            case 0:
+                SimulateLiquidAt(water, movedWater, x, y, waterViscosity);
+                SimulateLiquidAt(fuel, movedFuel, x, y, fuelViscosity);
+                SimulateLiquidAt(acid, movedAcid, x, y, acidViscosity);
+                break;
+
+            case 1:
+                SimulateLiquidAt(fuel, movedFuel, x, y, fuelViscosity);
+                SimulateLiquidAt(acid, movedAcid, x, y, acidViscosity);
+                SimulateLiquidAt(water, movedWater, x, y, waterViscosity);
+                break;
+
+            default:
+                SimulateLiquidAt(acid, movedAcid, x, y, acidViscosity);
+                SimulateLiquidAt(water, movedWater, x, y, waterViscosity);
+                SimulateLiquidAt(fuel, movedFuel, x, y, fuelViscosity);
+                break;
+        }
+    }
+    
 }

@@ -5,9 +5,21 @@ public partial class CellWorld2D
 {
     //add materials with AddLiquidCircle
     public int AddWater(Vector2 position, int radius, int amountPerCell) =>
-        IsReady ? AddLiquidCircle(water, position, radius, amountPerCell) : 0;
+        IsReady 
+            ? AddLiquidCircle(water, position, radius, amountPerCell) 
+            : 0;
+    
+    
     public int AddFuel(Vector2 position, int radius, int amountPerCell) =>
-        IsReady ? AddLiquidCircle(fuel, position, radius, amountPerCell) : 0;
+        IsReady 
+            ? AddLiquidCircle(fuel, position, radius, amountPerCell) 
+            : 0;
+    
+    public int AddAcid(
+        Vector2 position, int radius, int amountPerCell) =>
+        IsReady
+            ? AddLiquidCircle(acid, position, radius, amountPerCell)
+            : 0;
     public int AddSmoke(Vector2 position, int radius, int amountPerCell)
     {
         if (!IsReady || !TryWorldToCell(position, out Vector2Int center)) return 0;
@@ -145,10 +157,12 @@ public partial class CellWorld2D
             //check for empty cells and skip over them
             if (!IsInsideCircle(x, y, center, radiusSquared)) continue;
             int i = Index(x, y);
-            if (water[i] == 0 && fuel[i] == 0 && fire[i] == 0 && smoke[i] == 0) continue;
+            if (water[i] == 0 && fuel[i] == 0 && acid[i]==0&&
+                fire[i] == 0 && smoke[i] == 0) 
+                continue;
 
             //clear everything and update
-            water[i] = fuel[i] = fire[i] = smoke[i] = 0;
+            water[i] = fuel[i] = acid[i] = fire[i] = smoke[i] = 0;
             WakeCell(x, y);
             changed = true;
         }
@@ -179,6 +193,7 @@ public partial class CellWorld2D
     }
     public int GetTotalWaterUnits() => Sum(water);
     public int GetTotalFuelUnits() => Sum(fuel);
+    public int GetTotalAcidUnits() => Sum(acid);
     
     
     public void ClearAllMaterials()
@@ -186,6 +201,7 @@ public partial class CellWorld2D
         if (!IsReady) return;
         Array.Clear(water, 0, water.Length);
         Array.Clear(fuel, 0, fuel.Length);
+        Array.Clear(acid,0,acid.Length);
         Array.Clear(fire, 0, fire.Length);
         Array.Clear(smoke, 0, smoke.Length);
         textureNeedsRefresh = true;

@@ -105,6 +105,7 @@ public partial class CellWorld2D
                 Array.Clear(movedWater, start, rowLength);
                 Array.Clear(movedFuel, start, rowLength);
                 Array.Clear(movedSmoke, start, rowLength);
+                Array.Clear(movedAcid,start, rowLength);
             }
         }
     }

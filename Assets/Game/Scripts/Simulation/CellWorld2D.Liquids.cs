@@ -5,7 +5,7 @@ public partial class CellWorld2D
     
     private int GetTotalLiquid(int index)
     {
-        return water[index] + fuel[index];
+        return water[index] + fuel[index]+ acid[index];
     }
     
     // Basic rule: fall down, try the two lower diagonals, then level with neighbors.

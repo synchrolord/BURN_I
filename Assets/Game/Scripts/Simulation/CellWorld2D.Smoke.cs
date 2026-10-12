@@ -28,7 +28,6 @@ public partial class CellWorld2D
         if (smoke[neighbor] < smoke[i] && Random.value < smokeSidewaysChance)
             MoveSmoke(x, y, x + direction, y, 1);
     }
-
     
     //transfer smoke between cells without exceeding the destination capacity
     private void MoveSmoke(int x, int y, int nextX, int nextY, int requested)

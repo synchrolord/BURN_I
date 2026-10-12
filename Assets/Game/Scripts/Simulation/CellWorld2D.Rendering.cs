@@ -57,14 +57,13 @@ public partial class CellWorld2D
                 hasVisibleFire = true;
             }
             else if (smoke[i] > 0) pixels[i] = SmokeColor(smoke[i]);
-            else if (water[i] > 0 && fuel[i] > 0)
+            
+            
+            //dynamically color liquids
+            else if (GetTotalLiquid(i) > 0)
             {
-                //blend the two liquid colors using their relative amounts
-                float waterShare = water[i] / (float)(water[i] + fuel[i]);
-                pixels[i] = Color.Lerp(FuelColor(fuel[i]), WaterColor(water[i]), waterShare);
+                pixels[i] = LiquidColor(i);
             }
-            else if (water[i] > 0) pixels[i] = WaterColor(water[i]);
-            else if (fuel[i] > 0) pixels[i] = FuelColor(fuel[i]);
             else pixels[i] = new Color32(0, 0, 0, 0);
         }
 
@@ -97,6 +96,31 @@ public partial class CellWorld2D
     private Color FuelColor(byte amount) =>
         Color.Lerp(shallowFuelColor, deepFuelColor, amount / (float)liquidCapacity);
 
+    private Color AcidColor(byte amount) =>
+        Color.Lerp(
+            shallowAcidColor,
+            deepAcidColor,
+            amount / (float)liquidCapacity);
+
+    
+    
+    private Color LiquidColor(int index)
+    {
+        float total = GetTotalLiquid(index);
+
+        Color color = Color.clear;
+
+        color += WaterColor(water[index]) *
+                 (water[index] / total);
+
+        color += FuelColor(fuel[index]) *
+                 (fuel[index] / total);
+
+        color += AcidColor(acid[index]) *
+                 (acid[index] / total);
+
+        return color;
+    }
     //more smoke makes the cell less transparent
     private Color SmokeColor(byte amount)
     {

@@ -5,7 +5,18 @@ using UnityEngine.Serialization;
 // Optional test brush. Disable this component for ordinary player controls.
 public sealed class CellWorldDebugPainter : MonoBehaviour
 {
-    private enum PaintMode { Water, Fuel, Smoke, Fire }
+    
+    
+    
+    
+    private enum PaintMode
+    {
+        Water,
+        Fuel,
+        Acid,
+        Smoke,
+        Fire
+    }
     [SerializeField] private CellWorld2D cellWorld;
     [SerializeField] private Camera worldCamera;
     [Header("Brush")]
@@ -46,6 +57,7 @@ public sealed class CellWorldDebugPainter : MonoBehaviour
             case PaintMode.Fuel: cellWorld.AddFuel(position, brushRadiusInCells, liquidUnitsPerStamp); break;
             case PaintMode.Smoke: cellWorld.AddSmoke(position, brushRadiusInCells, smokeUnitsPerStamp); break;
             case PaintMode.Fire: cellWorld.Ignite(position, brushRadiusInCells); break;
+            case PaintMode.Acid: cellWorld.AddAcid(position, brushRadiusInCells, liquidUnitsPerStamp); break;
         }
     }
 
@@ -53,17 +65,31 @@ public sealed class CellWorldDebugPainter : MonoBehaviour
     private void HandleKeyboard()
     {
         Keyboard keys = Keyboard.current;
-        if (keys.digit1Key.wasPressedThisFrame) paintMode = PaintMode.Water;
-        if (keys.digit2Key.wasPressedThisFrame) paintMode = PaintMode.Fuel;
-        if (keys.digit3Key.wasPressedThisFrame) paintMode = PaintMode.Smoke;
-        if (keys.digit4Key.wasPressedThisFrame) paintMode = PaintMode.Fire;
+        if (keys.digit1Key.wasPressedThisFrame)
+            paintMode = PaintMode.Water;
+
+        if (keys.digit2Key.wasPressedThisFrame)
+            paintMode = PaintMode.Fuel;
+
+        if (keys.digit3Key.wasPressedThisFrame)
+            paintMode = PaintMode.Acid;
+
+        if (keys.digit4Key.wasPressedThisFrame)
+            paintMode = PaintMode.Smoke;
+
+        if (keys.digit5Key.wasPressedThisFrame)
+            paintMode = PaintMode.Fire;
+        
         if (keys.pKey.wasPressedThisFrame) cellWorld.TogglePaused();
         if (keys.nKey.wasPressedThisFrame) cellWorld.StepOnce();
         if (keys.rKey.wasPressedThisFrame) cellWorld.ClearAllMaterials();
         if (keys.bKey.wasPressedThisFrame) cellWorld.RebakeSolidsFromPhysics();
         if (keys.f1Key.wasPressedThisFrame)
-            Debug.Log($"Water: {cellWorld.GetTotalWaterUnits()} | Fuel: {cellWorld.GetTotalFuelUnits()} | Awake chunks: {cellWorld.GetActiveChunkCount()}");
-    }
+            Debug.Log(
+                $"Water: {cellWorld.GetTotalWaterUnits()} | " +
+                $"Fuel: {cellWorld.GetTotalFuelUnits()} | " +
+                $"Acid: {cellWorld.GetTotalAcidUnits()} | " +
+                $"Awake chunks: {cellWorld.GetActiveChunkCount()}");    }
 
     //convert the mouse's screen position to the grid's world plane
     private Vector2 GetMouseWorldPosition()
@@ -77,7 +103,8 @@ public sealed class CellWorldDebugPainter : MonoBehaviour
     private void OnGUI()
     {
         if (!showHelpText) return;
-        GUI.Label(new Rect(12f, 12f, 700f, 60f), $"CELL DEBUG - Mode: {paintMode}\n" +
-            "1 Water | 2 Fuel | 3 Smoke | 4 Fire | Left Paint | Right Erase | P Pause | N Step | R Clear | B Rebake | F1 Stats");
+        GUI.Label(new Rect(12f, 12f, 700f, 60f), "1 Water | 2 Fuel | 3 Acid | 4 Smoke | 5 Fire | " +
+"Left Paint | Right Erase | P Pause | N Step | " +
+"R Clear | B Rebake | F1 Stats");
     }
 }
