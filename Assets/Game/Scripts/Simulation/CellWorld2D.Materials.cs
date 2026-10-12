@@ -115,34 +115,79 @@ public partial class CellWorld2D
         return changed;
     }
 
-    public int ExtractWater(Vector2 position, int radius, int requestedAmount)
+    public int ExtractWater(
+        Vector2 position,
+        int radius,
+        int requestedAmount)
     {
-      
-        if (!IsReady || requestedAmount <= 0 || !TryWorldToCell(position, out Vector2Int center)) return 0;
+        return ExtractLiquid(
+            water,
+            position,
+            radius,
+            requestedAmount);
+    }
+
+    
+    public int ExtractAcid(
+        Vector2 position,
+        int radius,
+        int requestedAmount)
+    {
+        return ExtractLiquid(
+            acid,
+            position,
+            radius,
+            requestedAmount);
+    }
+    
+    private int ExtractLiquid(
+        byte[] liquid,
+        Vector2 position,
+        int radius,
+        int requestedAmount)
+    {
+        if (!IsReady ||
+            requestedAmount <= 0 ||
+            !TryWorldToCell(position, out Vector2Int center))
+        {
+            return 0;
+        }
+
         int removedTotal = 0;
         int radiusSquared = radius * radius;
 
-        //loop thorough all sounding neighbors 
-        for (int y = center.y - radius; y <= center.y + radius && removedTotal < requestedAmount; y++)
-        for (int x = center.x - radius; x <= center.x + radius && removedTotal < requestedAmount; x++)
+        for (int y = center.y - radius;
+             y <= center.y + radius && removedTotal < requestedAmount;
+             y++)
         {
-            if (!IsInsideCircle(x, y, center, radiusSquared)) continue;
-            int i = Index(x, y);
-            
-            //check if cell is inside circle or is solid
-            int removed = Mathf.Min(water[i], requestedAmount - removedTotal);
-            if (removed <= 0) continue;
+            for (int x = center.x - radius;
+                 x <= center.x + radius && removedTotal < requestedAmount;
+                 x++)
+            {
+                if (!IsInsideCircle(x, y, center, radiusSquared))
+                    continue;
 
-            water[i] -= (byte)removed;
-            removedTotal += removed;
-            WakeCell(x, y);
+                int i = Index(x, y);
+
+                int removed = Mathf.Min(
+                    liquid[i],
+                    requestedAmount - removedTotal);
+
+                if (removed <= 0)
+                    continue;
+
+                liquid[i] -= (byte)removed;
+                removedTotal += removed;
+
+                WakeCell(x, y);
+            }
         }
 
-        //update visuals only if cells change
-        if (removedTotal > 0) textureNeedsRefresh = true;
+        if (removedTotal > 0)
+            textureNeedsRefresh = true;
+
         return removedTotal;
     }
-
     
     public void EraseCircle(Vector2 position, int radius)
     {

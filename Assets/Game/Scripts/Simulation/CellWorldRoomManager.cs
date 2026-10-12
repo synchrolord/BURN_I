@@ -2,12 +2,16 @@ using UnityEngine;
 
 //choose the active room before the worlds update
 [DefaultExecutionOrder(-100)]
+
 public sealed class CellWorldRoomManager : MonoBehaviour
 {
     [SerializeField] private Transform player;
     [SerializeField] private CellWorld2D[] worlds = new CellWorld2D[0];
     [SerializeField] private PressureTool2D pressureTool;
     [SerializeField] private FireLightPool2D fireLightPool;
+    
+    [SerializeField]
+    private PlayerLiquidInteraction2D playerLiquidInteraction;
     public CellWorld2D CurrentWorld { get; private set; }
 
     private void Update()
@@ -34,11 +38,18 @@ public sealed class CellWorldRoomManager : MonoBehaviour
                 world.SetRoomActive(world == CurrentWorld);
         }
         
+        
+        //change the active cellWorld
         if (pressureTool != null)
             pressureTool.SetWorld(CurrentWorld);
 
         if (fireLightPool != null)
             fireLightPool.SetWorld(CurrentWorld);
+        
+        if (playerLiquidInteraction != null)
+        {
+            playerLiquidInteraction.SetWorld(CurrentWorld);
+        }
     }
 
     private bool ContainsPlayer(CellWorld2D world)
@@ -65,6 +76,11 @@ public sealed class CellWorldRoomManager : MonoBehaviour
 
         if (fireLightPool != null)
             fireLightPool.SetWorld(CurrentWorld);
+        
+        if (playerLiquidInteraction != null)
+        {
+            playerLiquidInteraction.SetWorld(null);
+        }
     }
     
     

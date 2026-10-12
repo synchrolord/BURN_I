@@ -177,6 +177,7 @@ public partial class CellWorld2D : MonoBehaviour
                 {
                     SeparateOilAt(x, y);
 
+
                 }
                 SimulateLiquidsAt(x,y);
                 //process smoke and fire after moving the liquids
