@@ -234,9 +234,9 @@ public class PlayerVitals2D : MonoBehaviour, Damageable2D
         
     }
 
-    public float cleansePoison(float amount)
+    public float CleansePoison(float amount)
     {
-        if (currentPoison<=0)return 0f;
+        if (currentPoison<=0|| amount<=0)return 0f;
         
         float previousPoison = currentPoison;
         

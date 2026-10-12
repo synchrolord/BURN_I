@@ -1,5 +1,3 @@
-using System;
-using System.Reflection.Metadata;
 using UnityEngine;
 
 public class Projectile2D : MonoBehaviour
@@ -83,7 +81,7 @@ public class Projectile2D : MonoBehaviour
             playerVitals.AddPoison(poisonAmount);
         
         //look for objects that are damageable and apply damage 
-        Damageable2D target = collider.GetComponent<Damageable2D>();
+        Damageable2D target = collider.GetComponentInParent<Damageable2D>();
         target?.TakeDamage(damage);
         Destroy(gameObject);    
     }    

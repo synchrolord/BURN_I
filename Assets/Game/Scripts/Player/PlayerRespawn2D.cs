@@ -13,6 +13,8 @@ public sealed class PlayerRespawn2D : MonoBehaviour
     private Vector3 startingPosition;
     private Coroutine respawnRoutine;
 
+    private bool diedWhilePoisoned;
+    
     private void Awake()
     {
         Debug.Log("PlayerRespawn2D Awake", this);
@@ -50,6 +52,7 @@ public sealed class PlayerRespawn2D : MonoBehaviour
     private void HandleDeath()
     {
 
+        diedWhilePoisoned = vitals.IsPoisoned;
         if (respawnRoutine == null)
             respawnRoutine = StartCoroutine(RespawnAfterDelay());
     }
@@ -60,11 +63,17 @@ public sealed class PlayerRespawn2D : MonoBehaviour
 
         Debug.Log("Respawning player now."+ "infection=" +vitals.InfectionStage, this);
 
-        int nextStage = Mathf.Min(
-            vitals.InfectionStage + 1,
-            InfectionProfile.InfectionCount - 1
-        );
+        int nextStage = vitals.InfectionStage;
 
+        //only increase infection status if player dies with poison
+        if (diedWhilePoisoned)
+        {
+            nextStage = Mathf.Min(
+                nextStage + 1,
+                InfectionProfile.InfectionCount - 1
+            );
+        }
+        
         transform.position = respawnPoint != null
             ? respawnPoint.position
             : startingPosition;
@@ -72,7 +81,10 @@ public sealed class PlayerRespawn2D : MonoBehaviour
         if (body != null)
             body.linearVelocity = Vector2.zero;
 
+        
+        //reset stats for player when they die
         vitals.ResetForSpawn(nextStage);
+        diedWhilePoisoned = false;
         respawnRoutine = null;
     }
 }

@@ -25,13 +25,16 @@ public sealed class ResourceHUD : MonoBehaviour
     [SerializeField] private Image healthFill;
     [SerializeField] private TMP_Text healthText;
     
+    [Header("Poison")]
+    [SerializeField] private Image poisonFill;
+    [SerializeField] private TMP_Text poisonText;
+    
     [Header("Animation")]
     [SerializeField] private Animator animator;
 
     [SerializeField, Min(0f)]
     private float attackAnimationSeconds = 0.4f;
 
-    
     
     
     
@@ -55,7 +58,11 @@ public sealed class ResourceHUD : MonoBehaviour
             
             playerVitals == null ||
             healthFill == null || 
-            healthText == null 
+            healthText == null||
+            
+            
+            poisonFill == null ||
+            poisonText == null 
             
             ) 
         {
@@ -90,11 +97,22 @@ public sealed class ResourceHUD : MonoBehaviour
             "Health",
             playerVitals.CurrentHealth,
             playerVitals.MaxHealth);
-
+        
+        
+        RefreshBar(
+            poisonFill,
+            poisonText,
+            "Poison",
+            playerVitals.CurrentPoison,
+            playerVitals.MaxPoison
+        );
+        
         modeText.text =
             $"{pressureTool.CurrentSprayType} | " +
             pressureTool.CurrentNozzleLabel;
     }
+    
+    
 
     private void RefreshBar(
         Image fill,
