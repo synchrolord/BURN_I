@@ -12,6 +12,7 @@ public class Projectile2D : MonoBehaviour
 
     [Header("Impact")]
     [SerializeField, Min(0f)] private float damage = 10f;
+    [SerializeField, Min(0f)] private float poisonAmount = 25f;
     [SerializeField] private LayerMask hitMask;
 
 
@@ -76,6 +77,11 @@ public class Projectile2D : MonoBehaviour
 
     public void HandleImpact(Collider2D collider)
     {
+        //add poison to player when hit
+        PlayerVitals2D playerVitals = collider.GetComponentInParent<PlayerVitals2D>();
+        if (playerVitals != null)
+            playerVitals.AddPoison(poisonAmount);
+        
         //look for objects that are damageable and apply damage 
         Damageable2D target = collider.GetComponent<Damageable2D>();
         target?.TakeDamage(damage);

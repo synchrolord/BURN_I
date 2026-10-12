@@ -19,6 +19,7 @@ public class InfectionProfile : ScriptableObject{
         [Min(0.1f)] public float aggroMultiplier = 1f;
         [Min(0.1f)] public float movementMultiplier = 1f;
         [Min(0.1f)] public float fireDamageMultiplier = 1f;
+        [Min(0.1f)] public float poisonResistance=1f;
         
         //custom sprites for every infection state while using the same animator
         public AnimatorOverrideController animationOverride;
@@ -50,6 +51,7 @@ public class InfectionProfile : ScriptableObject{
         string[] names = { "Healthy", "Exposed", "Rooted", "Overgrown", "Lost", "Consumed" };
         var result = new InfectionStage[InfectionCount];
         
+        
         for (int i = 0; i < result.Length; i++)
         {
             result[i] = new InfectionStage()
@@ -60,7 +62,9 @@ public class InfectionProfile : ScriptableObject{
                 aggroMultiplier = 1f - i * 0.15f,
                 movementMultiplier = 1f - i * 0.025f,
                 fireDamageMultiplier = 1f + i * 0.20f,
+                poisonResistance = i * 0.10f,
                 placeHolderTint = Color.Lerp(Color.white, new Color(0.55f, 0.85f, 0.45f), i / 4f)
+                
             };
           
         }        return result;

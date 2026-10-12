@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -12,6 +13,11 @@ public class PlayerVitals2D : MonoBehaviour, Damageable2D
     [SerializeField, Range(0, 5)] private int infectionStage;
 
     [SerializeField] private float invincibilityFrames;
+    
+    
+    [Header("Poison")]
+    [SerializeField, Min(1f)] private float maxPoison = 100f;
+    [SerializeField, Min(0f)] private float currentPoison;
 
 
     [Header("Enviroment")] [SerializeField, Min(0.02f)]
@@ -85,6 +91,11 @@ public class PlayerVitals2D : MonoBehaviour, Damageable2D
 
     private float currentHealth;
     private float invincibilitySeconds;
+    
+    public float CurrentPoison => currentPoison;
+    public float MaxPoison => maxPoison;
+    public bool IsPoisoned => currentPoison > 0.01f;
+    
 
     private float burningSeconds;
     private float wetSeconds;
@@ -204,6 +215,37 @@ public class PlayerVitals2D : MonoBehaviour, Damageable2D
         RefreshBurningFeedback();
     }
 
+
+    public float AddPoison(float amount)
+    {
+        if (IsDead || amount <= 0) return 0f;
+
+        float resistance =Mathf.Clamp01(CurrentStage.poisonResistance);
+        float previousPoison = currentPoison;
+
+        
+        currentPoison = Mathf.Min(
+            maxPoison,
+            currentPoison + amount * (1f - resistance)
+            
+            
+        );
+        return currentPoison - previousPoison;
+        
+    }
+
+    public float cleansePoison(float amount)
+    {
+        if (currentPoison<=0)return 0f;
+        
+        float previousPoison = currentPoison;
+        
+        currentPoison =Mathf.Max(0f,currentPoison-amount);
+        
+        return previousPoison - currentPoison;
+    
+    }
+
     public void SetWet(float seconds = 1.5f)
     {
         if (IsDead) return;
@@ -243,7 +285,7 @@ public class PlayerVitals2D : MonoBehaviour, Damageable2D
         Extinguish();
         SetInfectionStage(stage);
         currentHealth = health < 0f ? MaxHealth : Mathf.Clamp(health, 1f, MaxHealth);
-
+        currentPoison = 0f;
     }
 
     private float DamageScale => Mathf.Max(0f, IncomingDamageMultiplier);
@@ -306,7 +348,6 @@ public class PlayerVitals2D : MonoBehaviour, Damageable2D
             visionLight.pointLightInnerRadius = baseVisionInnerRadius * scale;
         }
     }
-    
     private void RefreshBurningFeedback()
     {
         bool burning = IsBurning;
