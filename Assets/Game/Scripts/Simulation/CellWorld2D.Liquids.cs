@@ -77,10 +77,10 @@ public partial class CellWorld2D
     
     /// handling movement of liquids between neighboring cells
     private void MoveLiquid(byte[] liquid, bool[] moved,
-        int x, int y, int nextX, int nextY, int requested)
+        int cellX, int cellY, int nextCellX, int nextCellY, int requested)
     {
-        if (!InBounds(nextX, nextY)) return;
-        int from = Index(x, y), to = Index(nextX, nextY);
+        if (!InBounds(nextCellX, nextCellY)) return;
+        int from = Index(cellX, cellY), to = Index(nextCellX, nextCellY);
         if (solid[to]) return;
         
         //how mcuh space is inside neighboring cell
@@ -95,8 +95,8 @@ public partial class CellWorld2D
         moved[to] = true;
         
         
-        WakeCell(x, y);
-        WakeCell(nextX, nextY);
+        WakeCell(cellX, cellY);
+        WakeCell(nextCellX, nextCellY);
         textureNeedsRefresh = true;
     }
 

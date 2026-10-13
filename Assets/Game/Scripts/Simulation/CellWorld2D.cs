@@ -16,7 +16,7 @@ public partial class CellWorld2D : MonoBehaviour
     [SerializeField] private Transform activityTarget;
     [SerializeField] private bool simulateAllChunks;
 
-    [Header("Chunk Sleeping")]
+    [Header("Chunks")]
     [SerializeField, Range(8, 64)] private int chunkSize = 32;
     [SerializeField, Range(0, 4)] private int activeChunkRadius = 1;
     [SerializeField, Range(1, 200)] private int chunkStayAwakeTicks = 40;
@@ -154,61 +154,64 @@ public partial class CellWorld2D : MonoBehaviour
         plantSimulationTime += 1.0 / ticksPerSecond;
         AgeChunks();
         WakeChunksNearTarget();
-        ClearMovementFlagsInAwakeChunks();
-        //alternate liquid priority and horizontal scan direction every tick
+        ClearMovementFlags();
+        
+        //change scan direction every tick
         bool scanForward = (tickNumber & 1) == 0;
 
-        // Visit only awake chunks. Each cell follows the same short set of rules.
-        // Movement flags stop incoming liquid/smoke traveling again in this tick.
-        for (int cy = 0; cy < chunkCountY; cy++)
+        
+        //loop over chunks
+        for (int chunkY = 0; chunkY < chunkCountY; chunkY++)
         for (int column = 0; column < chunkCountX; column++)
         {
-            int cx = scanForward ? column : chunkCountX - 1 - column;
-            if (!IsChunkAwake(cx, cy)) continue;
-            GetChunkBounds(cx, cy, out int minX, out int maxX, out int minY, out int maxY);
-            for (int y = minY; y <= maxY; y++)
-            for (int offset = 0; offset <= maxX - minX; offset++)
+            
+            //change scan order, left to right when treu
+            int chunkX = scanForward ? column : chunkCountX - 1 - column;
+            if (!IsChunkAwake(chunkX, chunkY)) continue;
+            
+            GetChunkBounds(chunkX, chunkY,
+                out int minCellX, out int maxCellX,
+                out int minCellY, out int maxY);
+            
+            //loop over one chunks cells
+            for (int cellY = minCellY; cellY <= maxY; cellY++)
+            for (int offset = 0; offset <= maxCellX - minCellX; offset++)
             {
-                int x = scanForward ? minX + offset : maxX - offset;
-                if (!ContainsCell(x, y))
+                int cellX = scanForward ? minCellX + offset : maxCellX - offset;
+                if (!ContainsCell(cellX, cellY))
                     continue;
 
-                if (scanForward)
-                {
-                    SeparateOilAt(x, y);
-
-
-                }
-                SimulateLiquidsAt(x,y);
+                SeparateOilAt(cellX, cellY);
+                SimulateLiquidsAt(cellX,cellY);
                 //process smoke and fire after moving the liquids
-                SimulateSmokeAt(x, y);
-                SimulateFireAt(x, y);
+                SimulateSmokeAt(cellX, cellY);
+                SimulateFireAt(cellX, cellY);
             }
         }
         // New neighbors ignite next tick, so fire cannot cross a whole vine instantly.
         ApplyPendingFire();
         tickNumber++;
     }
-    private void SimulateLiquidsAt(int x, int y)
+    private void SimulateLiquidsAt(int cellX, int cellY)
     {
         switch (tickNumber % 3)
         {
             case 0:
-                SimulateLiquidAt(water, movedWater, x, y, waterViscosity);
-                SimulateLiquidAt(fuel, movedFuel, x, y, fuelViscosity);
-                SimulateLiquidAt(acid, movedAcid, x, y, acidViscosity);
+                SimulateLiquidAt(water, movedWater, cellX, cellY, waterViscosity);
+                SimulateLiquidAt(fuel, movedFuel, cellX, cellY, fuelViscosity);
+                SimulateLiquidAt(acid, movedAcid, cellX, cellY, acidViscosity);
                 break;
 
             case 1:
-                SimulateLiquidAt(fuel, movedFuel, x, y, fuelViscosity);
-                SimulateLiquidAt(acid, movedAcid, x, y, acidViscosity);
-                SimulateLiquidAt(water, movedWater, x, y, waterViscosity);
+                SimulateLiquidAt(fuel, movedFuel, cellX,cellY, fuelViscosity);
+                SimulateLiquidAt(acid, movedAcid, cellX, cellY, acidViscosity);
+                SimulateLiquidAt(water, movedWater, cellX, cellY, waterViscosity);
                 break;
 
             default:
-                SimulateLiquidAt(acid, movedAcid, x, y, acidViscosity);
-                SimulateLiquidAt(water, movedWater, x, y, waterViscosity);
-                SimulateLiquidAt(fuel, movedFuel, x, y, fuelViscosity);
+                SimulateLiquidAt(acid, movedAcid, cellX, cellY, acidViscosity);
+                SimulateLiquidAt(water, movedWater, cellX, cellY, waterViscosity);
+                SimulateLiquidAt(fuel, movedFuel, cellX, cellY, fuelViscosity);
                 break;
         }
     }

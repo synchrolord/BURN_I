@@ -18,9 +18,9 @@ public partial class CellWorld2D
     }
 
     //check both the grid rectangle and the optional room shape
-    public bool ContainsCell(int x, int y)
+    public bool ContainsCell(int cellX, int cellY)
     {
-        return !InitializationFailed && InBounds(x, y) && (roomCells == null || roomCells[Index(x, y)]);
+        return !InitializationFailed && InBounds(cellX, cellY) && (roomCells == null || roomCells[Index(cellX, cellY)]);
     }
 
     //validate grid size before allocating arrays, then build the room mask

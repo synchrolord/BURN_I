@@ -114,15 +114,15 @@ public partial class CellWorld2D
         
         return ContainsCell(cell.x, cell.y);
     }
-    public Vector2 CellToWorld(int x, int y) =>
+    public Vector2 CellToWorld(int cellx, int cellY) =>
         transform.TransformPoint(
             new Vector3(
-                (x + 0.5f) * cellSize,
-                (y + 0.5f) * cellSize));
+                (cellx + 0.5f) * cellSize,
+                (cellY + 0.5f) * cellSize));
 
      //transform to array index used by All Arrays
-    private int Index(int x, int y) => x + y * width;
-    private bool InBounds(int x, int y) => x >= 0 && x < width && y >= 0 && y < height;
+    private int Index(int cellX, int cellY) => cellX + cellY * width;
+    private bool InBounds(int cellX, int cellY) => cellX >= 0 && cellX < width && cellY >= 0 && cellY < height;
     
     //allow dynamic effects to effect sounding cells in a radius
     private bool IsInsideCircle(int x, int y, Vector2Int center, int radiusSquared)
@@ -140,4 +140,5 @@ public partial class CellWorld2D
     {
         if (!paused && IsReady) SimulateOneTick();
     }
+    
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public partial class CellWorld2D
 {
-    //count down how long each chunk stays awake
+    //how long each chunk stays awake
     private void AgeChunks()
     {
         if (simulateAllChunks) return;
@@ -12,13 +12,15 @@ public partial class CellWorld2D
             if (chunkAwakeTicks[i] > 0) chunkAwakeTicks[i]--;
     }
 
-    //keep chunks around the activity target awake
+    //keep chunks around the player awake
     private void WakeChunksNearTarget()
     {
         if (simulateAllChunks || activityTarget == null) return;
-        if (!TryWorldToCell(activityTarget.position, out Vector2Int cell)) return;
+        
+        if (!TryWorldToCell(
+                activityTarget.position, out Vector2Int cell)) return;
 
-        //convert the target cell into chunk coordinates
+        //convert cell into chunk coordinates
         int centerX = cell.x / chunkSize;
         int centerY = cell.y / chunkSize;
 
@@ -27,17 +29,16 @@ public partial class CellWorld2D
             WakeChunk(x, y);
     }
 
-    //wake the cell's chunk and nearby chunks if it is close to an edge
-    private void WakeCell(int x, int y)
+    private void WakeCell(int cellX, int cellY )
     {
-        int chunkX = x / chunkSize;
-        int chunkY = y / chunkSize;
+        int chunkX = cellX / chunkSize;
+        int chunkY = cellY / chunkSize;
 
         WakeChunk(chunkX, chunkY);
 
         //find where the cell is inside its chunk
-        int localX = x - chunkX * chunkSize;
-        int localY = y - chunkY * chunkSize;
+        int localX = cellX - chunkX * chunkSize;
+        int localY = cellY - chunkY * chunkSize;
 
         const int border = 1;
 
@@ -58,10 +59,10 @@ public partial class CellWorld2D
     }
 
     //reset the awake timer for a valid room chunk
-    private void WakeChunk(int x, int y)
+    private void WakeChunk(int chunkX, int chunkY)
     {
-        if (x < 0 || x >= chunkCountX || y < 0 || y >= chunkCountY || !IsRoomChunk(x, y)) return;
-        chunkAwakeTicks[ChunkIndex(x, y)] = (byte)Mathf.Min(255, chunkStayAwakeTicks);
+        if (chunkX < 0 || chunkX >= chunkCountX || chunkY < 0 || chunkY >= chunkCountY || !IsRoomChunk(chunkX, chunkY)) return;
+        chunkAwakeTicks[ChunkIndex(chunkX, chunkY)] = (byte)Mathf.Min(255, chunkStayAwakeTicks);
     }
 
     //give every chunk a fresh awake timer
@@ -72,41 +73,29 @@ public partial class CellWorld2D
     }
 
     //only simulate room chunks that are forced awake or still have time left
-    private bool IsChunkAwake(int x, int y) =>
-        IsRoomChunk(x, y) && (simulateAllChunks || chunkAwakeTicks[ChunkIndex(x, y)] > 0);
+    private bool IsChunkAwake(int chunkX, int chunkY) =>
+        IsRoomChunk(chunkX, chunkY) && (simulateAllChunks || chunkAwakeTicks[ChunkIndex(chunkX, chunkY)] > 0);
 
     //convert chunk coordinates into the chunk array index
-    private int ChunkIndex(int x, int y) => x + y * chunkCountX;
+    private int ChunkIndex(int chunkX, int chunkY) => chunkX + chunkY * chunkCountX;
 
-    private void GetChunkBounds(int x, int y,
-        out int minX, out int maxX, out int minY, out int maxY)
+    private void GetChunkBounds(int chunkX, int chunkY,
+        out int minCellX, out int maxCellX,
+        out int minCellY, out int maxCellY)
     {
         // The outside cell ring is a solid boundary and never needs simulation.
-        minX = Mathf.Max(1, x * chunkSize);
-        minY = Mathf.Max(1, y * chunkSize);
-        maxX = Mathf.Min(width - 2, (x + 1) * chunkSize - 1);
-        maxY = Mathf.Min(height - 2, (y + 1) * chunkSize - 1);
+        minCellX = Mathf.Max(1, chunkX * chunkSize);
+        minCellY = Mathf.Max(1, chunkY * chunkSize);
+        maxCellX = Mathf.Min(width - 2, (chunkX + 1) * chunkSize - 1);
+        maxCellY = Mathf.Min(height - 2, (chunkY + 1) * chunkSize - 1);
     }
 
     //allow cells in awake chunks to move again this tick
-    private void ClearMovementFlagsInAwakeChunks()
+    private void ClearMovementFlags()
     {
-        for (int cy = 0; cy < chunkCountY; cy++)
-        for (int cx = 0; cx < chunkCountX; cx++)
-        {
-            if (!IsChunkAwake(cx, cy)) continue;
-            GetChunkBounds(cx, cy, out int minX, out int maxX, out int minY, out int maxY);
-            int rowLength = maxX - minX + 1;
-
-            for (int y = minY; y <= maxY; y++)
-            {
-                //clear one row of movement flags inside this chunk
-                int start = Index(minX, y);
-                Array.Clear(movedWater, start, rowLength);
-                Array.Clear(movedFuel, start, rowLength);
-                Array.Clear(movedSmoke, start, rowLength);
-                Array.Clear(movedAcid,start, rowLength);
-            }
-        }
+        Array.Clear(movedWater, 0, movedWater.Length);
+        Array.Clear(movedFuel, 0, movedFuel.Length);
+        Array.Clear(movedAcid, 0, movedAcid.Length);
+        Array.Clear(movedSmoke, 0, movedSmoke.Length);
     }
 }
