@@ -1,25 +1,25 @@
 using UnityEngine;
-
 [RequireComponent(typeof(PlayerVitals2D))]
+
+
 public class PlayerLiquidInteraction2D : MonoBehaviour
 {
     [SerializeField] private CellWorld2D cellWorld;
     [SerializeField] private Transform samplePoint;
 
     [Header("Sampling")]
-    [SerializeField, Min(0.02f)]
-    private float sampleInterval = 0.1f;
+    [SerializeField, Min(0.02f)] private float sampleInterval = 0.1f;
+    [SerializeField, Range(0, 4)] private int sampleRadius = 1;
+    [SerializeField, Range(1, 12)] private int liquidUnitsPerSample = 1;
+    
+    
+    [Header("Acid & Water")]
+    [SerializeField, Min(0.1f)] private float poisonPerAcidUnit = 1f;
+    [SerializeField, Min(0.1f)] private float cleansePerWaterUnit = 3f;
 
-    [SerializeField, Range(0, 4)]
-    private int sampleRadius = 1;
-
-    [Header("Acid")]
-    [SerializeField, Range(1, 8)]
-    private int acidUnitsPerSample = 1;
-
-    [SerializeField, Min(0.1f)]
-    private float poisonPerAcidUnit = 2f;
-
+    
+    
+    
     private PlayerVitals2D vitals;
     private float sampleTimer;
 
@@ -30,6 +30,7 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
     
     private void Update()
     {
+        
         if (vitals.IsDead || cellWorld == null)
             return;
 
@@ -39,23 +40,31 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
             return;
 
         sampleTimer = sampleInterval;
-
-        AbsorbAcid();
-    }
-    private void AbsorbAcid()
-    {
-        // A saturated player cannot absorb more acid.
-        if (vitals.CurrentPoison >= vitals.MaxPoison)
-            return;
-
+        
+        
+        //PLayer location and fallBack for sample point
         Vector2 position = samplePoint != null
             ? samplePoint.position
             : transform.position;
 
+        
+        
+
+        AbsorbAcid(position);
+        AbsorbWater(position);
+    }
+    private void AbsorbAcid(Vector2 position)
+    {
+        // A saturated player cannot absorb more acid.
+        if (vitals.IsPoisonSaturated)
+            return;
+            
+        
+
         int absorbedUnits = cellWorld.ExtractAcid(
             position,
             sampleRadius,
-            acidUnitsPerSample);
+            liquidUnitsPerSample);
 
         if (absorbedUnits > 0)
         {
@@ -68,4 +77,23 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
     {
         cellWorld = world;
     }
+
+
+    public void AbsorbWater(Vector2 position)
+    {
+        if (!vitals.IsPoisoned)return;
+        
+        int absorbedUnits = cellWorld.ExtractWater(
+            position,
+            sampleRadius,
+            liquidUnitsPerSample);
+
+        if (absorbedUnits > 0)
+        {
+            vitals.CleansePoison(absorbedUnits);
+        }
+
+
+    }
+    
 }

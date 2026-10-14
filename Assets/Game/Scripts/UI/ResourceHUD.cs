@@ -102,10 +102,9 @@ public sealed class ResourceHUD : MonoBehaviour
         RefreshBar(
             poisonFill,
             poisonText,
-            "Poison",
+            $"Poison L{playerVitals.PoisonLevel}",
             playerVitals.CurrentPoison,
-            playerVitals.MaxPoison
-        );
+            playerVitals.MaxPoison);
         
         modeText.text =
             $"{pressureTool.CurrentSprayType} | " +
