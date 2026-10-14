@@ -20,34 +20,19 @@ public partial class CellWorld2D
         IsReady
             ? AddLiquidCircle(acid, position, radius, amountPerCell)
             : 0;
-    public int AddSmoke(Vector2 position, int radius, int amountPerCell)
+    
+    
+    public int AddSmoke(
+        Vector2 position, int radius, int amountPerCell)
     {
-        if (!IsReady || !TryWorldToCell(position, out Vector2Int center)) return 0;
-        int acceptedTotal = 0;
-        int radiusSquared = radius * radius;
-
-        //loop thorough all sounding neighbors 
-        
-        for (int y = center.y - radius; y <= center.y + radius; y++)
-        for (int x = center.x - radius; x <= center.x + radius; x++)
-        {
-            //check if cell is inside circle or is solid
-            if (!IsInsideCircle(x, y, center, radiusSquared)) continue;
-            int i = Index(x, y);
-            if (solid[i]) continue;
-
-            
-            int accepted = Mathf.Min(amountPerCell, smokeCapacity - smoke[i]);
-            if (accepted <= 0) continue;
-
-            smoke[i] += (byte)accepted;
-            acceptedTotal += accepted;
-            WakeCell(x, y);
-        }
-
-        if (acceptedTotal > 0) textureNeedsRefresh = true;
-        return acceptedTotal;
+        return IsReady
+            ? AddGasCircle(
+                smoke, position,
+                radius, amountPerCell)
+            : 0;
     }
+    
+    
     
     
     public int ApplyWaterImpact(Vector2 position, int amount)

@@ -52,8 +52,8 @@ MonoBehaviour:
   hitMask:
     serializedVersion: 2
     m_Bits: 72
-  acidSplashRadius: 40
-  acidUnitsPerCell: 286
+  acidSplashRadius: 5
+  acidUnitsPerCell: 39
 --- !u!1 &2499085839434073133
 GameObject:
   m_ObjectHideFlags: 0

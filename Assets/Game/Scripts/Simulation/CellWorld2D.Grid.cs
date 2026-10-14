@@ -58,8 +58,7 @@ public partial class CellWorld2D
         
         //physical capacity
         liquidCapacity = Mathf.Clamp(liquidCapacity, 1, 32);
-        smokeCapacity = Mathf.Clamp(smokeCapacity, 1, 16);
-        
+        gasCapacity = Mathf.Clamp(gasCapacity, 1, 16);        
         //Fire updates every N ticks
         fuelBurnEveryTicks = Mathf.Max(1, fuelBurnEveryTicks);
         fireDecayEveryTicks = Mathf.Max(1, fireDecayEveryTicks);

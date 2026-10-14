@@ -212887,7 +212887,7 @@ MonoBehaviour:
   waterSidewaysPasses: 3
   fuelSpreadSearchDistance: 4
   fuelSidewaysPasses: 1
-  smokeCapacity: 8
+  gasCapacity: 8
   smokeRisePerTick: 4
   smokeDecayEveryTicks: 200
   smokeSidewaysChance: 0.35
@@ -224846,6 +224846,10 @@ PrefabInstance:
     - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: chunkSize
       value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
+      propertyPath: gasCapacity
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: startPaused

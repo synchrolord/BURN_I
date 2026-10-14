@@ -125,7 +125,7 @@ public partial class CellWorld2D
     private Color SmokeColor(byte amount)
     {
         Color color = smokeColor;
-        color.a *= Mathf.Lerp(0.25f, 1f, amount / (float)smokeCapacity);
+        color.a *= Mathf.Lerp(0.25f, 1f, amount / (float)gasCapacity);
         return color;
     }
 

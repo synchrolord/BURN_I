@@ -38,12 +38,17 @@ public partial class CellWorld2D : MonoBehaviour
     [SerializeField, HideInInspector] private int fuelSpreadSearchDistance = 4;
     [SerializeField, HideInInspector] private int fuelSidewaysPasses = 1;
 
+    
+    [Header("Gases")]
+    [FormerlySerializedAs("smokeCapacity")]
+    [SerializeField, Range(1, 16)] private int gasCapacity = 8;
+
     [Header("Smoke")]
-    [SerializeField, Range(1, 16)] private int smokeCapacity = 8;
     [SerializeField, Range(1, 8)] private int smokeRisePerTick = 4;
     [SerializeField, Range(1, 1000)] private int smokeDecayEveryTicks = 200;
     [SerializeField, Range(0f, 1f)] private float smokeSidewaysChance = 0.35f;
 
+    
     [Header("Fire")]
     [SerializeField, Range(1, 30)] private int fuelBurnEveryTicks = 4;
     [SerializeField, Range(1, 30)] private int fireDecayEveryTicks = 6;
