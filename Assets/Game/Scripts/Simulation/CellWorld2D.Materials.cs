@@ -60,64 +60,40 @@ public partial class CellWorld2D
     
     
     
-    public int ApplyWaterImpact(
-        Vector2 position,
-        int amount)
+    public int ApplyWaterImpact(Vector2 position, int amount)
     {
-        if (!IsReady ||
-            amount <= 0 ||
-            !TryWorldToCell(position, out Vector2Int cell))
-        {
-            return 0;
-        }
+        if (!IsReady || amount <= 0 || !TryWorldToCell(position, out Vector2Int cell)) return 0;
+        
 
-        int index = Index(cell.x, cell.y);
-        bool plant = HasPlantFuel(index);
-
-        if (solid[index] && !plant)
-            return 0;
-
-        // Water spent directly extinguishing visible fire.
-        int fireSpent = Mathf.Min(
-            amount,
-            fire[index]);
-
-        // A plant absorbs at least one unit even when it is not burning.
-        int waterSpent = fireSpent;
-
+        int i = Index(cell.x, cell.y);
+        bool plant = HasPlantFuel(i);
+        if (solid[i] && !plant) return 0;
+        int spent = Mathf.Min(amount, fire[i]);
+        
+        //if tile is occupied with plant
         if (plant)
         {
-            waterSpent = Mathf.Max(1, waterSpent);
-            WetPlant(index);
+            spent = Mathf.Max(1, spent);
+            WetPlant(i);
         }
-
-        if (fireSpent > 0)
+        
+        if (spent > 0)
         {
-            fire[index] -= (byte)fireSpent;
-
-            AddGasNearCell(
-                steam,
-                movedSteam,
-                cell.x,
-                cell.y,
-                fireSpent);
-
+            //subtract water from fire i cell
+            fire[i] = (byte)Mathf.Max(0, fire[i] - spent);
+            
+            //create smoke 
+            if (plant)
+            {
+                AddPlantSmoke(cell.x, cell.y, 1);
+            }
+            else AddSmokeAtCell(cell.x, cell.y, 1);
             WakeCell(cell.x, cell.y);
             textureNeedsRefresh = true;
         }
-
-        int remaining = amount - waterSpent;
-
-        return waterSpent +
-               (remaining > 0
-                   ? AddWater(position, 0, remaining)
-                   : 0);
+        int remaining = amount - spent;
+        return spent + (remaining > 0 ? AddWater(position, 0, remaining) : 0);
     }
-    
-    
-    
-    
-    
     public int Ignite(Vector2 position, int radius, byte energy = 3)
     {
         if (!IsReady || !TryWorldToCell(position, out Vector2Int center)) return 0;

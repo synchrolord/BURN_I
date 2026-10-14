@@ -127,12 +127,13 @@ public partial class CellWorld2D
         return burning;
     }
 
-    private void AddPlantSmoke(int cellX, int cellY, int amount)
+    private void AddPlantSmoke(int x, int y, int amount)
     {
-        AddGasNearCell(
-            smoke, movedSmoke,
-            cellX, cellY,
-            amount);
+        // Vines may sit on a wall. Smoke must enter air, without turning that wall into liquid space.
+        if (!solid[Index(x, y)]) { AddSmokeAtCell(x, y, amount); return; }
+        if (y + 1 < height - 1 && !solid[Index(x, y + 1)]) AddSmokeAtCell(x, y + 1, amount);
+        else if (x > 1 && !solid[Index(x - 1, y)]) AddSmokeAtCell(x - 1, y, amount);
+        else if (x + 1 < width - 1 && !solid[Index(x + 1, y)]) AddSmokeAtCell(x + 1, y, amount);
     }
 
     private void SpreadPlantFireDiagonally(int x, int y)
