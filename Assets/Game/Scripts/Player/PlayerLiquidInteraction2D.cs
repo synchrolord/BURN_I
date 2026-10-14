@@ -10,7 +10,7 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
     [Header("Sampling")]
     [SerializeField, Min(0.02f)] private float sampleInterval = 0.1f;
     [SerializeField, Range(0, 4)] private int sampleRadius = 1;
-    [SerializeField, Range(1, 12)] private int liquidUnitsPerSample = 1;
+    [SerializeField, Range(1, 24)] private int liquidUnitsPerSample = 1;
     
     
     [Header("Acid & Water")]
@@ -53,6 +53,8 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
         AbsorbAcid(position);
         AbsorbWater(position);
     }
+    
+    
     private void AbsorbAcid(Vector2 position)
     {
         // A saturated player cannot absorb more acid.
@@ -72,28 +74,27 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
                 absorbedUnits * poisonPerAcidUnit);
         }
     }
-
-    public void SetWorld(CellWorld2D world)
-    {
-        cellWorld = world;
-    }
-
-
     public void AbsorbWater(Vector2 position)
     {
-        if (!vitals.IsPoisoned)return;
+        if (!vitals.HasPoison)
+            return;
         
         int absorbedUnits = cellWorld.ExtractWater(
             position,
             sampleRadius,
             liquidUnitsPerSample);
 
-        if (absorbedUnits > 0)
-        {
-            vitals.CleansePoison(absorbedUnits);
-        }
+        vitals.CleansePoison(
+            absorbedUnits * cleansePerWaterUnit);
 
 
     }
+    
+    
+    public void SetWorld(CellWorld2D world)
+    {
+        cellWorld = world;
+    }
+
     
 }

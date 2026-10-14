@@ -225496,9 +225496,9 @@ MonoBehaviour:
   samplePoint: {fileID: 1481601469}
   sampleInterval: 0.02
   sampleRadius: 2
-  liquidUnitsPerSample: 12
+  liquidUnitsPerSample: 24
   poisonPerAcidUnit: 0.1
-  cleansePerWaterUnit: 3
+  cleansePerWaterUnit: 0.1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
