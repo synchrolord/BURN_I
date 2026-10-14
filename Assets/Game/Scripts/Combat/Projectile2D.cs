@@ -13,12 +13,18 @@ public class Projectile2D : MonoBehaviour
     [SerializeField, Min(0f)] private float poisonAmount = 25f;
     [SerializeField] private LayerMask hitMask;
 
+    [Header("Acid Splash")]
+    [SerializeField, Range(0, 20)] private int acidSplashRadius = 1;
+    [SerializeField, Range(0, 250)] private int acidUnitsPerCell = 4;
 
+    private CellWorld2D cellWorld;
+    
+    
     private Vector2 direction;
     private float lifetimeRemaining;
     private bool hasLaunched;
 
-    public void Launch(Vector2 launchDirection)
+    public void Launch(Vector2 launchDirection, CellWorld2D world)
     {
         //assign default launch to right
         if (launchDirection.sqrMagnitude < 0.001f)
@@ -28,10 +34,14 @@ public class Projectile2D : MonoBehaviour
         direction = launchDirection.normalized;
         transform.right = launchDirection;
         
+        cellWorld = world;
+
         lifetimeRemaining = lifetime;
         hasLaunched = true;
 
     }
+    
+    
 
     private void Update()
     {
@@ -54,7 +64,7 @@ public class Projectile2D : MonoBehaviour
         if (hit.collider != null)
         {
             transform.position = hit.point;
-            HandleImpact(hit.collider);
+            HandleImpact(hit);
             return;
         }
         
@@ -73,8 +83,10 @@ public class Projectile2D : MonoBehaviour
     }
 
 
-    public void HandleImpact(Collider2D collider)
+    public void HandleImpact(RaycastHit2D hit)
     {
+        Collider2D collider = hit.collider;
+        
         //add poison to player when hit
         PlayerVitals2D playerVitals = collider.GetComponentInParent<PlayerVitals2D>();
         if (playerVitals != null)
@@ -83,6 +95,31 @@ public class Projectile2D : MonoBehaviour
         //look for objects that are damageable and apply damage 
         Damageable2D target = collider.GetComponentInParent<Damageable2D>();
         target?.TakeDamage(damage);
+        
+        CreateAcidSplash(hit);
         Destroy(gameObject);    
     }    
+    
+    
+    
+    private void CreateAcidSplash(RaycastHit2D hit)
+    {
+        if (cellWorld == null ||
+            acidUnitsPerCell <= 0)
+        {
+            return;
+        }
+
+       // move slightly to avoid creating liquid inside ground
+        Vector2 splashPosition =
+            hit.point +
+            hit.normal * (cellWorld.CellSize * 0.5f);
+
+        cellWorld.AddAcid(
+            splashPosition,
+            acidSplashRadius,
+            acidUnitsPerCell);
+    }
+    
+    
 }

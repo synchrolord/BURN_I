@@ -38,8 +38,11 @@ public sealed class PlantEnemy2D : MonoBehaviour
     [SerializeField] private Projectile2D spitPrefab;
     [SerializeField] private Transform shotOrigin;
     [SerializeField, Min(0f)] private float spitRange = 7f;
+    [SerializeField] private CellWorldRoomManager roomManager;
+
     
-    
+    private CellWorld2D cellWorld;
+
     //Animation
     [Header("Animation")]
     [SerializeField]float attackAnimationSeconds;
@@ -72,7 +75,8 @@ public sealed class PlantEnemy2D : MonoBehaviour
 
     private void Awake()
     {
-        
+        if (roomManager == null)
+        { roomManager = FindFirstObjectByType<CellWorldRoomManager>(); }
         
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
@@ -271,7 +275,13 @@ public sealed class PlantEnemy2D : MonoBehaviour
         Vector2 shotDirection =
             player.BodyCenter - (Vector2)shotOrigin.position;
 
-        shot.Launch(shotDirection);
+        //shoot into the current cellWold
+        CellWorld2D activeWorld =
+            roomManager != null
+                ? roomManager.CurrentWorld
+                : null;
+
+        shot.Launch(shotDirection, activeWorld);
 
         attackCooldownRemaining = attackCooldown;
         attackAnimationRemaining = attackAnimationSeconds;
