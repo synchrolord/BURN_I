@@ -82,7 +82,7 @@ public partial class CellWorld2D
         
         //calculate space available in the "to" cell and transfer as much amount as possible without overfilling 
         int freeSpace = gasCapacity - GetTotalGas(to);
-        int amount = Mathf.Min(gas[from], freeSpace);
+        int amount = Mathf.Min(gas[from], Mathf.Min(requested, freeSpace));
         if (amount <= 0) return;
         //actual transfer
         gas[from] -= (byte)amount;
