@@ -171,6 +171,50 @@ public partial class CellWorld2D
 
         return acceptedTotal;
     }
+    
+    
+    
+//fill cells around current cell for water turning to steam and plants burning
+    private void AddGasNearCell(
+        byte[] gas, bool[] movedGas,
+        int cellX, int cellY,
+        int amount)
+    {
+        if (!solid[Index(cellX, cellY)])
+        {
+            AddGasAtCell(
+                gas, movedGas,
+                cellX, cellY,
+                amount);
+    
+            return;
+        }
+        
+        if (ContainsCell(cellX, cellY + 1) &&
+            !solid[Index(cellX, cellY + 1)])
+        {
+            AddGasAtCell(
+                gas, movedGas,
+                cellX, cellY + 1,
+                amount);
+        }
+        else if (ContainsCell(cellX - 1, cellY) &&
+                 !solid[Index(cellX - 1, cellY)])
+        {
+            AddGasAtCell(
+                gas, movedGas,
+                cellX - 1, cellY,
+                amount);
+        }
+        else if (ContainsCell(cellX + 1, cellY) &&
+                 !solid[Index(cellX + 1, cellY)])
+        {
+            AddGasAtCell(
+                gas, movedGas,
+                cellX + 1, cellY,
+                amount);
+        }
+    }
 
 
 

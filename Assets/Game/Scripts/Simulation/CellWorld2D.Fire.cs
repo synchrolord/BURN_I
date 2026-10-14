@@ -8,17 +8,28 @@ public partial class CellWorld2D
         if (fire[i] == 0) return;
         WakeCell(x, y);
    
-        // fire is spent to destroy water
+
         if (water[i] > 0)
         {
-            //exhaust fire if possible
-            int spent = Mathf.Min(water[i], waterUsedToExtinguish);
-            water[i] -= (byte)spent;
-            fire[i] = (byte)Mathf.Max(0, fire[i] - spent);
-            
-            //if plant exists,wet it and make smoke 
+            int reacted = Mathf.Min(
+                fire[i],
+                Mathf.Min(
+                    water[i],
+                    waterUsedToExtinguish));
+
+            water[i] -= (byte)reacted;
+            fire[i] -= (byte)reacted;
+
             WetPlant(i);
-            AddPlantSmoke(x, y, 1);
+
+            AddGasNearCell(
+                steam,
+                movedSteam,
+                x,
+                y,
+                reacted);
+
+            WakeCell(x, y);
             textureNeedsRefresh = true;
             return;
         }

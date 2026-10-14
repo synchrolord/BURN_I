@@ -204919,7 +204919,7 @@ MonoBehaviour:
   worldCamera: {fileID: 0}
   brushRadiusInCells: 2
   liquidUnitsPerStamp: 8
-  smokeUnitsPerStamp: 5
+  gasUnitsPerStamp: 5
   stampInterval: 0.04
   showHelpText: 1
 --- !u!4 &613709043
@@ -210365,7 +210365,7 @@ MonoBehaviour:
   worldCamera: {fileID: 1247774254}
   brushRadiusInCells: 2
   liquidUnitsPerStamp: 8
-  smokeUnitsPerStamp: 5
+  gasUnitsPerStamp: 5
   stampInterval: 0.04
   showHelpText: 1
 --- !u!1001 &1047905850
@@ -212891,6 +212891,9 @@ MonoBehaviour:
   smokeRisePerTick: 4
   smokeDecayEveryTicks: 200
   smokeSidewaysChance: 0.35
+  steamRisePerTick: 6
+  steamDecayEveryTicks: 100
+  steamSidewaysChance: 0.55
   fuelBurnEveryTicks: 4
   fireDecayEveryTicks: 6
   fireSpreadEveryTicks: 16
@@ -212908,6 +212911,7 @@ MonoBehaviour:
   weakFireColor: {r: 0.9, g: 0.18, b: 0.03, a: 1}
   mediumFireColor: {r: 1, g: 0.48, b: 0.03, a: 1}
   hotFireColor: {r: 1, g: 0.95, b: 0.45, a: 1}
+  steamColor: {r: 0.75, g: 0.85, b: 0.92, a: 0.6}
   startPaused: 0
   showSolidCells: 0
   solidDebugColor: {r: 0.2, g: 0.2, b: 0.2, a: 0}
@@ -224849,7 +224853,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: gasCapacity
-      value: 9
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: startPaused
@@ -224870,6 +224874,10 @@ PrefabInstance:
     - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: fireSpreadChance
       value: 0.296
+      objectReference: {fileID: 0}
+    - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
+      propertyPath: smokeRisePerTick
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: activeChunkRadius
