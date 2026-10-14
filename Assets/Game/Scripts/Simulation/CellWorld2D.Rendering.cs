@@ -56,7 +56,8 @@ public partial class CellWorld2D
                 pixels[i] = FireColor(i);
                 hasVisibleFire = true;
             }
-            else if (smoke[i] > 0) pixels[i] = SmokeColor(smoke[i]);
+            else if (GetTotalGas(i) > 0)
+                pixels[i] = GasColor(i);
             
             
             //dynamically color liquids
@@ -88,22 +89,15 @@ public partial class CellWorld2D
         return color;
     }
 
-    //fuller water cells use more of the deep water color
     private Color WaterColor(byte amount) =>
         Color.Lerp(shallowWaterColor, deepWaterColor, amount / (float)liquidCapacity);
-
-    //fuller fuel cells use more of the deep fuel color
     private Color FuelColor(byte amount) =>
         Color.Lerp(shallowFuelColor, deepFuelColor, amount / (float)liquidCapacity);
-
     private Color AcidColor(byte amount) =>
         Color.Lerp(
             shallowAcidColor,
             deepAcidColor,
             amount / (float)liquidCapacity);
-
-    
-    
     private Color LiquidColor(int index)
     {
         float total = GetTotalLiquid(index);
@@ -121,14 +115,31 @@ public partial class CellWorld2D
 
         return color;
     }
-    //more smoke makes the cell less transparent
     private Color SmokeColor(byte amount)
     {
         Color color = smokeColor;
         color.a *= Mathf.Lerp(0.25f, 1f, amount / (float)gasCapacity);
         return color;
     }
+    private Color GasColor(int index)
+    {
+        int total = GetTotalGas(index);
 
+        float steamFraction =
+            steam[index] / (float)total;
+
+        Color color = Color.Lerp(
+            smokeColor,
+            steamColor,
+            steamFraction);
+
+        color.a *= Mathf.Lerp(
+            0.25f,
+            1f,
+            total / (float)gasCapacity);
+
+        return color;
+    }
     //show the grid bounds when selecting the object in the editor
     protected void OnDrawGizmosSelected()
     {

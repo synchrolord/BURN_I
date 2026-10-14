@@ -6,19 +6,31 @@ public partial class CellWorld2D
     //add materials with AddLiquidCircle
     public int AddWater(Vector2 position, int radius, int amountPerCell) =>
         IsReady 
-            ? AddLiquidCircle(water, position, radius, amountPerCell) 
+            ? AddLiquidCircle(
+                water, 
+                position, 
+                radius, 
+                amountPerCell) 
             : 0;
     
     
     public int AddFuel(Vector2 position, int radius, int amountPerCell) =>
         IsReady 
-            ? AddLiquidCircle(fuel, position, radius, amountPerCell) 
+            ? AddLiquidCircle(
+                fuel,
+                position,
+                radius, 
+                amountPerCell) 
             : 0;
     
     public int AddAcid(
         Vector2 position, int radius, int amountPerCell) =>
         IsReady
-            ? AddLiquidCircle(acid, position, radius, amountPerCell)
+            ? AddLiquidCircle(
+                acid, 
+                position,
+                radius, 
+                amountPerCell)
             : 0;
     
     
@@ -27,11 +39,24 @@ public partial class CellWorld2D
     {
         return IsReady
             ? AddGasCircle(
-                smoke, position,
-                radius, amountPerCell)
+                smoke, 
+                position,
+                radius, 
+                amountPerCell)
             : 0;
     }
     
+    public int AddSteam(
+        Vector2 position, int radius, int amountPerCell)
+    {
+        return IsReady
+            ? AddGasCircle(
+                steam, 
+                position,
+                radius,
+                amountPerCell)
+            : 0;
+    }
     
     
     
@@ -188,11 +213,11 @@ public partial class CellWorld2D
             if (!IsInsideCircle(x, y, center, radiusSquared)) continue;
             int i = Index(x, y);
             if (water[i] == 0 && fuel[i] == 0 && acid[i]==0&&
-                fire[i] == 0 && smoke[i] == 0) 
+                fire[i] == 0 && smoke[i] == 0&&steam[i]==0) 
                 continue;
 
             //clear everything and update
-            water[i] = fuel[i] = acid[i] = fire[i] = smoke[i] = 0;
+            water[i] = fuel[i] = acid[i] = fire[i] = smoke[i] = steam[i]= 0;
             WakeCell(x, y);
             changed = true;
         }
@@ -224,7 +249,7 @@ public partial class CellWorld2D
     public int GetTotalWaterUnits() => Sum(water);
     public int GetTotalFuelUnits() => Sum(fuel);
     public int GetTotalAcidUnits() => Sum(acid);
-    
+    public int GetTotalSteamUnits() => Sum(steam);
     
     public void ClearAllMaterials()
     {
@@ -234,6 +259,7 @@ public partial class CellWorld2D
         Array.Clear(acid,0,acid.Length);
         Array.Clear(fire, 0, fire.Length);
         Array.Clear(smoke, 0, smoke.Length);
+        Array.Clear(steam, 0, steam.Length);
         textureNeedsRefresh = true;
     }
     
@@ -264,5 +290,7 @@ public partial class CellWorld2D
         for (int i = 0; i < values.Length; i++) total += values[i];
         return total;
     }
+    
+    
 
 }

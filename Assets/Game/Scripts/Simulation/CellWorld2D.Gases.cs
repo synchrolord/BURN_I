@@ -7,8 +7,10 @@ public partial class CellWorld2D
     //total amount of all gases in a tile
     private int GetTotalGas(int index)
     {
-        return smoke[index];
+        return smoke[index] + steam[index];
     }
+    
+    
 
     private void SimulateGasAt(
         byte[] gas, bool[] movedGas,

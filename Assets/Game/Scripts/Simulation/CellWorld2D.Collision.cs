@@ -36,7 +36,7 @@ public partial class CellWorld2D
             if (solid[i])
             {
                 //clear materials from walls, but allow registered plants to keep fire
-                water[i] = fuel[i] = acid[i] = smoke[i] = 0;
+                water[i] = fuel[i] = acid[i] = smoke[i] = steam[i] = 0;
                 if (!ContainsCell(x, y) || !HasPlantFuel(i)) fire[i] = 0;
             }
         }

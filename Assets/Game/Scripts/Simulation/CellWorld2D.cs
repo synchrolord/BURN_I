@@ -48,6 +48,10 @@ public partial class CellWorld2D : MonoBehaviour
     [SerializeField, Range(1, 1000)] private int smokeDecayEveryTicks = 200;
     [SerializeField, Range(0f, 1f)] private float smokeSidewaysChance = 0.35f;
 
+    [Header("Steam")]
+    [SerializeField, Range(1, 8)] private int steamRisePerTick = 6;
+    [SerializeField, Range(1, 1000)] private int steamDecayEveryTicks = 100;
+    [SerializeField, Range(0f, 1f)] private float steamSidewaysChance = 0.55f;
     
     [Header("Fire")]
     [SerializeField, Range(1, 30)] private int fuelBurnEveryTicks = 4;
@@ -69,7 +73,7 @@ public partial class CellWorld2D : MonoBehaviour
     [SerializeField] private Color weakFireColor = new Color(0.90f, 0.18f, 0.03f, 1f);
     [SerializeField] private Color mediumFireColor = new Color(1f, 0.48f, 0.03f, 1f);
     [SerializeField] private Color hotFireColor = new Color(1f, 0.95f, 0.45f, 1f);
-
+    [SerializeField] private Color steamColor = new Color(0.75f, 0.85f, 0.92f, 0.60f);
     [Header("Debug")]
     [SerializeField] private bool startPaused;
     [SerializeField] private bool showSolidCells;
@@ -189,7 +193,7 @@ public partial class CellWorld2D : MonoBehaviour
                 SeparateOilAt(cellX, cellY);
                 SimulateLiquidsAt(cellX,cellY);
                 //process smoke and fire after moving the liquids
-                SimulateSmokeAt(cellX, cellY);
+                SimulateGasesAt(cellX, cellY);
                 SimulateFireAt(cellX, cellY);
             }
         }
@@ -197,6 +201,8 @@ public partial class CellWorld2D : MonoBehaviour
         ApplyPendingFire();
         tickNumber++;
     }
+    
+    //simulate all three liquids, alternating to avoid bias
     private void SimulateLiquidsAt(int cellX, int cellY)
     {
         switch (tickNumber % 3)
@@ -218,6 +224,22 @@ public partial class CellWorld2D : MonoBehaviour
                 SimulateLiquidAt(water, movedWater, cellX, cellY, waterViscosity);
                 SimulateLiquidAt(fuel, movedFuel, cellX, cellY, fuelViscosity);
                 break;
+        }
+    }
+    
+    
+   //simulate gasses like how water is handled
+    private void SimulateGasesAt(int cellX, int cellY)
+    {
+        if ((tickNumber & 1) == 0)
+        {
+            SimulateSmokeAt(cellX, cellY);
+            SimulateSteamAt(cellX, cellY);
+        }
+        else
+        {
+            SimulateSteamAt(cellX, cellY);
+            SimulateSmokeAt(cellX, cellY);
         }
     }
     

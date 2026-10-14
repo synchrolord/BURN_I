@@ -5,21 +5,22 @@ public partial class CellWorld2D
 {
     
     //initialize all possible materials arrays in a cell
-    private byte[] water, fuel, acid, smoke, fire;
-    /*
-        Single cell can store an amount of each material
-        cell #25
-        water[25] = 5;
-        fuel[25] = 2;
-        smoke[25] = 0;
-        fire[25] = 0;
-     */
+    private byte[] water, fuel, acid, smoke, steam, fire; 
+        /*
+            Single cell can store an amount of each material
+            cell #25
+            water[25] = 5;
+            fuel[25] = 2;
+            smoke[25] = 0;
+            fire[25] = 0;
+         */
     
     //cell is blocked, no material allowed tom move here
     private bool[] solid;
     
     //flags to mark materials that have already moved this simulation step
-    private bool[] movedWater, movedFuel, movedAcid, movedSmoke;
+    private bool[] movedWater, movedFuel, movedAcid;
+    private bool[] movedSmoke, movedSteam;
     
     //fire waiting to be applied, avoid instantaneous burning.
     private byte[] pendingFire;
@@ -38,9 +39,9 @@ public partial class CellWorld2D
     private Color32[] pixels;
     internal bool IsReady =>
         
-        water != null && fuel != null && acid != null &&  
-        smoke != null && fire != null &&
-        solid != null;
+        water != null && fuel != null && acid != null &&
+        smoke != null && steam != null && fire != null &&
+        solid != null;  
 
     
     
@@ -76,7 +77,10 @@ public partial class CellWorld2D
         water = new byte[count];
         acid = new byte[count];
         fuel = new byte[count];
+        
+        
         smoke = new byte[count];
+        steam = new byte[count];
         fire = new byte[count];
         
         
@@ -84,7 +88,10 @@ public partial class CellWorld2D
         movedWater = new bool[count];
         movedAcid = new bool[count];
         movedFuel = new bool[count];
+        
+        
         movedSmoke = new bool[count];
+        movedSteam = new bool[count];
         pendingFire = new byte[count];
         
         //how many chunks to cove Grid
