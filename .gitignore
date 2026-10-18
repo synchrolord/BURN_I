@@ -19,3 +19,7 @@
 .DS_Store
 Thumbs.db
 desktop.ini
+
+
+# Advanced reference package is local only.
+/ScriptLibrary/Advanced/
