@@ -1,17 +1,19 @@
-# Only show project source and our guides/script library at the repository root.
+# Track only the Unity project source needed to open and build the game.
 /*
 !/Assets/
 !/Packages/
 !/ProjectSettings/
-/Docs/
-!/ScriptLibrary/
 
-# Keep Git configuration and root documentation.
+# Keep Git configuration.
 !/.gitignore
 !/.gitattributes
-!/*.md
 
-# Editor/OS-generated files can still appear inside an included folder.
+# Local reference, recovery, and duplicate asset folders.
+/Assets/_Recovery/
+/Assets/Legacy/
+/Assets/celeste stuff/
+
+# Editor/OS-generated files inside tracked folders.
 .vs/
 .idea/
 *.csproj
@@ -19,7 +21,7 @@
 .DS_Store
 Thumbs.db
 desktop.ini
+/Assets/_Recovery.meta
+/Assets/Legacy.meta
+/Assets/celeste stuff.meta
 
-
-# Advanced reference package is local only.
-/ScriptLibrary/Advanced/
