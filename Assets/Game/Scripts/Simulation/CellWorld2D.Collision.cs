@@ -37,6 +37,8 @@ public partial class CellWorld2D
             {
                 //clear materials from walls, but allow registered plants to keep fire
                 water[i] = fuel[i] = acid[i] = smoke[i] = steam[i] = 0;
+                smokeVelocity[i] = Vector2.zero;
+                steamVelocity[i] = Vector2.zero;
                 if (!ContainsCell(x, y) || !HasPlantFuel(i)) fire[i] = 0;
             }
         }
@@ -87,6 +89,8 @@ public partial class CellWorld2D
             if (blocked)
             {
                 water[i] = fuel[i] = acid[i]= smoke[i] = 0;
+                smokeVelocity[i] = Vector2.zero;
+                steamVelocity[i] = Vector2.zero;
                 if (!ContainsCell(x, y) || !HasPlantFuel(i)) fire[i] = 0;
             }
             WakeCell(x, y);

@@ -7,8 +7,10 @@ public partial class CellWorld2D
     {
         SimulateGasAt(
             smoke, movedSmoke,
-            cellX, cellY,
-            smokeRisePerTick, smokeSidewaysChance, smokeDecayEveryTicks);
+            smokeVelocity, cellX,
+            cellY, smokeRisePerTick,
+            smokeSidewaysChance, 
+            smokeDecayEveryTicks);
     }
 
 

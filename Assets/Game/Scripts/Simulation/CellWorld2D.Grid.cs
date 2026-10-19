@@ -21,6 +21,7 @@ public partial class CellWorld2D
     //flags to mark materials that have already moved this simulation step
     private bool[] movedWater, movedFuel, movedAcid;
     private bool[] movedSmoke, movedSteam;
+    private Vector2[] smokeVelocity,steamVelocity;
     
     //fire waiting to be applied, avoid instantaneous burning.
     private byte[] pendingFire;
@@ -37,11 +38,13 @@ public partial class CellWorld2D
     private Texture2D runtimeTexture;
     private Sprite runtimeSprite;
     private Color32[] pixels;
+
     internal bool IsReady =>
-        
+
         water != null && fuel != null && acid != null &&
         smoke != null && steam != null && fire != null &&
-        solid != null;  
+        solid != null &&
+        smokeVelocity != null && steamVelocity != null;
 
     
     
@@ -83,7 +86,8 @@ public partial class CellWorld2D
         steam = new byte[count];
         fire = new byte[count];
         
-        
+        smokeVelocity = new Vector2[count];
+        steamVelocity = new Vector2[count];
         
         movedWater = new bool[count];
         movedAcid = new bool[count];

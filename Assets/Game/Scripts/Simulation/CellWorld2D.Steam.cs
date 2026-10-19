@@ -4,13 +4,10 @@ public partial class CellWorld2D
     private void SimulateSteamAt(int cellX, int cellY)
     {
         SimulateGasAt(
-            steam,
-            movedSteam,
-            cellX,
-            cellY,
-            steamRisePerTick,
-            steamSidewaysChance,
-            steamDecayEveryTicks);
+            steam, movedSteam,
+            steamVelocity,
+            cellX, cellY,
+            steamRisePerTick, steamSidewaysChance, steamDecayEveryTicks);
     }
 
    

@@ -42,12 +42,26 @@ public partial class CellWorld2D : MonoBehaviour
     [Header("Gases")]
     [FormerlySerializedAs("smokeCapacity")]
     [SerializeField, Range(1, 16)] private int gasCapacity = 8;
+    [SerializeField, Range(1, 8)] private int gasSpreadDistance = 4;
+
+    
+    [Header("Gas Momentum")]
+    [SerializeField, Min(0f)] private float gasBuoyancy = 0.9f;
+    [SerializeField, Range(0f, 0.95f)] private float gasVelocityDrag = 0.12f;
+    [SerializeField, Range(1f, 4f)] private float gasMaximumSpeedInCells = 3f;
+    
+    
 
     [Header("Smoke")]
     [SerializeField, Range(1, 8)] private int smokeRisePerTick = 4;
     [SerializeField, Range(1, 1000)] private int smokeDecayEveryTicks = 200;
     [SerializeField, Range(0f, 1f)] private float smokeSidewaysChance = 0.35f;
-
+    
+    
+    
+    
+    
+    
     [Header("Steam")]
     [SerializeField, Range(1, 8)] private int steamRisePerTick = 6;
     [SerializeField, Range(1, 1000)] private int steamDecayEveryTicks = 100;

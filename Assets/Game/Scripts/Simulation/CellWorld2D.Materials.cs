@@ -218,6 +218,7 @@ public partial class CellWorld2D
 
             //clear everything and update
             water[i] = fuel[i] = acid[i] = fire[i] = smoke[i] = steam[i]= 0;
+            smokeVelocity[i] = Vector2.zero; steamVelocity[i] = Vector2.zero;
             WakeCell(x, y);
             changed = true;
         }
@@ -260,6 +261,10 @@ public partial class CellWorld2D
         Array.Clear(fire, 0, fire.Length);
         Array.Clear(smoke, 0, smoke.Length);
         Array.Clear(steam, 0, steam.Length);
+        
+        Array.Clear(smokeVelocity, 0, smokeVelocity.Length);
+
+        Array.Clear(steamVelocity, 0, steamVelocity.Length);
         textureNeedsRefresh = true;
     }
     
