@@ -20,7 +20,7 @@ public partial class CellWorld2D
     
     //flags to mark materials that have already moved this simulation step
     private bool[] movedWater, movedFuel, movedAcid;
-    private bool[] movedSmoke, movedSteam;
+    private bool[] movedSmoke, movedSteam,movedFire;
     private Vector2[] smokeVelocity,steamVelocity;
     
     //fire waiting to be applied, avoid instantaneous burning.
@@ -44,7 +44,7 @@ public partial class CellWorld2D
         water != null && fuel != null && acid != null &&
         smoke != null && steam != null && fire != null &&
         plant != null && plantColor != null && visiblePlant != null &&
-        solid != null &&
+        solid != null && movedFire != null &&
         smokeVelocity != null && steamVelocity != null;
 
     
@@ -70,7 +70,7 @@ public partial class CellWorld2D
         fireSpreadEveryTicks = Mathf.Max(1, fireSpreadEveryTicks);
         plantBurnEveryTicks = Mathf.Max(1, plantBurnEveryTicks);
         plantSpreadEveryTicks = Mathf.Max(1, plantSpreadEveryTicks);
-        
+        firePuffEveryTicks = Mathf.Max(1, firePuffEveryTicks);
         //initialize cellWorld properties
         paused = startPaused;
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -102,6 +102,7 @@ public partial class CellWorld2D
         
         movedSmoke = new bool[count];
         movedSteam = new bool[count];
+        movedFire = new bool[count];
         pendingFire = new byte[count];
         
         //how many chunks to cove Grid

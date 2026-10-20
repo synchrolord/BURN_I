@@ -75,7 +75,15 @@ public partial class CellWorld2D : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float upwardSpreadBonus = 0.15f;
     [SerializeField, Range(0, 8)] private int smokeMadeByFire = 2;
     [SerializeField, Range(1, 8)] private int waterUsedToExtinguish = 2;
-
+    
+    [Header("Fire Puff")]
+    [SerializeField, Range(1, 30)] private int firePuffEveryTicks = 4;
+    [SerializeField, Range(0f, 1f)] private float firePuffChance = 0.25f;
+    [SerializeField, Range(1, 3)] private int firePuffAmount = 1;
+    [SerializeField, Range(1, 3)] private int firePuffPower = 1;
+    [SerializeField, Range(0f, 1f)] private float fireWander = 0.7f;
+    [SerializeField, Range(0f, 0.95f)] private float fireDrag = 0.15f;
+    
     [Header("Plants")]
     [Tooltip("Ticks between each of the five visible burn stages.")]
     [SerializeField, Range(1, 60)] private int plantBurnEveryTicks = 20;

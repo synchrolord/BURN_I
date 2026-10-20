@@ -7,6 +7,11 @@ public partial class CellWorld2D
     [SerializeField, Range(5f, 30f)] private float fireVisualFramesPerSecond = 20f;
     [SerializeField, Range(0f, 1f)] private float fireFlickerAmount = 0.4f;
     [SerializeField, Min(0.1f)] private float fireFlickerSpeed = 7f;
+    
+    [SerializeField, Range(0f, 1f)] private float fireHeat = 0.7f;
+    [SerializeField, Range(0f, 1f)] private float fireMinimumAlpha = 0.35f;
+    
+    
     private bool hasVisibleFire;
     private float nextFireVisualUpdate;
 
@@ -83,11 +88,26 @@ public partial class CellWorld2D
         float x = index % width, y = index / width;
         float noise = Mathf.PerlinNoise(x * 0.32f + Time.time * 0.7f,
             y * 0.3f - Time.time * fireFlickerSpeed);
-        float heat = Mathf.Clamp01((fire[index] - 1f) * 0.5f + (noise - 0.5f) * fireFlickerAmount);
-        //blend weak to medium fire, then medium to hot fire
-        Color color = heat < 0.5f ? Color.Lerp(weakFireColor, mediumFireColor, heat * 2f)
+        
+        
+        
+        
+        float strength = fire[index] / 3f;
+
+        float heat = Mathf.Clamp01(
+            strength * fireHeat +
+            (noise - 0.5f) * fireFlickerAmount);
+
+        
+        //decide fire Color Dynamically between the 3 colors
+        Color color = heat < 0.5f
+            ? Color.Lerp(weakFireColor, mediumFireColor, heat * 2f)
             : Color.Lerp(mediumFireColor, hotFireColor, (heat - 0.5f) * 2f);
-        color.a *= Mathf.Lerp(0.72f, 1f, noise);
+
+        color.a *= Mathf.Lerp(fireMinimumAlpha, 1f, noise) *
+                   Mathf.Lerp(0.65f, 1f, strength);
+        
+        
         return color;
     }
 

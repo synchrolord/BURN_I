@@ -98,6 +98,7 @@ public partial class CellWorld2D
         Array.Clear(movedAcid, 0, movedAcid.Length);
         Array.Clear(movedSmoke, 0, movedSmoke.Length);
         Array.Clear(movedSteam, 0, movedSteam.Length);
+        Array.Clear(movedFire, 0, movedFire.Length);
     }
     
 }

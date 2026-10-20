@@ -10,7 +10,6 @@ public sealed class BurnablePlantTile : TileBase
     {
         if (burnStages == null || burnStages.Length == 0) return null;
 
-        //use the nearest earlier picture when a stage is left empty
         for (int i = Mathf.Min(stage, burnStages.Length - 1); i >= 0; i--)
             if (burnStages[i] != null) return burnStages[i];
 
@@ -28,3 +27,4 @@ public sealed class BurnablePlantTile : TileBase
         tileData.colliderType = Tile.ColliderType.None;
     }
 }
+

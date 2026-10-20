@@ -23,6 +23,8 @@ public sealed class PressureTool2D : MonoBehaviour
 
     
     
+    [SerializeField] private bool showFlameVisual = true;
+    
     [Header("Starting mode and nozzles")]
     [SerializeField] private SprayType currentSprayType = SprayType.Water;
     [SerializeField, Range(0, 2)] private int nozzleMode = 1;
@@ -150,7 +152,11 @@ public sealed class PressureTool2D : MonoBehaviour
         //update current shots/create new shots
         MoveShots(Time.deltaTime);
         LaunchShots(Time.deltaTime);
-        sprayVisuals.Draw(activeShots, waterShotWidth, flameShotWidth);
+        sprayVisuals.Draw(
+            activeShots,
+            waterShotWidth,
+            flameShotWidth,
+            showFlameVisual);
     }
 
     //pressing left mouse button

@@ -45,36 +45,60 @@ internal sealed class PressureSprayVisuals
 
     
     //handle drawing all  particles
-    public void Draw(List<PressureTool2D.SprayShot> activeShots, float waterShotWidth, float flameShotWidth)
-    {
+    public void Draw(List<PressureTool2D.SprayShot> activeShots, float waterShotWidth, float flameShotWidth, bool showFlameVisual){
+        
+        int visibleCount = 0;
+        
         //Draw every shot in activeShot arraylist
         for (int i = 0; i < activeShots.Count; i++)
         {   
             //store variables for current shot
             PressureTool2D.SprayShot shot = activeShots[i];
             bool isWater = shot.sprayType == PressureTool2D.SprayType.Water;
+            
+            
+            //hide flame shots but keep simulating them
+            if (!isWater && !showFlameVisual) continue;
+            
             float lifetimeProgress = 1 - shot.remainingLifetimeSeconds / shot.initialLifetimeSeconds;
-            float width = isWater ? waterShotWidth : flameShotWidth * (0.65f + lifetimeProgress);
+            float width = isWater 
+                ? waterShotWidth 
+                : flameShotWidth * (0.65f + lifetimeProgress);
             
             //decide color based on material
-            Color color = isWater ? new Color(0.2f, 0.72f, 1, 0.9f)
-                : Color.Lerp(new Color(1, 0.9f, 0.22f), new Color(1, 0.18f, 0.025f), lifetimeProgress);
+            Color color = isWater
+                ? new Color(0.2f, 0.72f, 1, 0.9f)
+                : Color.Lerp(
+                    new Color(1, 0.9f, 0.22f),
+                    new Color(1, 0.18f, 0.025f),
+                    lifetimeProgress);
+
             color.a *= 1 - lifetimeProgress;
-            float directionAngleDegrees = Mathf.Atan2(shot.velocity.y, shot.velocity.x) * Mathf.Rad2Deg;
+
+            float angle =
+                Mathf.Atan2(shot.velocity.y, shot.velocity.x) *
+                Mathf.Rad2Deg;
+
             
             // create ParticleSystem.Particle and store in buffer with shot's properties  
-            particleBuffer[i] = new ParticleSystem.Particle
-            {
-                position = shot.position,
-                startSize3D = new Vector3(width, isWater ? width * 2 : width * 2.3f, width),
-                rotation = 90 - directionAngleDegrees,
-                startColor = color,
-                startLifetime = 1,
-                remainingLifetime = 1
+            particleBuffer[visibleCount] =
+                new ParticleSystem.Particle
+                {
+                    position = shot.position,
+                    startSize3D = new Vector3(
+                        width,
+                        isWater ? width * 2 : width * 2.3f,
+                        width),
+                    rotation = 90 - angle,
+                    startColor = color,
+                    startLifetime = 1,
+                    remainingLifetime = 1
             };
+            visibleCount++;
+
         }
         //push particle buffer to particleSystem
-        particleSystem.SetParticles(particleBuffer, activeShots.Count);
+        particleSystem.SetParticles(particleBuffer, visibleCount);
     }
 
     

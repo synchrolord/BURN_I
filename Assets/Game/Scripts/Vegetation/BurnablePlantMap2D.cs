@@ -60,26 +60,32 @@ public sealed class BurnablePlantMap2D : MonoBehaviour
         for (int y = 0; y < world.Height; y++)
         for (int x = 0; x < world.Width; x++)
         {
+            
+            //which tile is in this cell
             Vector2 worldPoint = world.CellToWorld(x, y);
             Vector3Int tilePosition = map.WorldToCell(worldPoint);
             Sprite sprite = map.GetSprite(tilePosition);
             if (sprite == null) continue;
 
+            
             Vector3 localPoint = map.transform.InverseTransformPoint(worldPoint);
             Vector2 offset = localPoint - map.GetCellCenterLocal(tilePosition);
 
+            //Get specific pixel location
             int pixelX = Mathf.FloorToInt(offset.x * sprite.pixelsPerUnit + sprite.pivot.x);
             int pixelY = Mathf.FloorToInt(offset.y * sprite.pixelsPerUnit + sprite.pivot.y);
             int spriteWidth = Mathf.RoundToInt(sprite.rect.width);
             int spriteHeight = Mathf.RoundToInt(sprite.rect.height);
 
+            
             if (pixelX < 0 || pixelY < 0 || pixelX >= spriteWidth || pixelY >= spriteHeight)
                 continue;
 
+            //read specific pixel and ignore if transparent
             Color32 color = GetSpritePixels(sprite)[pixelX + pixelY * spriteWidth];
             if (color.a <= 25) continue;
 
-            //include any color painted onto this Tilemap cell
+            //create new cellWolrd plant cell with the same color of pixel
             Color tint = map.GetColor(tilePosition);
             Color finalColor = (Color)color * tint;
             world.AddPlantCell(x, y, finalColor);
