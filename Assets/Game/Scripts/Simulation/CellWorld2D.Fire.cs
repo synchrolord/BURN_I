@@ -16,8 +16,7 @@ public partial class CellWorld2D
             water[i] -= (byte)spent;
             fire[i] = (byte)Mathf.Max(0, fire[i] - spent);
             
-            //if plant exists,wet it and make smoke 
-            WetPlant(i);
+            //hot water touching fire makes a little smoke
             AddPlantSmoke(x, y, 1);
             textureNeedsRefresh = true;
             return;
@@ -26,8 +25,8 @@ public partial class CellWorld2D
         
         
         
-        //try burning plant if it exists
-        bool plantBurning = BurnPlant(i, out bool firstPlantPass);
+        //fire stays alive while it has fuel or plant matter
+        bool plantBurning = HasPlant(i);
         bool hasFuel = fuel[i] > 0;
         
        //burning and fire spreading
@@ -36,15 +35,16 @@ public partial class CellWorld2D
             fire[i] = 3;//max firePower
             
             //burn fuel every N ticks
-            if (tickNumber % fuelBurnEveryTicks == 0)
+            if (hasFuel && tickNumber % fuelBurnEveryTicks == 0)
             {
-                if (hasFuel) fuel[i]--;
-                if (hasFuel || firstPlantPass) AddPlantSmoke(x, y, smokeMadeByFire);
+                fuel[i]--;
+                AddPlantSmoke(x, y, smokeMadeByFire);
                 textureNeedsRefresh = true;
             }
             
             // fire spreading logic hierarchy
-            if (tickNumber % fireSpreadEveryTicks == 0)
+            int spreadEvery = plantBurning ? plantSpreadEveryTicks : fireSpreadEveryTicks;
+            if (tickNumber % spreadEvery == 0)
             {
                 TrySpreadFire(x, y, x, y + 1, true);//try up
                 TrySpreadFire(x, y, x - 1, y, false);//try left
@@ -69,12 +69,13 @@ public partial class CellWorld2D
     {
         if (!ContainsCell(toX, toY)) return;
         int target = Index(toX, toY);
-        bool plant = CanBurnPlant(target);
+        bool plant = HasPlant(target);
         
         //fire cant spread to water
         if (fire[target] > 0 || water[target] > 0 || (!plant && (solid[target] || fuel[target] == 0))) return;
         
-        float chance = fireSpreadChance + (upward ? upwardSpreadBonus : 0f);
+        float chance = plant ? plantSpreadChance : fireSpreadChance;
+        if (upward) chance += plant ? plantUpwardSpreadBonus : upwardSpreadBonus;
         
         if (Random.value > Mathf.Clamp01(chance)) return;
         //queue each target once so new fire starts after this tick's cell processing

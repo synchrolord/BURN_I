@@ -3,253 +3,202 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-// BASIC EDITION: one manager for the whole plant Tilemap.
-// Each Plant below is plain data, not a GameObject. Hundreds of tiles share this Update.
-// CellWorld burns the baked pixels and reports how much fuel each plant has lost.
+//copy ordinary Tilemap sprites into CellWorld when play starts
 [DisallowMultipleComponent, RequireComponent(typeof(Tilemap), typeof(TilemapRenderer))]
-public sealed partial class BurnablePlantMap2D : MonoBehaviour
+public sealed class BurnablePlantMap2D : MonoBehaviour
 {
-    [SerializeField] private CellWorld2D world;
-    [Tooltip("This is a static decoration map. After runtime painting or moving it, call ResetPlantsAndRebuild().")]
-    [SerializeField] private bool warnAboutUnregisteredPlants = true;
-
-    //store one painted plant's position, appearance and total burn damage
-    private sealed class Plant
+    private sealed class PlantTile
     {
         public Vector3Int position;
-        public BurnablePlantTile tile;
-        public Matrix4x4 transform;
+        public BurnablePlantTile animatedTile;
         public Color color;
-        //total registered burn time across its cells, and how much has been used
-        public double capacity, consumed;
-        public int stage;
-        public bool finished;
-        public Bounds collisionBounds;
+        public Matrix4x4 transform;
+        public readonly List<Vector2Int> cells = new List<Vector2Int>();
+        public int stage = -1;
     }
+
+    [SerializeField] private CellWorld2D world;
 
     private Tilemap map;
-    private readonly List<Plant> plants = new List<Plant>();
-    //find a plant's list index from its tilemap position
-    private readonly Dictionary<Vector3Int, int> plantAt = new Dictionary<Vector3Int, int>();
-    //reuse the temporary tiles made for each asset's burn stages
-    private readonly Dictionary<BurnablePlantTile, Tile[]> stageTiles = new Dictionary<BurnablePlantTile, Tile[]>();
-    private Coroutine initialization;
-    private bool registered;
-    private CellWorld2D registeredWorld;
-    public int RegisteredPlantCount => plants.Count;
-    public int RegisteredFuelSampleCount { get; private set; }
+    private readonly Dictionary<Sprite, Color32[]> spritePixels = new Dictionary<Sprite, Color32[]>();
+    private readonly Dictionary<Vector3Int, PlantTile> plants = new Dictionary<Vector3Int, PlantTile>();
+    private readonly Dictionary<Sprite, Tile> stageTiles = new Dictionary<Sprite, Tile>();
+    private float nextVisualUpdate;
     public CellWorld2D World { get => world; set => world = value; }
 
-    private void OnEnable() { initialization = StartCoroutine(InitializeWhenReady()); }
-
-    //find the tilemap and wait for CellWorld to finish starting
-    private IEnumerator InitializeWhenReady()
+    private void Awake()
     {
         map = GetComponent<Tilemap>();
+
+        
+        TilemapCollider2D plantCollider = GetComponent<TilemapCollider2D>();
+        if (plantCollider != null) plantCollider.enabled = false;
+    }
+
+    private IEnumerator Start()
+    {
         if (world == null) world = FindAnyObjectByType<CellWorld2D>();
+
         if (world == null)
         {
-            Debug.LogWarning("Burnable plants need a CellWorld2D. Assign World, then re-enable the component.", this);
+            Debug.LogWarning("Burnable Plants needs a CellWorld2D.", this);
             yield break;
         }
-        //wait until the next frame while the grid is still initializing
-        while (world != null && !world.IsInitialized && !world.InitializationFailed) yield return null;
-        if (world != null && world.IsInitialized) RegisterMap();
-        initialization = null;
+
+        //wait until CellWorld has created its arrays
+        while (!world.IsInitialized && !world.InitializationFailed)
+            yield return null;
+
+        if (!world.IsInitialized) yield break;
+
+        CopyPlants();
+        UpdatePlantTiles();
     }
 
-    // Register the HEALTHY pixels once. Changing the visible sprite does not move the fuel.
-    // The matrix calculations support rotated tiles, sprite pivots and different pixel sizes.
-    private void RegisterMap()
+    private void CopyPlants()
     {
-        registeredWorld = world;
-        InitializePlantCollision();
-        BoundsInt bounds = map.cellBounds;
-        if (bounds.size == Vector3Int.zero) { registered = true; return; }
-        //the bounds end is exclusive, so subtract one to get the last tile position
-        Vector3Int last = bounds.max - Vector3Int.one;
-        //collect the painted tiles and their positions into matching arrays
-        int count = map.GetTilesRangeCount(bounds.min, last);
-        var positions = new Vector3Int[count];
-        var tiles = new TileBase[count];
-        count = map.GetTilesRangeNonAlloc(bounds.min, last, positions, tiles);
-        //keep each covered simulation cell only once per plant
-        var cells = new HashSet<Vector2Int>();
-        int missingMasks = 0, outside = 0, partial = 0;
-        for (int n = 0; n < count; n++)
+        for (int y = 0; y < world.Height; y++)
+        for (int x = 0; x < world.Width; x++)
         {
-            //skip ordinary tiles and plants without prepared fuel samples
-            if (!(tiles[n] is BurnablePlantTile tile)) continue;
-            if (!tile.HasBakedMask) { missingMasks++; continue; }
-            Vector3Int position = positions[n];
-            Matrix4x4 tileTransform = map.GetTransformMatrix(position);
-            Matrix4x4 orientation = map.orientationMatrix;
-            Vector3 pivot = map.CellToLocalInterpolated((Vector3)position + map.tileAnchor);
-            float pixelSize = 1f / tile.GetStageSprite(0).pixelsPerUnit;
-            //measure the sprite pixel size after the tile and grid transforms
-            Matrix4x4 toWorldGrid = world.transform.worldToLocalMatrix * map.transform.localToWorldMatrix * orientation * tileTransform;
-            float sampleSpan = Mathf.Max(toWorldGrid.MultiplyVector(Vector3.right * pixelSize).magnitude,
-                toWorldGrid.MultiplyVector(Vector3.up * pixelSize).magnitude);
-            //take extra samples when one artwork pixel covers multiple simulation cells
-            int subdivisions = Mathf.Max(1, Mathf.CeilToInt(sampleSpan / world.CellSize));
-            cells.Clear();
-            bool clipped = false;
-            foreach (Vector2 sample in tile.FuelSamples)
+            Vector2 worldPoint = world.CellToWorld(x, y);
+            Vector3Int tilePosition = map.WorldToCell(worldPoint);
+            Sprite sprite = map.GetSprite(tilePosition);
+            if (sprite == null) continue;
+
+            Vector3 localPoint = map.transform.InverseTransformPoint(worldPoint);
+            Vector2 offset = localPoint - map.GetCellCenterLocal(tilePosition);
+
+            int pixelX = Mathf.FloorToInt(offset.x * sprite.pixelsPerUnit + sprite.pivot.x);
+            int pixelY = Mathf.FloorToInt(offset.y * sprite.pixelsPerUnit + sprite.pivot.y);
+            int spriteWidth = Mathf.RoundToInt(sprite.rect.width);
+            int spriteHeight = Mathf.RoundToInt(sprite.rect.height);
+
+            if (pixelX < 0 || pixelY < 0 || pixelX >= spriteWidth || pixelY >= spriteHeight)
+                continue;
+
+            Color32 color = GetSpritePixels(sprite)[pixelX + pixelY * spriteWidth];
+            if (color.a <= 25) continue;
+
+            //include any color painted onto this Tilemap cell
+            Color tint = map.GetColor(tilePosition);
+            Color finalColor = (Color)color * tint;
+            world.AddPlantCell(x, y, finalColor);
+
+            if (!plants.TryGetValue(tilePosition, out PlantTile plantTile))
             {
-                for (int sy = 0; sy < subdivisions; sy++)
-                for (int sx = 0; sx < subdivisions; sx++)
+                plantTile = new PlantTile
                 {
-                    Vector2 offset = new Vector2((sx + 0.5f) / subdivisions - 0.5f, (sy + 0.5f) / subdivisions - 0.5f) * pixelSize;
-                    //move the sample from sprite space to the tilemap, then into the world grid
-                    Vector3 local = pivot + orientation.MultiplyPoint3x4(tileTransform.MultiplyPoint3x4(sample + offset));
-                    if (world.TryWorldToCell(map.transform.TransformPoint(local), out Vector2Int cell)
-                        && cell.x > 0 && cell.y > 0 && cell.x < world.Width - 1 && cell.y < world.Height - 1)
-                        cells.Add(cell);
-                    else clipped = true;
-                }
+                    position = tilePosition,
+                    animatedTile = map.GetTile(tilePosition) as BurnablePlantTile,
+                    color = tint,
+                    transform = map.GetTransformMatrix(tilePosition)
+                };
+                plants.Add(tilePosition, plantTile);
             }
-            //skip plants completely outside the grid and count partly clipped ones
-            if (cells.Count == 0) { outside++; continue; }
-            if (clipped) partial++;
-            //use the plant's list position as its id when registering its fuel
-            int id = plants.Count;
-            var plant = new Plant { position = position, tile = tile, transform = tileTransform, color = map.GetColor(position) };
-            if (plantCollider != null && tile.CollisionType != Tile.ColliderType.None)
-                plant.collisionBounds = GetPlantCollisionBounds(plant);
-            int accepted = 0;
-            //register a separate plant-fuel entry in every covered simulation cell
-            foreach (Vector2Int cell in cells)
-                if (world.RegisterPlantFuel(cell, this, id, tile.BurnSeconds, tile.WetSeconds)) accepted++;
-            //sum the burn time across registered cells to track total plant damage
-            plant.capacity = accepted * (double)tile.BurnSeconds;
-            plants.Add(plant);
-            plantAt.Add(position, id);
-            RegisteredFuelSampleCount += accepted;
-            QueueCollisionRefresh(plant);
+
+            plantTile.cells.Add(new Vector2Int(x, y));
         }
-        registered = true;
-        FlushPlantCollisionChanges();
-        if (warnAboutUnregisteredPlants && (missingMasks + outside + partial > 0))
-            Debug.LogWarning($"Plants: {missingMasks} missing baked masks, {outside} outside CellWorld, {partial} partly outside. Bake masks / enlarge or reposition CellWorld.", this);
-    }
 
-    //receive consumed plant fuel from CellWorld and add it to this plant's damage
-    internal void OnPlantFuelBurned(int id, float amount)
-    {
-        Plant plant = plants[id];
-        plant.consumed = System.Math.Min(plant.capacity, plant.consumed + amount);
-    }
-
-    //look up a painted plant and return its burned fraction from 0 to 1
-    public bool TryGetBurnProgress(Vector3Int position, out float progress)
-    {
-        progress = 0f;
-        if (!plantAt.TryGetValue(position, out int id)) return false;
-        Plant plant = plants[id];
-        progress = plant.capacity > 0 ? Mathf.Clamp01((float)(plant.consumed / plant.capacity)) : 0f;
-        return true;
+        spritePixels.Clear();
     }
 
     private void LateUpdate()
     {
-        // A plain loop is enough for hundreds of plants; it allocates nothing per frame.
-        // Only a change of burn stage replaces a Tile.
-        foreach (Plant plant in plants)
+        //visual stages do not need to be checked every frame
+        if (world == null || Time.time < nextVisualUpdate) return;
+        nextVisualUpdate = Time.time + 0.1f;
+        UpdatePlantTiles();
+    }
+
+    private void UpdatePlantTiles()
+    {
+        foreach (PlantTile tile in plants.Values)
         {
-            if (plant.finished || plant.capacity <= 0 || plant.consumed <= 0) continue;
-            float progress = (float)(plant.consumed / plant.capacity);
-            //convert the burned fraction into one of five artwork stages
-            int stage = Mathf.Min(4, Mathf.FloorToInt(progress * 5f));
-            bool finished = progress >= 0.99999f;
-            //fully burned plants disappear or keep a remnant without collision
-            if (finished)
+            int remaining = 0;
+            foreach (Vector2Int cell in tile.cells)
+                remaining += world.GetPlant(cell.x, cell.y);
+
+            if (remaining == 0)
             {
-                QueueCollisionRefresh(plant);
-                if (plant.tile.DisappearWhenBurned) map.SetTile(plant.position, null);
-                else SetStage(plant, 4, true); // An optional charred remnant is no longer solid.
+                if (tile.stage != 5) map.SetTile(tile.position, null);
+                tile.stage = 5;
+                continue;
             }
-            else if (stage != plant.stage) SetStage(plant, stage);
-            plant.stage = stage;
-            plant.finished = finished;
-        }
-        FlushPlantCollisionChanges();
-    }
 
-    // Cache one Tile per artwork/stage. Plants reuse it instead of making one every frame.
-    private void SetStage(Plant plant, int stage, bool finished = false)
-    {
-        //reserve slot 5 for the finished version without collision
-        int cacheIndex = finished ? 5 : stage;
-        if (!stageTiles.TryGetValue(plant.tile, out Tile[] stages))
-        {
-            stages = new Tile[6];
-            stageTiles.Add(plant.tile, stages);
-        }
-        //create each temporary stage tile only when first needed
-        if (stages[cacheIndex] == null)
-        {
-            Tile tile = ScriptableObject.CreateInstance<Tile>();
-            tile.name = plant.tile.name + " burn " + stage;
-            tile.hideFlags = HideFlags.HideAndDontSave;
-            tile.sprite = GetPlantStageSprite(plant.tile, stage, finished);
-            tile.flags = TileFlags.None;
-            tile.colliderType = finished ? Tile.ColliderType.None : plant.tile.CollisionType;
-            stages[cacheIndex] = tile;
-        }
-        //replace the artwork and restore this placement's transform and tint
-        map.SetTile(plant.position, stages[cacheIndex]);
-        map.SetTransformMatrix(plant.position, plant.transform);
-        map.SetColor(plant.position, plant.color);
-    }
+            float health = remaining / (tile.cells.Count * 5f);
+            int stage = Mathf.Clamp(Mathf.FloorToInt((1f - health) * 5f), 0, 4);
+            if (stage == tile.stage) continue;
 
-    /// <summary>Restore original artwork, forget damage, and register the current static map again.</summary>
-    [ContextMenu("Reset Plants And Rebuild (Play Mode)")]
-    public void ResetPlantsAndRebuild()
-    {
-        if (!Application.isPlaying) return;
-        ReleaseRegistration();
-        if (initialization != null) StopCoroutine(initialization);
-        initialization = StartCoroutine(InitializeWhenReady());
-    }
-
-    //stop pending initialization and release this map's registered plants
-    private void OnDisable()
-    {
-        if (initialization != null) StopCoroutine(initialization);
-        initialization = null;
-        ReleaseRegistration();
-    }
-
-    //remove this map's fuel, restore its tiles and clean up temporary objects
-    private void ReleaseRegistration()
-    {
-        if (registered && registeredWorld != null) registeredWorld.UnregisterPlantFuel(this);
-        if (map != null)
-        {
-            foreach (Plant plant in plants)
+            if (tile.animatedTile != null)
             {
-                // Restore only our runtime stages / vanished pieces; don't overwrite newly painted tiles.
-                TileBase current = map.GetTile(plant.position);
-                bool ours = current == null || current == plant.tile;
-                if (!ours && stageTiles.TryGetValue(plant.tile, out Tile[] stages))
-                    foreach (Tile tile in stages) if (current == tile) { ours = true; break; }
-                if (!ours) continue;
-                QueueCollisionRefresh(plant);
-                map.SetTile(plant.position, plant.tile);
-                map.SetTransformMatrix(plant.position, plant.transform);
-                map.SetColor(plant.position, plant.color);
+                Sprite sprite = tile.animatedTile.GetStage(stage);
+                if (sprite != null) map.SetTile(tile.position, GetStageTile(sprite));
+                map.SetTransformMatrix(tile.position, tile.transform);
+                map.SetColor(tile.position, tile.color);
             }
+            else
+            {
+                //ordinary Tiles darken through the same five stages
+                map.SetTileFlags(tile.position, TileFlags.None);
+                float darkness = stage / 4f;
+                Color darkColor = Color.Lerp(tile.color, tile.color * 0.3f, darkness);
+                darkColor.a = tile.color.a;
+                map.SetColor(tile.position, darkColor);
+            }
+
+            tile.stage = stage;
         }
-        FlushPlantCollisionChanges();
-        //destroy cached stage tiles and clear the registration data
-        foreach (Tile[] stages in stageTiles.Values)
-            foreach (Tile tile in stages) if (tile != null) Destroy(tile);
-        plants.Clear();
-        plantAt.Clear();
-        stageTiles.Clear();
-        ReleasePlantCollision();
-        RegisteredFuelSampleCount = 0;
-        registered = false;
-        registeredWorld = null;
+    }
+
+    private Tile GetStageTile(Sprite sprite)
+    {
+        if (stageTiles.TryGetValue(sprite, out Tile tile)) return tile;
+
+        tile = ScriptableObject.CreateInstance<Tile>();
+        tile.name = sprite.name + " burn stage";
+        tile.hideFlags = HideFlags.HideAndDontSave;
+        tile.sprite = sprite;
+        tile.flags = TileFlags.None;
+        tile.colliderType = Tile.ColliderType.None;
+        stageTiles.Add(sprite, tile);
+        return tile;
+    }
+
+    //read one sprite through the GPU, so Read/Write does not need to be enabled
+    private Color32[] GetSpritePixels(Sprite sprite)
+    {
+        if (spritePixels.TryGetValue(sprite, out Color32[] colors)) return colors;
+
+        int width = Mathf.RoundToInt(sprite.rect.width);
+        int height = Mathf.RoundToInt(sprite.rect.height);
+        RenderTexture oldTarget = RenderTexture.active;
+        RenderTexture target = RenderTexture.GetTemporary(width, height, 0, RenderTextureFormat.ARGB32);
+
+        Vector2 scale = new Vector2(
+            sprite.rect.width / sprite.texture.width,
+            sprite.rect.height / sprite.texture.height);
+        Vector2 offset = new Vector2(
+            sprite.rect.x / sprite.texture.width,
+            sprite.rect.y / sprite.texture.height);
+
+        Graphics.Blit(sprite.texture, target, scale, offset);
+        RenderTexture.active = target;
+
+        Texture2D copy = new Texture2D(width, height, TextureFormat.RGBA32, false);
+        copy.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+        copy.Apply();
+        colors = copy.GetPixels32();
+
+        Destroy(copy);
+        RenderTexture.active = oldTarget;
+        RenderTexture.ReleaseTemporary(target);
+        spritePixels.Add(sprite, colors);
+        return colors;
+    }
+
+    private void OnDestroy()
+    {
+        foreach (Tile tile in stageTiles.Values)
+            if (tile != null) Destroy(tile);
     }
 }

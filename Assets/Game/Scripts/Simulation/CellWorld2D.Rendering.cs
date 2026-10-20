@@ -65,6 +65,8 @@ public partial class CellWorld2D
             {
                 pixels[i] = LiquidColor(i);
             }
+            else if (plant[i] > 0 && visiblePlant[i])
+                pixels[i] = PlantColor(i);
             else pixels[i] = new Color32(0, 0, 0, 0);
         }
 

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8d12ff2656e3684f8e30ec69693da98, type: 3}
+  m_Name: Cross_2
+  m_EditorClassIdentifier: Assembly-CSharp::BurnablePlantTile
+  burnStages:
+  - {fileID: 534178451701872957, guid: 5a0bc47a88fe2c6429fda300395b5bd2, type: 3}
+  - {fileID: 828954066, guid: 5a0bc47a88fe2c6429fda300395b5bd2, type: 3}
+  - {fileID: -551624151, guid: 5a0bc47a88fe2c6429fda300395b5bd2, type: 3}
+  - {fileID: -613541839, guid: 5a0bc47a88fe2c6429fda300395b5bd2, type: 3}

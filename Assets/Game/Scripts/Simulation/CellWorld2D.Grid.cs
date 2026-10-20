@@ -43,6 +43,7 @@ public partial class CellWorld2D
 
         water != null && fuel != null && acid != null &&
         smoke != null && steam != null && fire != null &&
+        plant != null && plantColor != null && visiblePlant != null &&
         solid != null &&
         smokeVelocity != null && steamVelocity != null;
 
@@ -67,6 +68,8 @@ public partial class CellWorld2D
         fuelBurnEveryTicks = Mathf.Max(1, fuelBurnEveryTicks);
         fireDecayEveryTicks = Mathf.Max(1, fireDecayEveryTicks);
         fireSpreadEveryTicks = Mathf.Max(1, fireSpreadEveryTicks);
+        plantBurnEveryTicks = Mathf.Max(1, plantBurnEveryTicks);
+        plantSpreadEveryTicks = Mathf.Max(1, plantSpreadEveryTicks);
         
         //initialize cellWorld properties
         paused = startPaused;
@@ -85,6 +88,9 @@ public partial class CellWorld2D
         smoke = new byte[count];
         steam = new byte[count];
         fire = new byte[count];
+        plant = new byte[count];
+        plantColor = new Color32[count];
+        visiblePlant = new bool[count];
         
         smokeVelocity = new Vector2[count];
         steamVelocity = new Vector2[count];
@@ -130,9 +136,26 @@ public partial class CellWorld2D
                 (cellx + 0.5f) * cellSize,
                 (cellY + 0.5f) * cellSize));
 
-     //transform to array index used by All Arrays
+    //transform cell coordinates into the index used by every material array
     private int Index(int cellX, int cellY) => cellX + cellY * width;
     private bool InBounds(int cellX, int cellY) => cellX >= 0 && cellX < width && cellY >= 0 && cellY < height;
+
+    //clear every material stored in one cell
+    private void ClearCell(int index, bool clearFire = true)
+    {
+        water[index] = 0;
+        fuel[index] = 0;
+        acid[index] = 0;
+        smoke[index] = 0;
+        steam[index] = 0;
+
+        smokeVelocity[index] = Vector2.zero;
+        steamVelocity[index] = Vector2.zero;
+        pendingFire[index] = 0;
+
+        if (clearFire)
+            fire[index] = 0;
+    }
     
     //allow dynamic effects to effect sounding cells in a radius
     private bool IsInsideCircle(int x, int y, Vector2Int center, int radiusSquared)

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8d12ff2656e3684f8e30ec69693da98, type: 3}
+  m_Name: End_2
+  m_EditorClassIdentifier: Assembly-CSharp::BurnablePlantTile
+  burnStages:
+  - {fileID: 7188011196314485681, guid: 8bd47b3af7de61d47843ad9ca785de90, type: 3}
+  - {fileID: -3653126857206806043, guid: 8bd47b3af7de61d47843ad9ca785de90, type: 3}
+  - {fileID: -8971066508821880049, guid: 8bd47b3af7de61d47843ad9ca785de90, type: 3}

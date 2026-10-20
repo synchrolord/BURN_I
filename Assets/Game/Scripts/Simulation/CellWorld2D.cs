@@ -76,6 +76,15 @@ public partial class CellWorld2D : MonoBehaviour
     [SerializeField, Range(0, 8)] private int smokeMadeByFire = 2;
     [SerializeField, Range(1, 8)] private int waterUsedToExtinguish = 2;
 
+    [Header("Plants")]
+    [Tooltip("Ticks between each of the five visible burn stages.")]
+    [SerializeField, Range(1, 60)] private int plantBurnEveryTicks = 20;
+    [Tooltip("Ticks between attempts to spread fire from a burning plant cell.")]
+    [SerializeField, Range(1, 60)] private int plantSpreadEveryTicks = 10;
+    [SerializeField, Range(0f, 1f)] private float plantSpreadChance = 0.12f;
+    [SerializeField, Range(0f, 1f)] private float plantUpwardSpreadBonus = 0.08f;
+    [SerializeField] private Color burnedPlantColor = new Color(0.18f, 0.09f, 0.03f, 1f);
+
     [Header("Colors")]
     [SerializeField] private Color shallowWaterColor = new Color(0.15f, 0.48f, 0.85f, 0.45f);
     [SerializeField] private Color deepWaterColor = new Color(0.03f, 0.22f, 0.65f, 0.95f);
@@ -88,6 +97,8 @@ public partial class CellWorld2D : MonoBehaviour
     [SerializeField] private Color mediumFireColor = new Color(1f, 0.48f, 0.03f, 1f);
     [SerializeField] private Color hotFireColor = new Color(1f, 0.95f, 0.45f, 1f);
     [SerializeField] private Color steamColor = new Color(0.75f, 0.85f, 0.92f, 0.60f);
+    
+    
     [Header("Debug")]
     [SerializeField] private bool startPaused;
     [SerializeField] private bool showSolidCells;
@@ -173,8 +184,6 @@ public partial class CellWorld2D : MonoBehaviour
     {
         if (!roomActive) return;
         
-        //advance plant timers using simulation time
-        plantSimulationTime += 1.0 / ticksPerSecond;
         AgeChunks();
         WakeChunksNearTarget();
         ClearMovementFlags();
@@ -209,6 +218,7 @@ public partial class CellWorld2D : MonoBehaviour
                 //process smoke and fire after moving the liquids
                 SimulateGasesAt(cellX, cellY);
                 SimulateFireAt(cellX, cellY);
+                SimulatePlantAt(cellX, cellY);
             }
         }
         // New neighbors ignite next tick, so fire cannot cross a whole vine instantly.

@@ -66,16 +66,9 @@ public partial class CellWorld2D
         
 
         int i = Index(cell.x, cell.y);
-        bool plant = HasPlantFuel(i);
+        bool plant = HasPlant(i);
         if (solid[i] && !plant) return 0;
         int spent = Mathf.Min(amount, fire[i]);
-        
-        //if tile is occupied with plant
-        if (plant)
-        {
-            spent = Mathf.Max(1, spent);
-            WetPlant(i);
-        }
         
         if (spent > 0)
         {
@@ -108,8 +101,7 @@ public partial class CellWorld2D
             //check if cell is inside circle or is solid
             if (!IsInsideCircle(x, y, center, radiusSquared)) continue;
             int i = Index(x, y);
-            if (solid[i] && !CanBurnPlant(i)) continue;
-            if (HasPlantFuel(i) && !CanBurnPlant(i) && fuel[i] == 0) continue;
+            if (solid[i] && !HasPlant(i)) continue;
             
             //update fire value inside the cell
             byte oldValue = fire[i];
@@ -217,8 +209,7 @@ public partial class CellWorld2D
                 continue;
 
             //clear everything and update
-            water[i] = fuel[i] = acid[i] = fire[i] = smoke[i] = steam[i]= 0;
-            smokeVelocity[i] = Vector2.zero; steamVelocity[i] = Vector2.zero;
+            ClearCell(i);
             WakeCell(x, y);
             changed = true;
         }
