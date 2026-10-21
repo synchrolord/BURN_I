@@ -7,10 +7,13 @@ public sealed class FireEmitter2D : MonoBehaviour
     [SerializeField] private Transform[] points = new Transform[0];
 
     [Header("Fire")]
-    [SerializeField, Min(0.002f)] private float emitEvery = 0.12f;
+    [SerializeField, Min(0.02f)] private float emitEvery = 0.12f;
     [SerializeField, Range(1, 12)] private int puffsPerEmit = 1;
     [SerializeField, Range(1, 12)] private int firePower = 1;
-
+    
+    [SerializeField, Range(0, 4)] private int puffSize;
+    [SerializeField, Range(1, 3)] private int puffLevel = 1;
+    
     private bool burning;
     private float nextEmit;
 
@@ -37,8 +40,17 @@ public sealed class FireEmitter2D : MonoBehaviour
                 ? points[Random.Range(0, points.Length)]
                 : transform;
 
+            //randomley choose between 3 levels of intensity
             if (point != null)
-                world.Ignite(point.position, 0, (byte)firePower);
+            {
+                //higher levels can randomly make larger puffs
+                int puffSize = Random.Range(0, puffLevel);
+
+                world.Ignite(
+                    point.position,
+                    puffSize,
+                    (byte)firePower);
+            }
         }
 
         //wait before making the next group of puffs
