@@ -9,14 +9,10 @@ public partial class PlayerVitals2D : MonoBehaviour, Damageable2D{
 
     [SerializeField] private InfectionProfile profile;
     [SerializeField, Range(0, 5)] private int infectionStage;
-
-    [SerializeField] private float invincibilityFrames;
-    
-    
-   
+    [SerializeField] private FireEmitter2D fireEmitter;
+    [SerializeField] private float invincibilityTime;
 
     
-
     [Header("Enviroment")] [SerializeField, Min(0.02f)]
     private float sampleInterval = 0.1f;
 
@@ -25,7 +21,6 @@ public partial class PlayerVitals2D : MonoBehaviour, Damageable2D{
     [SerializeField, Range(1, 32)] private int dangerousSmokeDensity = 4;
     [SerializeField, Min(0f)] private float smokeGraceSeconds = 1.5f;
 
-    [SerializeField, Min(0.1f)] private float burnDuration = 2f;
     [SerializeField, Min(0f)] private float wetProtectionSeconds = 1.5f;
 
     [SerializeField, Min(1f)] private float fireDamageToCure = 30f;
@@ -66,7 +61,11 @@ public partial class PlayerVitals2D : MonoBehaviour, Damageable2D{
         : InfectionProfile.GetDefaultStage(infectionStage);
 
     public bool IsDead { get; private set; }
-    public bool IsBurning => !IsDead && burningSeconds > 0f;
+    
+    private bool burning;
+    public bool IsBurning => !IsDead && burning;    private float wetSeconds;
+
+    
     public bool IsWet => wetSeconds > 0f;
 
     public Vector2 BodyCenter =>
@@ -88,13 +87,7 @@ public partial class PlayerVitals2D : MonoBehaviour, Damageable2D{
 
     private float currentHealth;
     private float invincibilitySeconds;
-    
-    //Poison things
-    
-   
 
-    private float burningSeconds;
-    private float wetSeconds;
 
     private float smokeExposure;
     private float purificationDamage;
@@ -114,10 +107,14 @@ public partial class PlayerVitals2D : MonoBehaviour, Damageable2D{
 
     private void Awake()
     {
+        
         motor = GetComponent<PlayerMotor2D>();
         bodyCollider = GetComponent<Collider2D>();
         if (characterRenderer == null) characterRenderer = GetComponentInChildren<SpriteRenderer>();
         if (characterRenderer != null) originalTint = characterRenderer.color;
+        //find the emitter on the player if one was not given
+        if (fireEmitter == null) fireEmitter = GetComponent<FireEmitter2D>();
+
 
         if (visionLight != null)
         {
@@ -135,6 +132,7 @@ public partial class PlayerVitals2D : MonoBehaviour, Damageable2D{
 
     private void Update()
     {
+        
         float seconds = Time.deltaTime;
         invincibilitySeconds = Mathf.Max(0f, invincibilitySeconds - seconds);
         flashSeconds = Mathf.Max(0f, flashSeconds - seconds);
@@ -146,10 +144,8 @@ public partial class PlayerVitals2D : MonoBehaviour, Damageable2D{
 
         if (IsBurning)
         {
-            float burnTime = Mathf.Min(seconds, burningSeconds);
-            burningSeconds = Mathf.Max(0f, burningSeconds - seconds);
-            ApplyFireDamage(fireDamagePerSecond * burnTime);
-
+            //burning deals smooth damage every frame
+            ApplyFireDamage(fireDamagePerSecond * seconds);
         }
 
         UpdatePoisonDamage(seconds);
@@ -191,25 +187,32 @@ public partial class PlayerVitals2D : MonoBehaviour, Damageable2D{
 
     public void TakeDamage(float damage)
     {
-        if (IsDead || invincibilitySeconds > 0f || damage <= 0f) return;
+        
+        if (IsDead || invincibilitySeconds > 0f || damage <= 0f) return; 
+
+        //Apply damage and reset invincibility Frames
         float damageTaken = ApplyDamage(damage * DamageScale);
+        invincibilitySeconds = invincibilityTime;
+        
     }
 
-    public void TakeFireDamage(float damage)
-    {
-        if (!IsDead && damage > 0f) ApplyFireDamage(damage);
-    }
 
-    public void Ignite(float seconds = 2f)
+
+    public void Ignite()
     {
-        if (IsDead || IsWet || seconds <= 0f) return;
-        burningSeconds = Mathf.Max(burningSeconds, seconds * Mathf.Max(0.1f, CurrentStage.fireDamageMultiplier));
+        if (IsDead || IsWet || burning) { return; }
+
+        burning = true;
         RefreshBurningFeedback();
     }
 
+
     public void Extinguish()
     {
-        burningSeconds = 0f;
+        if (!burning)
+        { return; }
+
+        burning = false;
         RefreshBurningFeedback();
     }
 
@@ -250,7 +253,7 @@ public partial class PlayerVitals2D : MonoBehaviour, Damageable2D{
     {
         
         IsDead = false;
-        invincibilitySeconds = invincibilityFrames;
+        invincibilitySeconds = invincibilityTime;
         wetSeconds = smokeExposure = flashSeconds = sampleTimer = 0f;
         denseSmoke = false;
         Extinguish();
@@ -263,14 +266,16 @@ public partial class PlayerVitals2D : MonoBehaviour, Damageable2D{
 
     private float DamageScale => Mathf.Max(0f, IncomingDamageMultiplier);
 
-    public float ApplyDamage(float amount)
+    public float ApplyDamage(float amount,bool showFlash = true)
     {
         if (IsDead || amount <= 0) return 0f;
         float damageTaken = Mathf.Min(currentHealth, amount);
         currentHealth -= damageTaken;
-        flashSeconds = damageFlashSeconds;
-        invincibilitySeconds = invincibilityFrames;
-
+        
+        
+        if (showFlash) flashSeconds = damageFlashSeconds;
+        
+       
         Damaged?.Invoke(damageTaken);
 
 
@@ -293,9 +298,13 @@ public partial class PlayerVitals2D : MonoBehaviour, Damageable2D{
 
     public void ApplyFireDamage(float baseDamage)
     {
-        //use same func and scale damage with infection debuff
-        float damageTaken = ApplyDamage(baseDamage * Mathf.Max(0.1f, CurrentStage.fireDamageMultiplier) * DamageScale);
+        //dont flash for burning
+        float damageTaken = ApplyDamage(
+            baseDamage * Mathf.Max(0.1f, CurrentStage.fireDamageMultiplier) * DamageScale,
+                    false);
+        
         if (IsDead || infectionStage == 0 || damageTaken <= 0f) return;
+        
         purificationDamage += damageTaken;
         float cost = Mathf.Max(1f, fireDamageToCure);
 
@@ -324,6 +333,8 @@ public partial class PlayerVitals2D : MonoBehaviour, Damageable2D{
     private void RefreshBurningFeedback()
     {
         bool burning = IsBurning;
+        //start or stop the real CellWorld fire puffs
+        if (fireEmitter != null) fireEmitter.SetBurning(burning);
         if (burningLight != null) burningLight.enabled = burning;
         if (burningVisual != null) burningVisual.enabled = burning;
         if (burningAudio != null)

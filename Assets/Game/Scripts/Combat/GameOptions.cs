@@ -1,4 +1,4 @@
-using UnityEngine;
+    using UnityEngine;
 
 /// <summary>Small persistent player preferences. No save-game or scene state lives here.</summary>
 public static class GameOptions

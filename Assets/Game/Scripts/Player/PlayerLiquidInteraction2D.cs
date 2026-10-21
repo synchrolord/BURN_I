@@ -51,6 +51,7 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
         
 
         AbsorbAcid(position);
+        TouchFireAndWater(position);
         AbsorbWater(position);
     }
     
@@ -96,5 +97,49 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
         cellWorld = world;
     }
 
+
     
+    
+    private void TouchFireAndWater(Vector2 position)
+    {
+        bool touchingFire = false;
+
+        //scan the cells in a circle around the player
+        float cellSize = cellWorld.CellSize;
+        int radius = Mathf.CeilToInt(sampleRadius / cellSize);
+        float radiusSquared = sampleRadius * sampleRadius;
+
+        for (int y = -radius; y <= radius; y++)
+        {
+            for (int x = -radius; x <= radius; x++)
+            {
+                Vector2 offset = new Vector2(x, y) * cellSize;
+
+                //skip the corners outside the circle
+                if (offset.sqrMagnitude > radiusSquared)
+                {
+                    continue;
+                }
+
+                Vector2 samplePosition = position + offset;
+
+                //water wins if fire and water are both touching the player
+                if (cellWorld.GetWaterFraction(samplePosition) > 0f)
+                {
+                    vitals.SetWet();
+                    return;
+                }
+
+                if (cellWorld.GetFireEnergy(samplePosition) > 0)
+                {
+                    touchingFire = true;
+                }
+            }
+        }
+
+        if (touchingFire)
+        {
+            vitals.Ignite();
+        }
+    }
 }
