@@ -152,5 +152,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66d23c34f6f2caf47b75b0548b8babfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourcePickup2D
+  roomManager: {fileID: 0}
+  explosionPrefab: {fileID: 985291664023512419, guid: 685981fc6b4d32e4fa6dab6366460e48, type: 3}
+  explosionRadius: 3
+  fuelPerCell: 2
+  explosionLife: 0.5
   pickupType: 1
   amount: 30
