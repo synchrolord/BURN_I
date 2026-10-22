@@ -294,12 +294,7 @@ public sealed class PlayerMotor2D : MonoBehaviour
             return;
         }
 
-        if (Mathf.Abs(moveInput.x) > 0.01f)
-        {
-            Vector3 scale = transform.localScale;
-            scale.x = Mathf.Abs(scale.x) * (moveInput.x < 0f ? -1f : 1f);
-            transform.localScale = scale;
-        }
+       //Zehahaha
 
         int nextAnimation;
 
@@ -360,4 +355,19 @@ public sealed class PlayerMotor2D : MonoBehaviour
         jumpBufferRemaining = 0f;
         coyoteRemaining = 0f;
     }
+    
+    
+    public void Face(float direction)
+    {
+        if (spriteRenderer == null || Mathf.Abs(direction) < 0.01f)
+        {
+            return;
+        }
+
+        spriteRenderer.flipX = direction < 0f;
+    }
+    
+    
+    
+    
 }

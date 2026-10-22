@@ -13,7 +13,14 @@ public sealed class PlayerAim2D : MonoBehaviour
 
     [SerializeField]
     private Transform torchPivot;
+    [SerializeField] private PlayerMotor2D playerMotor;
+    [SerializeField, Range(10f, 89f)] private float aimLimit = 80f;
 
+    private float facing = 1f;
+    private Vector3 toolPosition;
+    private Vector3 torchPosition;
+    
+    
     private Vector2 aimScreenPosition;
     
     public Vector2 AimDirection { get; private set; }
@@ -22,10 +29,11 @@ public sealed class PlayerAim2D : MonoBehaviour
     
     private void Awake()
     {
-        if (worldCamera == null)
-        {
-            worldCamera = Camera.main;
-        }
+        if (worldCamera == null) { worldCamera = Camera.main; }
+        if (playerMotor == null) { playerMotor = GetComponent<PlayerMotor2D>(); }
+        //save initial positions for flipping
+        if (toolPivot != null) {toolPosition = toolPivot.localPosition; }
+        if (torchPivot != null) { torchPosition = torchPivot.localPosition; }
     }
     
     
@@ -57,27 +65,66 @@ public sealed class PlayerAim2D : MonoBehaviour
             );
 
         //calculate aim relative to the player.
+        //calculate aim relative to the player
         Vector2 playerPosition = transform.position;
+        Vector2 direction =
+            (Vector2)mouseWorldPosition - playerPosition;
 
-        AimDirection = (Vector2)mouseWorldPosition - playerPosition;
-
-        //if mouse is almost exactly over player
-        if (AimDirection.sqrMagnitude < 0.0001f)
+//do nothing if the mouse is exactly over the player
+        if (direction.sqrMagnitude < 0.0001f)
         {
             return;
         }
-        
-        AimDirection.Normalize();
 
-        // Rotate the weapon.
-        if (toolPivot != null)
+        direction.Normalize();
+
+//remember which side of the player the mouse is on
+        if (Mathf.Abs(direction.x) > 0.05f)
         {
-            toolPivot.right = AimDirection;
+            facing = Mathf.Sign(direction.x);
         }
 
-        // Rotate the torch.
+        if (playerMotor != null)
+        {
+            playerMotor.Face(facing);
+        }
+
+//get the angle as if the player was facing right
+        float angle = Mathf.Atan2(
+            direction.y,
+            Mathf.Abs(direction.x)
+        ) * Mathf.Rad2Deg;
+
+//stop the tool from rotating behind the player
+        angle = Mathf.Clamp(angle, -aimLimit, aimLimit);
+
+//create the limited direction, then mirror it when facing left
+        Vector2 limitedDirection =
+            Quaternion.Euler(0f, 0f, angle) * Vector2.right;
+
+        limitedDirection.x *= facing;
+
+//assign the complete vector back to the property
+        AimDirection = limitedDirection;
+
+        if (toolPivot != null)
+        {
+            //move tool to the direction player faces
+            Vector3 position = toolPosition;
+            position.x = Mathf.Abs(toolPosition.x) * facing;
+            toolPivot.localPosition = position;
+            
+            toolPivot.right = AimDirection;
+
+
+        }
+
         if (torchPivot != null)
         {
+            Vector3 position = torchPosition;
+            position.x = Mathf.Abs(torchPosition.x) * facing;
+            torchPivot.localPosition = position;
+
             torchPivot.right = AimDirection;
         }
     }
