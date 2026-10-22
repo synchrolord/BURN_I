@@ -106,8 +106,10 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
 
         //scan the cells in a circle around the player
         float cellSize = cellWorld.CellSize;
-        int radius = Mathf.CeilToInt(sampleRadius / cellSize);
-        float radiusSquared = sampleRadius * sampleRadius;
+        int radius = sampleRadius;
+
+        float worldRadius = radius * cellSize;
+        float radiusSquared = worldRadius * worldRadius;
 
         for (int y = -radius; y <= radius; y++)
         {

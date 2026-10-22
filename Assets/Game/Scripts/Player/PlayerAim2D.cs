@@ -64,7 +64,6 @@ public sealed class PlayerAim2D : MonoBehaviour
                 )
             );
 
-        //calculate aim relative to the player.
         //calculate aim relative to the player
         Vector2 playerPosition = transform.position;
         Vector2 direction =
@@ -79,15 +78,8 @@ public sealed class PlayerAim2D : MonoBehaviour
         direction.Normalize();
 
 //remember which side of the player the mouse is on
-        if (Mathf.Abs(direction.x) > 0.05f)
-        {
-            facing = Mathf.Sign(direction.x);
-        }
-
-        if (playerMotor != null)
-        {
-            playerMotor.Face(facing);
-        }
+        if (Mathf.Abs(direction.x) > 0.05f) { facing = Mathf.Sign(direction.x); }
+        if (playerMotor != null) { playerMotor.Face(facing); }
 
 //get the angle as if the player was facing right
         float angle = Mathf.Atan2(
@@ -99,11 +91,10 @@ public sealed class PlayerAim2D : MonoBehaviour
         angle = Mathf.Clamp(angle, -aimLimit, aimLimit);
 
 //create the limited direction, then mirror it when facing left
-        Vector2 limitedDirection =
-            Quaternion.Euler(0f, 0f, angle) * Vector2.right;
-
+        Vector2 limitedDirection = Quaternion.Euler(0f, 0f, angle) * Vector2.right;
         limitedDirection.x *= facing;
-
+        
+        
 //assign the complete vector back to the property
         AimDirection = limitedDirection;
 

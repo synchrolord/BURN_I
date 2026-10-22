@@ -258,11 +258,6 @@ public sealed class PlayerMotor2D : MonoBehaviour
 
         
         
-        
-        
-        
-        
-
         //when to allow jumping
         if (jumpBufferRemaining > 0f &&
             (IsGrounded || IsTouchingWall || coyoteRemaining > 0f))
@@ -293,9 +288,7 @@ public sealed class PlayerMotor2D : MonoBehaviour
             PlayAnimation(DeadAnimation);
             return;
         }
-
-       //Zehahaha
-
+        
         int nextAnimation;
 
         if (!IsGrounded)
