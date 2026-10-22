@@ -11,6 +11,11 @@ public class CreatureHealth2D : MonoBehaviour,Damageable2D
     [SerializeField] private Color damageColor =
         new Color(1f, 0.25f, 0.2f, 1f);
 
+    [Header("Fire")]
+    [SerializeField] private FireEmitter2D fireEmitter;
+    [SerializeField, Min(0f)] private float fireDamagePerSecond = 5f;
+    private bool burning;
+
     [SerializeField, Min(0f)]
     private float damageFlashSeconds = 0.12f;
 
@@ -39,12 +44,11 @@ public class CreatureHealth2D : MonoBehaviour,Damageable2D
     {   body = GetComponent<Rigidbody2D>();
         bodyCollider = GetComponent<Collider2D>();
 
-        if (animator == null)
-            animator = GetComponentInChildren<Animator>();
-
-        if (behaviour == null)
-            behaviour = GetComponent<PlantEnemy2D>();
-
+        if (animator == null) animator = GetComponentInChildren<Animator>();
+        if (behaviour == null) behaviour = GetComponent<PlantEnemy2D>();
+        if (fireEmitter == null) fireEmitter = GetComponent<FireEmitter2D>(); 
+        
+        
         currentHealth = maxHealth;
         
         //get players renderer to red flashing
@@ -56,17 +60,23 @@ public class CreatureHealth2D : MonoBehaviour,Damageable2D
         
     }
     
-    //switch between damage color and normal color to create flashing effect.
     private void Update()
     {
-      
-        if (damageFlashRemaining <= 0) return;
-        
+        if (burning && !IsDead)
+        {
+            ApplyDamage(
+                fireDamagePerSecond * Time.deltaTime,
+                false);
+        }
+
+        if (damageFlashRemaining <= 0f) { return; }
         damageFlashRemaining -= Time.deltaTime;
-        
+
         if (damageFlashRemaining <= 0f && spriteRenderer != null)
-            spriteRenderer.color = normalColor;
-        
+        {
+            spriteRenderer.color = normalColor; 
+            
+        }
     }
     
     
@@ -81,22 +91,46 @@ public class CreatureHealth2D : MonoBehaviour,Damageable2D
     //Apply Damage to enemies and kill them if necessary
     public void TakeDamage(float damage)
     {
-        if (IsDead||damage <= 0f)return;
-        
-        
-        currentHealth = Mathf.Max(currentHealth - damage, 0f);
-        FlashDamage();
+        ApplyDamage(damage, true);
+    }
+
+    private void ApplyDamage(float damage, bool showFlash)
+    {
+        if (IsDead || damage <= 0f)
+        {
+            return;
+        }
+
+        currentHealth =
+            Mathf.Max(currentHealth - damage, 0f);
+
+        if (showFlash)
+        {
+            FlashDamage();
+        }
 
         if (currentHealth <= 0f)
+        {
             Die();
-
-        if (currentHealth <= 0) Die();
+        }
     }
     
-    //custom fire damage to add Burn logic to later
     public void TakeFireDamage(float amount)
     {
-        TakeDamage(amount);
+        if (IsDead || amount <= 0f)
+        { return; }
+
+        if (!burning)
+        {
+            burning = true;
+
+            if (fireEmitter != null)
+            {
+                fireEmitter.SetBurning(true);
+            }
+        }
+
+        ApplyDamage(amount, false);
     }
     
     
@@ -105,6 +139,10 @@ public class CreatureHealth2D : MonoBehaviour,Damageable2D
         
         //disable enemy when they die
         IsDead=true;
+        burning = false;
+
+        if (fireEmitter != null) { fireEmitter.SetBurning(false); }
+        
         if (behaviour != null) behaviour.enabled = false;
         
         //stop enemy when they die
@@ -115,8 +153,7 @@ public class CreatureHealth2D : MonoBehaviour,Damageable2D
         if(bodyCollider != null) bodyCollider.enabled = false;
         
         //play death animation
-        if (animator != null &&
-            animator.HasState(0, DeadAnimation))
+        if (animator != null && animator.HasState(0, DeadAnimation))
         {
             animator.Play(DeadAnimation);
         }
