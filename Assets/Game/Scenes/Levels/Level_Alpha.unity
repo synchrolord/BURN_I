@@ -227,6 +227,102 @@ MonoBehaviour:
       type: {class: 'Provider2DCache`1[[UnityEngine.Rendering.Universal.Light2DProvider, Unity.RenderPipelines.Universal.2D.Runtime]]', ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
       data:
         m_Cache: []
+--- !u!1 &16521029
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 16521030}
+  - component: {fileID: 16521032}
+  - component: {fileID: 16521031}
+  m_Layer: 0
+  m_Name: Win (30)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &16521030
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16521029}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -5.370001, y: -14.170001, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1130462312}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &16521031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16521029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8584df2ad6e204f4ab99272391ed0309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
+  sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
+  resetCurrentScene: 1
+  extraResetDelay: 0
+--- !u!61 &16521032
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16521029}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1001 &19746637
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15764,6 +15860,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
   sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
   resetCurrentScene: 1
   extraResetDelay: 0
 --- !u!61 &168018100
@@ -15821,8 +15919,8 @@ Transform:
   m_GameObject: {fileID: 168018098}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.1306267, y: -10.409142, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -3.2799969, y: -9.82, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130462312}
@@ -15889,6 +15987,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
   sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
   resetCurrentScene: 1
   extraResetDelay: 0
 --- !u!61 &189741421
@@ -15946,12 +16046,108 @@ Transform:
   m_GameObject: {fileID: 189741419}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.44063, y: -10.409142, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -6.59, y: -9.82, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130462312}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &195593885
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 195593886}
+  - component: {fileID: 195593888}
+  - component: {fileID: 195593887}
+  m_Layer: 0
+  m_Name: Win (18)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &195593886
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195593885}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -6.510002, y: -13.100002, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1130462312}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &195593887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195593885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8584df2ad6e204f4ab99272391ed0309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
+  sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
+  resetCurrentScene: 1
+  extraResetDelay: 0
+--- !u!61 &195593888
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195593885}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &197719620
 GameObject:
   m_ObjectHideFlags: 0
@@ -16060,6 +16256,102 @@ MonoBehaviour:
       type: {class: 'Provider2DCache`1[[UnityEngine.Rendering.Universal.Light2DProvider, Unity.RenderPipelines.Universal.2D.Runtime]]', ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
       data:
         m_Cache: []
+--- !u!1 &220945416
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 220945417}
+  - component: {fileID: 220945419}
+  - component: {fileID: 220945418}
+  m_Layer: 0
+  m_Name: Win (20)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &220945417
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220945416}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -6.510002, y: -12.000004, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1130462312}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &220945418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220945416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8584df2ad6e204f4ab99272391ed0309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
+  sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
+  resetCurrentScene: 1
+  extraResetDelay: 0
+--- !u!61 &220945419
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220945416}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1001 &223751687
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16352,6 +16644,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
   sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
   resetCurrentScene: 1
   extraResetDelay: 0
 --- !u!61 &226967229
@@ -16409,8 +16703,8 @@ Transform:
   m_GameObject: {fileID: 226967227}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.1306267, y: -12.57914, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -3.2799969, y: -11.989998, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130462312}
@@ -16542,6 +16836,102 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6858803079170079510, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
   m_PrefabInstance: {fileID: 1668277337}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &251169772
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 251169773}
+  - component: {fileID: 251169775}
+  - component: {fileID: 251169774}
+  m_Layer: 0
+  m_Name: Win (31)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &251169773
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 251169772}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.1999989, y: -14.170002, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1130462312}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &251169774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 251169772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8584df2ad6e204f4ab99272391ed0309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
+  sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
+  resetCurrentScene: 1
+  extraResetDelay: 0
+--- !u!61 &251169775
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 251169772}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1001 &277107906
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16878,6 +17268,102 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+--- !u!1 &341246429
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 341246430}
+  - component: {fileID: 341246432}
+  - component: {fileID: 341246431}
+  m_Layer: 0
+  m_Name: Win (27)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &341246430
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341246429}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.1999989, y: -13.100002, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1130462312}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &341246431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341246429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8584df2ad6e204f4ab99272391ed0309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
+  sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
+  resetCurrentScene: 1
+  extraResetDelay: 0
+--- !u!61 &341246432
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341246429}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &347165904 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5717817132648860919, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
@@ -16981,6 +17467,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
   sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
   resetCurrentScene: 1
   extraResetDelay: 0
 --- !u!61 &393948224
@@ -17038,8 +17526,8 @@ Transform:
   m_GameObject: {fileID: 393948222}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.1306267, y: -11.50914, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -3.2799969, y: -10.919998, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130462312}
@@ -17650,6 +18138,102 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8287651541475554759, guid: 2bd2a834f1dda774c8bb4600be4ffb51, type: 3}
   m_PrefabInstance: {fileID: 523810487}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &540930859
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 540930860}
+  - component: {fileID: 540930862}
+  - component: {fileID: 540930861}
+  m_Layer: 0
+  m_Name: Win (16)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &540930860
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 540930859}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -6.5100026, y: -10.930005, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1130462312}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &540930861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 540930859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8584df2ad6e204f4ab99272391ed0309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
+  sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 1.3
+  use2DSound: 1
+  resetCurrentScene: 1
+  extraResetDelay: 0
+--- !u!61 &540930862
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 540930859}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1001 &545647410
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17738,6 +18322,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
   sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
   resetCurrentScene: 1
   extraResetDelay: 0
 --- !u!61 &549541680
@@ -17795,8 +18381,8 @@ Transform:
   m_GameObject: {fileID: 549541678}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.3006287, y: -12.57914, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -5.449999, y: -11.989998, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130462312}
@@ -17956,6 +18542,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
   sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
   resetCurrentScene: 1
   extraResetDelay: 0
 --- !u!61 &591248390
@@ -18013,8 +18601,8 @@ Transform:
   m_GameObject: {fileID: 591248388}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.3006287, y: -10.409142, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -5.449999, y: -9.82, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130462312}
@@ -18100,7 +18688,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &596961223
 Transform:
   m_ObjectHideFlags: 0
@@ -20602,6 +21190,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
   sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
   resetCurrentScene: 1
   extraResetDelay: 0
 --- !u!61 &691740833
@@ -20659,8 +21249,8 @@ Transform:
   m_GameObject: {fileID: 691740831}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.1306267, y: -9.339142, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -3.2799969, y: -8.75, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130462312}
@@ -20912,6 +21502,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
   sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
   resetCurrentScene: 1
   extraResetDelay: 0
 --- !u!61 &704429609
@@ -20969,8 +21561,8 @@ Transform:
   m_GameObject: {fileID: 704429607}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.27063, y: -12.57914, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -4.42, y: -11.989998, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130462312}
@@ -22714,6 +23306,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
   sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
   resetCurrentScene: 1
   extraResetDelay: 0
 --- !u!61 &803357141
@@ -22771,8 +23365,8 @@ Transform:
   m_GameObject: {fileID: 803357139}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.27063, y: -10.409142, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -4.42, y: -9.82, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130462312}
@@ -22844,6 +23438,102 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5608187543340934343, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
   m_PrefabInstance: {fileID: 7836626077589950052}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &886722177
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 886722178}
+  - component: {fileID: 886722180}
+  - component: {fileID: 886722179}
+  m_Layer: 0
+  m_Name: Win (22)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &886722178
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886722177}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -6.510002, y: -14.170002, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1130462312}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &886722179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886722177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8584df2ad6e204f4ab99272391ed0309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
+  sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
+  resetCurrentScene: 1
+  extraResetDelay: 0
+--- !u!61 &886722180
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886722177}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &889664545
 GameObject:
   m_ObjectHideFlags: 0
@@ -24759,6 +25449,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
   sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 1.3
+  use2DSound: 1
   resetCurrentScene: 1
   extraResetDelay: 0
 --- !u!61 &979177390
@@ -24816,8 +25508,8 @@ Transform:
   m_GameObject: {fileID: 979177388}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.44063, y: -9.339142, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -6.59, y: -8.75, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130462312}
@@ -25243,6 +25935,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
   sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
   resetCurrentScene: 1
   extraResetDelay: 0
 --- !u!61 &1026126298
@@ -25300,8 +25994,8 @@ Transform:
   m_GameObject: {fileID: 1026126296}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.3006287, y: -11.50914, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -5.449999, y: -10.919998, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130462312}
@@ -27576,7 +28270,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1105216587
 Transform:
   m_ObjectHideFlags: 0
@@ -29930,21 +30624,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 979177391}
+  - {fileID: 540930860}
   - {fileID: 1219224502}
+  - {fileID: 1998666460}
   - {fileID: 1979369481}
+  - {fileID: 195593886}
   - {fileID: 1200534438}
+  - {fileID: 1843426279}
   - {fileID: 189741422}
+  - {fileID: 220945417}
   - {fileID: 803357142}
+  - {fileID: 1827803388}
   - {fileID: 1596829044}
+  - {fileID: 886722178}
   - {fileID: 704429610}
+  - {fileID: 1267033567}
   - {fileID: 1730700323}
+  - {fileID: 1743837461}
   - {fileID: 691740834}
+  - {fileID: 1802920138}
   - {fileID: 1026126299}
+  - {fileID: 1953589806}
   - {fileID: 393948225}
+  - {fileID: 341246430}
   - {fileID: 591248391}
+  - {fileID: 1580877342}
   - {fileID: 168018101}
+  - {fileID: 1190870119}
   - {fileID: 549541681}
+  - {fileID: 16521030}
   - {fileID: 226967230}
+  - {fileID: 251169773}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1134494491
@@ -223974,6 +224684,102 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+--- !u!1 &1190870118
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1190870119}
+  - component: {fileID: 1190870121}
+  - component: {fileID: 1190870120}
+  m_Layer: 0
+  m_Name: Win (29)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1190870119
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190870118}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.1999989, y: -12.000004, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1130462312}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1190870120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190870118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8584df2ad6e204f4ab99272391ed0309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
+  sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
+  resetCurrentScene: 1
+  extraResetDelay: 0
+--- !u!61 &1190870121
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190870118}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &1200534435
 GameObject:
   m_ObjectHideFlags: 0
@@ -224005,6 +224811,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
   sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
   resetCurrentScene: 1
   extraResetDelay: 0
 --- !u!61 &1200534437
@@ -224062,8 +224870,8 @@ Transform:
   m_GameObject: {fileID: 1200534435}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.27063, y: -11.50914, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -4.42, y: -10.919998, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130462312}
@@ -224218,6 +225026,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
   sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 1.3
+  use2DSound: 1
   resetCurrentScene: 1
   extraResetDelay: 0
 --- !u!61 &1219224501
@@ -224275,8 +225085,8 @@ Transform:
   m_GameObject: {fileID: 1219224499}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.27063, y: -9.339142, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -4.42, y: -8.75, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130462312}
@@ -224394,6 +225204,102 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 1854832298311281260, guid: a061ccc688ea77142862047ed0a3d62e, type: 3}
   m_PrefabInstance: {fileID: 6604284663721771501}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1267033566
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1267033567}
+  - component: {fileID: 1267033569}
+  - component: {fileID: 1267033568}
+  m_Layer: 0
+  m_Name: Win (23)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1267033567
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267033566}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.340002, y: -14.170002, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1130462312}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1267033568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267033566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8584df2ad6e204f4ab99272391ed0309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
+  sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
+  resetCurrentScene: 1
+  extraResetDelay: 0
+--- !u!61 &1267033569
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267033566}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!4 &1281037534 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6858803079170079510, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
@@ -224967,6 +225873,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6858803079170079510, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
   m_PrefabInstance: {fileID: 1734204751}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1425570808
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5633550519022820784, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+      propertyPath: m_Name
+      value: Spitter
+      objectReference: {fileID: 0}
+    - target: {fileID: 6858803079170079510, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 33.226543
+      objectReference: {fileID: 0}
+    - target: {fileID: 6858803079170079510, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.8513205
+      objectReference: {fileID: 0}
+    - target: {fileID: 6858803079170079510, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6858803079170079510, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6858803079170079510, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6858803079170079510, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6858803079170079510, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6858803079170079510, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6858803079170079510, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6858803079170079510, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
 --- !u!1 &1429028687
 GameObject:
   m_ObjectHideFlags: 0
@@ -225373,6 +226336,102 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e9bf8fa0ca6c42428371e783686d6c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PressureTool2D
+--- !u!1 &1580877341
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1580877342}
+  - component: {fileID: 1580877344}
+  - component: {fileID: 1580877343}
+  m_Layer: 0
+  m_Name: Win (28)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1580877342
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580877341}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -5.370001, y: -12.000004, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1130462312}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1580877343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580877341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8584df2ad6e204f4ab99272391ed0309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
+  sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
+  resetCurrentScene: 1
+  extraResetDelay: 0
+--- !u!61 &1580877344
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580877341}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &1596829041
 GameObject:
   m_ObjectHideFlags: 0
@@ -225404,6 +226463,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
   sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
   resetCurrentScene: 1
   extraResetDelay: 0
 --- !u!61 &1596829043
@@ -225461,8 +226522,8 @@ Transform:
   m_GameObject: {fileID: 1596829041}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.44063, y: -12.57914, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -6.59, y: -11.989998, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130462312}
@@ -227718,6 +228779,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
   sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
   resetCurrentScene: 1
   extraResetDelay: 0
 --- !u!61 &1730700322
@@ -227775,8 +228838,8 @@ Transform:
   m_GameObject: {fileID: 1730700320}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.3006287, y: -9.339142, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -5.449999, y: -8.75, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130462312}
@@ -228065,6 +229128,102 @@ MonoBehaviour:
       type: {class: 'Provider2DCache`1[[UnityEngine.Rendering.Universal.Light2DProvider, Unity.RenderPipelines.Universal.2D.Runtime]]', ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
       data:
         m_Cache: []
+--- !u!1 &1743837460
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1743837461}
+  - component: {fileID: 1743837463}
+  - component: {fileID: 1743837462}
+  m_Layer: 0
+  m_Name: Win (24)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1743837461
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743837460}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -5.370001, y: -10.930004, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1130462312}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1743837462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743837460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8584df2ad6e204f4ab99272391ed0309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
+  sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
+  resetCurrentScene: 1
+  extraResetDelay: 0
+--- !u!61 &1743837463
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743837460}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &1771517884
 GameObject:
   m_ObjectHideFlags: 0
@@ -228287,6 +229446,102 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+--- !u!1 &1802920137
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1802920138}
+  - component: {fileID: 1802920140}
+  - component: {fileID: 1802920139}
+  m_Layer: 0
+  m_Name: Win (25)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1802920138
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802920137}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.1999989, y: -10.930004, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1130462312}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1802920139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802920137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8584df2ad6e204f4ab99272391ed0309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
+  sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
+  resetCurrentScene: 1
+  extraResetDelay: 0
+--- !u!61 &1802920140
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802920137}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1001 &1816802201
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -228514,6 +229769,102 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+--- !u!1 &1827803387
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1827803388}
+  - component: {fileID: 1827803390}
+  - component: {fileID: 1827803389}
+  m_Layer: 0
+  m_Name: Win (21)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1827803388
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1827803387}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.340002, y: -12.000004, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1130462312}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1827803389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1827803387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8584df2ad6e204f4ab99272391ed0309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
+  sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
+  resetCurrentScene: 1
+  extraResetDelay: 0
+--- !u!61 &1827803390
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1827803387}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1001 &1838987751
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -228571,6 +229922,102 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+--- !u!1 &1843426278
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1843426279}
+  - component: {fileID: 1843426281}
+  - component: {fileID: 1843426280}
+  m_Layer: 0
+  m_Name: Win (19)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1843426279
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843426278}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.340002, y: -13.100002, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1130462312}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1843426280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843426278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8584df2ad6e204f4ab99272391ed0309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
+  sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
+  resetCurrentScene: 1
+  extraResetDelay: 0
+--- !u!61 &1843426281
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843426278}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!4 &1859195379 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6858803079170079510, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
@@ -228643,6 +230090,102 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6858803079170079510, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
   m_PrefabInstance: {fileID: 2095220517}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1953589805
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1953589806}
+  - component: {fileID: 1953589808}
+  - component: {fileID: 1953589807}
+  m_Layer: 0
+  m_Name: Win (26)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1953589806
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1953589805}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -5.370001, y: -13.100002, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1130462312}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1953589807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1953589805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8584df2ad6e204f4ab99272391ed0309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
+  sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 0.43
+  use2DSound: 1
+  resetCurrentScene: 1
+  extraResetDelay: 0
+--- !u!61 &1953589808
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1953589805}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!4 &1969593079 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6858803079170079510, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
@@ -228736,6 +230279,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
   sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 1.3
+  use2DSound: 1
   resetCurrentScene: 1
   extraResetDelay: 0
 --- !u!61 &1979369480
@@ -228793,8 +230338,8 @@ Transform:
   m_GameObject: {fileID: 1979369478}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.44063, y: -11.50914, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -6.59, y: -10.919998, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130462312}
@@ -228804,6 +230349,102 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6858803079170079510, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
   m_PrefabInstance: {fileID: 1203965654}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1998666459
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1998666460}
+  - component: {fileID: 1998666462}
+  - component: {fileID: 1998666461}
+  m_Layer: 0
+  m_Name: Win (17)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1998666460
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998666459}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.340002, y: -10.930004, z: 0}
+  m_LocalScale: {x: -1.8565612, y: -1.3679925, z: -1.30285}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1130462312}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1998666461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998666459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8584df2ad6e204f4ab99272391ed0309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundTrigger2D
+  sound: {fileID: 8300000, guid: 701e86da22e30004f9961383e041b497, type: 3}
+  volume: 1.3
+  use2DSound: 1
+  resetCurrentScene: 1
+  extraResetDelay: 0
+--- !u!61 &1998666462
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998666459}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1001 &2000682908
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -229755,7 +231396,7 @@ PrefabInstance:
       objectReference: {fileID: 7836626077589950071}
     - target: {fileID: 4209448177274357688, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: infectionStage
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4209448177274357688, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: invincibilityTime
@@ -230188,8 +231829,8 @@ MonoBehaviour:
   emitEvery: 0.12
   puffsPerEmit: 4
   firePower: 3
-  puffSize: 0
-  puffLevel: 1
+  puffSize: 4
+  puffLevel: 2
 --- !u!114 &7836626077589950072 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4963776260120267364, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
@@ -230219,3 +231860,4 @@ SceneRoots:
   - {fileID: 1130462312}
   - {fileID: 710738820}
   - {fileID: 613709043}
+  - {fileID: 1425570808}

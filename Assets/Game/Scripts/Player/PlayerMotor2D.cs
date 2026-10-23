@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -29,8 +28,14 @@ public sealed class PlayerMotor2D : MonoBehaviour
     
     private bool isRunning = false;
     
-    
+    [Header("Swimming")]
+    [SerializeField] private PlayerLiquidInteraction2D liquids;
+    [SerializeField] private float swimSpeed = 5f;
+    [SerializeField] private float waterGravity = 1;
 
+    private float normalGravity;
+
+    public bool IsSwimming => liquids != null && liquids.IsSwimming;
     
     [Header("Animation timing")]
     [SerializeField, Min(0f)]
@@ -106,6 +111,9 @@ public sealed class PlayerMotor2D : MonoBehaviour
             playerVitals = GetComponent<PlayerVitals2D>();
         
         body = GetComponent<Rigidbody2D>();
+        normalGravity = body.gravityScale;
+
+        if (liquids == null) liquids = GetComponent<PlayerLiquidInteraction2D>();
         if (animator == null) { animator = GetComponentInChildren<Animator>(); }
         if (spriteRenderer == null){ spriteRenderer = GetComponentInChildren<SpriteRenderer>();}
     }
@@ -215,6 +223,17 @@ public sealed class PlayerMotor2D : MonoBehaviour
         }
         
         
+        //restore normal gravity after leaving water
+        body.gravityScale = normalGravity;
+
+        if (IsSwimming)
+        {
+            Swim();
+            UpdateAppearance();
+            return;
+        }
+        
+        
         bool groundedNow = TouchesGround();
         
         IsTouchingWall = TouchesWall();
@@ -237,25 +256,21 @@ public sealed class PlayerMotor2D : MonoBehaviour
         
         
         
-        //Speed Modifiers
-        
         //infection stage debuff
         float infectionSpeedMultiplier =
             playerVitals != null
                 ? playerVitals.CurrentStage.movementMultiplier
                 : 1f;
+        
+        
+        
+        float runSpeed = isRunning ? sprintMultiplier : 1f;
 
-        //sprinting
-        float sprintSpeedMultiplier =
-            isRunning ? sprintMultiplier : 1f;
-        
-        
-        
-        
-        velocity.x = isRunning ? 
-            moveInput.x * moveSpeed * sprintMultiplier
-            : moveInput.x * moveSpeed;
-
+        velocity.x =
+            moveInput.x *
+            moveSpeed *
+            runSpeed *
+            infectionSpeedMultiplier;
         
         
         //when to allow jumping
@@ -347,7 +362,9 @@ public sealed class PlayerMotor2D : MonoBehaviour
         currentAnimation = 0;
         jumpBufferRemaining = 0f;
         coyoteRemaining = 0f;
+        if (body != null) body.gravityScale = normalGravity;
     }
+    
     
     
     public void Face(float direction)
@@ -360,6 +377,17 @@ public sealed class PlayerMotor2D : MonoBehaviour
         spriteRenderer.flipX = direction < 0f;
     }
     
+    
+    private void Swim()
+    {
+        IsGrounded = false;
+        coyoteRemaining = 0f;
+        jumpBufferRemaining = 0f;
+
+       
+        body.gravityScale = waterGravity;
+        body.linearVelocity = moveInput * swimSpeed;
+    }
     
     
     

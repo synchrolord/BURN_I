@@ -18,6 +18,11 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
     [SerializeField, Min(0.1f)] private float cleansePerWaterUnit = 3f;
 
     
+    [Header("Swimming")]
+    [SerializeField] private Transform swimPoint;
+    [SerializeField, Range(0f, 1f)] private float swimWaterNeeded = 0.5f;
+
+    public bool IsSwimming { get; private set; }
     
     
     private PlayerVitals2D vitals;
@@ -30,9 +35,16 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
     
     private void Update()
     {
+
+        if (vitals.IsDead || cellWorld == null) { IsSwimming = false; return; }
         
-        if (vitals.IsDead || cellWorld == null)
-            return;
+        //fallback to player transform
+        Vector2 swimPosition = swimPoint != null
+            ? swimPoint.position
+            : transform.position;
+
+        IsSwimming =
+            cellWorld.GetWaterFraction(swimPosition) >= swimWaterNeeded;
 
         sampleTimer -= Time.deltaTime;
 
