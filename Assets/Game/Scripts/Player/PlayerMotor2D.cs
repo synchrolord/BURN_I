@@ -376,17 +376,21 @@ public sealed class PlayerMotor2D : MonoBehaviour
 
         spriteRenderer.flipX = direction < 0f;
     }
-    
-    
+
+
     private void Swim()
     {
         IsGrounded = false;
         coyoteRemaining = 0f;
-        jumpBufferRemaining = 0f;
-
-       
         body.gravityScale = waterGravity;
-        body.linearVelocity = moveInput * swimSpeed;
+
+        Vector2 velocity = body.linearVelocity;
+
+        //move Right, Left,Up,Down
+        velocity.x = moveInput.x * swimSpeed;
+        if (Mathf.Abs(moveInput.y) > 0.01f) { velocity.y = moveInput.y * swimSpeed; }
+    
+    body.linearVelocity = velocity;
     }
     
     

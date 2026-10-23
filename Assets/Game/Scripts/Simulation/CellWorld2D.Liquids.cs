@@ -7,7 +7,7 @@ public partial class CellWorld2D
     {
         return water[index] + fuel[index]+ acid[index];
     }
-    
+
     // Basic rule: fall down, try the two lower diagonals, then level with neighbors.
     // Water and fuel share capacity, so moving one never overwrites the other.
     private void SimulateLiquidAt(byte[] liquid, bool[] moved, int x, int y, float viscosity)
@@ -36,10 +36,100 @@ public partial class CellWorld2D
         if (!solid[Index(x - direction, y)])
             MoveLiquid(liquid, moved, x, y, x - direction, y - 1, downFlow);
         
+        if (liquid[i] == 0) return;
+
+        //water searches farther than other liquids for somewhere to fall
+        if (liquid == water &&
+            FlowWaterToDrop(moved, x, y, direction, sideFlow))
+        { return; }
         
         //left and right
         LevelLiquid(liquid, moved, x, y, x + direction, sideFlow);
         LevelLiquid(liquid, moved, x, y, x - direction, sideFlow);
+    }
+
+    //find the closest drop, then move the water row toward it
+    private bool FlowWaterToDrop(
+        bool[] moved,
+        int x,
+        int y,
+        int tieDirection,
+        int sideFlow)
+    {
+        int left = FindWaterDrop(x, y, -1);
+        int right = FindWaterDrop(x, y, 1);
+
+        if (left == 0 && right == 0)
+            return false;
+
+        //use the nearest drop, or alternate when both are equal
+        int direction;
+
+        if (left == 0) direction = 1;
+        else if (right == 0) direction = -1;
+        else if (left < right) direction = -1;
+        else if (right < left) direction = 1;
+        else direction = tieDirection;
+
+        int distance = direction < 0 ? left : right;
+
+        int dropX = x + direction * distance;
+
+        //empty the edge downward first
+        MoveLiquid(
+            water,
+            moved,
+            dropX,
+            y,
+            dropX,
+            y - 1,
+            liquidCapacity);
+
+        //pass the empty space backward through the water
+        for (int step = distance - 1; step >= 0; step--)
+        {
+            int fromX = x + direction * step;
+
+            MoveLiquid(
+                water,
+                moved,
+                fromX,
+                y,
+                fromX + direction,
+                y,
+                sideFlow);
+        }
+
+        return true;
+    }
+
+    //return how many cells away the first open drop is
+    private int FindWaterDrop(int x, int y, int direction)
+    {
+        for (int distance = 1; distance <= waterSpreadDistance; distance++)
+        {
+            int nextX = x + direction * distance;
+
+            if (!ContainsCell(nextX, y)) break;
+
+            int next = Index(nextX, y);
+            
+            
+            if (solid[next]) break;
+            
+            if (!ContainsCell(nextX, y - 1)) continue;
+
+            int below = Index(nextX, y - 1);
+
+            //the cell below must have room for more liquid
+            if (!solid[below] &&
+                GetTotalLiquid(below) < liquidCapacity)
+            {
+                return distance;
+            }
+        }
+
+        return 0;
     }
 
     //handle homogenizing liquid close by

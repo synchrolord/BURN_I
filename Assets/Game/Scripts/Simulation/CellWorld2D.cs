@@ -22,18 +22,16 @@ public partial class CellWorld2D : MonoBehaviour
     [SerializeField, Range(1, 200)] private int chunkStayAwakeTicks = 40;
 
     [Header("Basic Liquids")]
-    [FormerlySerializedAs("maximumWaterPerCell")]
     [SerializeField, Range(1, 32)] private int liquidCapacity = 8;
-    [Tooltip("Higher viscosity transfers fewer units to each neighboring cell.")]
     [SerializeField, Range(0f, 1f)] private float waterViscosity = 0.05f;
     [SerializeField, Range(0f, 1f)] private float fuelViscosity = 0.55f;
     [SerializeField, Range(0f, 1f)] private float acidViscosity = 0.15f;
     
     
-    [Tooltip("Fuel swaps upward with the water immediately above it, every other tick.")]
     [SerializeField, Range(1, 8)] private int oilBuoyancyStrength = 1;
-    // Retained for archived Advanced settings. Basic only looks at immediate neighbors.
-    [SerializeField, HideInInspector] private int waterSpreadSearchDistance = 8;
+    //how far water can look sideways for a nearby ledge
+    [SerializeField, Range(1, 12)] private int waterSpreadDistance = 8;
+
     [SerializeField, HideInInspector] private int waterSidewaysPasses = 3;
     [SerializeField, HideInInspector] private int fuelSpreadSearchDistance = 4;
     [SerializeField, HideInInspector] private int fuelSidewaysPasses = 1;
