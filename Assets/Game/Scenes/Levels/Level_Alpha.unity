@@ -30906,7 +30906,7 @@ MonoBehaviour:
   fuelViscosity: 0.55
   acidViscosity: 0.15
   oilBuoyancyStrength: 1
-  waterSpreadSearchDistance: 8
+  waterSpreadDistance: 8
   waterSidewaysPasses: 3
   fuelSpreadSearchDistance: 4
   fuelSidewaysPasses: 1
@@ -225424,6 +225424,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+--- !u!4 &1314738604 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5058940902147326635, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
+  m_PrefabInstance: {fileID: 7836626077589950052}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1323719190
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -225805,7 +225810,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1420153855
 Transform:
   m_ObjectHideFlags: 0
@@ -231012,6 +231017,10 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
+      propertyPath: waterSpreadDistance
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: fireSpreadEveryTicks
       value: 5
       objectReference: {fileID: 0}
@@ -231807,6 +231816,8 @@ MonoBehaviour:
   liquidUnitsPerSample: 24
   poisonPerAcidUnit: 0.1
   cleansePerWaterUnit: 0.1
+  swimPoint: {fileID: 1314738604}
+  swimWaterNeeded: 0.514
 --- !u!114 &7836626077589950071
 MonoBehaviour:
   m_ObjectHideFlags: 0
