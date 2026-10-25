@@ -20,6 +20,24 @@ public partial class CellWorld2D
         textureNeedsRefresh = true;
     }
 
+
+    //add visible plant matter that also holds liquids
+    public bool AddPlant(Vector2 position, Color32 color)
+    {
+        if (!IsReady ||
+            !TryWorldToCell(position, out Vector2Int cell))
+        {
+            return false;
+        }
+
+        int i = Index(cell.x, cell.y);
+
+        solid[i] = true;
+        ClearCell(i);
+        AddPlantCell(cell.x, cell.y, color, true);
+        return true;
+    }
+
     
 
     private bool HasPlant(int index) => plant[index] > 0;
@@ -39,6 +57,11 @@ public partial class CellWorld2D
 
         plant[i]--;
         AddPlantSmoke(cellX, cellY, plant[i] == 0 ? 3 : 1);
+
+        //visible plant walls open when they finish burning
+        if (plant[i] == 0 && visiblePlant[i])
+            solid[i] = false;
+
         WakeCell(cellX, cellY);
         textureNeedsRefresh = true;
     }

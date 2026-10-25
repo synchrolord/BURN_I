@@ -31,7 +31,14 @@ public partial class CellWorld2D
         {
             int i = Index(x, y);
             //block cells outside the room or overlapping the solid layers
-            solid[i] = !ContainsCell(x, y) || Physics2D.OverlapBox(CellToWorld(x, y), sampleSize, 0f, solidMask.value) != null;
+            solid[i] =
+                (HasPlant(i) && visiblePlant[i]) ||
+                !ContainsCell(x, y) ||
+                Physics2D.OverlapBox(
+                    CellToWorld(x, y),
+                    sampleSize,
+                    0f,
+                    solidMask.value) != null;
 
             if (solid[i])
             {
@@ -79,8 +86,16 @@ public partial class CellWorld2D
         foreach (int i in cells)
         {
             int x = i % width, y = i / width;
-            bool blocked = !ContainsCell(x, y) || x == 0 || y == 0 || x == width - 1 || y == height - 1 ||
-                Physics2D.OverlapBox(CellToWorld(x, y), sampleSize, 0f, solidMask.value) != null;
+            bool blocked =
+                (HasPlant(i) && visiblePlant[i]) ||
+                !ContainsCell(x, y) ||
+                x == 0 || y == 0 ||
+                x == width - 1 || y == height - 1 ||
+                Physics2D.OverlapBox(
+                    CellToWorld(x, y),
+                    sampleSize,
+                    0f,
+                    solidMask.value) != null;
             //leave unchanged cells alone and update cells whose blocked state changed
             if (solid[i] == blocked) continue;
             solid[i] = blocked;

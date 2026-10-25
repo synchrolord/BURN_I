@@ -42,6 +42,30 @@ public partial class CellWorld2D
             path.insideSurfacePosition = hit.point - hit.normal * (cellSize * 0.5f);
             break;
         }
+
+        //stop shots at CellWorld walls that do not have Unity colliders
+        Vector2 direction = (path.endPosition - startPosition).normalized;
+        int sampleCount = GetPathSampleCount(path);
+
+        for (int i = 1; i <= sampleCount; i++)
+        {
+            Vector2 point = Vector2.Lerp(
+                startPosition,
+                path.endPosition,
+                i / (float)sampleCount);
+
+            if (!TryWorldToCell(point, out Vector2Int cell) ||
+                !solid[Index(cell.x, cell.y)])
+            {
+                continue;
+            }
+
+            path.hitObstacle = true;
+            path.endPosition = point - direction * (cellSize * 0.55f);
+            path.insideSurfacePosition = point;
+            break;
+        }
+
         return path;
     }
 
