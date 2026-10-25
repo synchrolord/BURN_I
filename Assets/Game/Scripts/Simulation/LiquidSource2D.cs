@@ -59,9 +59,9 @@ public sealed class LiquidSource2D : MonoBehaviour
         }
     }
     
-    public void SetRunning(bool value)
+    public void Toggle()
     {
-        running = value;
+        running = !running;
     }
     
 }
