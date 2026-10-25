@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerVitals2D))]
 
 
@@ -27,16 +28,40 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
     
     private PlayerVitals2D vitals;
     private float sampleTimer;
-
+    
+    private PressureTool2D pressureTool;
+    private LiquidValve2D valve;
+    private InputAction interactAction;    
+    
     private void Awake()
     {
         vitals = GetComponent<PlayerVitals2D>();
+        pressureTool = GetComponent<PressureTool2D>();
+        interactAction =
+            GetComponent<PlayerInput>().actions.FindAction("Interact");
     }
+    
     
     private void Update()
     {
 
         if (vitals.IsDead || cellWorld == null) { IsSwimming = false; return; }
+        
+        
+        //source valves toggle once when F is pressed
+        if (interactAction != null &&
+            interactAction.WasPressedThisFrame() &&
+            valve != null &&
+            !valve.HoldToUse)
+        {
+            valve.Use(pressureTool, cellWorld);
+        }
+        
+        
+        
+        
+        
+        
         
         //fallback to player transform
         Vector2 swimPosition = swimPoint != null
@@ -65,6 +90,7 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
         AbsorbAcid(position);
         TouchFireAndWater(position);
         AbsorbWater(position);
+        UseWater(position);
     }
     
     
@@ -156,4 +182,59 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
             vitals.Ignite();
         }
     }
+    
+    
+    
+
+
+
+    private void UseWater(Vector2 position)
+    {
+        if (interactAction == null ||
+            !interactAction.IsPressed() ||
+            pressureTool == null ||
+            cellWorld == null)
+        {
+            return;
+        }
+
+        
+        //drain water from sink when button is pressed
+        if (valve != null)
+        {
+            
+            if (valve.HoldToUse)
+                valve.Use(pressureTool, cellWorld);
+
+            return;
+        }
+
+        //drain water from environment
+        int needed =
+            pressureTool.MaximumWater -
+            pressureTool.CurrentWater;
+
+        if (needed <= 0) return;
+
+        int removed = cellWorld.ExtractWater(
+            position,
+            sampleRadius,
+            Mathf.Min(liquidUnitsPerSample, needed));
+
+        pressureTool.AddWaterResource(removed);
+    }
+
+
+    public void SetValve(LiquidValve2D newValve)
+    {
+        valve = newValve;
+    }
+
+
+    public void ClearValve(LiquidValve2D oldValve)
+    {
+        if (valve == oldValve)
+            valve = null;
+    }
+    
 }
