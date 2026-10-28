@@ -5,7 +5,8 @@ public partial class CellWorld2D
 {
     
     //initialize all possible materials arrays in a cell
-    private byte[] water, fuel, acid, smoke, steam, fire; 
+    private byte[] water, fuel, acid, smoke, steam, fire;
+    private byte[] light, placedLight;
         /*
             Single cell can store an amount of each material
             cell #25
@@ -45,7 +46,8 @@ public partial class CellWorld2D
         smoke != null && steam != null && fire != null &&
         plant != null && plantColor != null && visiblePlant != null &&
         solid != null && movedFire != null &&
-        smokeVelocity != null && steamVelocity != null;
+        smokeVelocity != null && steamVelocity != null &&
+        light != null && placedLight != null;
 
     
     
@@ -88,6 +90,8 @@ public partial class CellWorld2D
         smoke = new byte[count];
         steam = new byte[count];
         fire = new byte[count];
+        light = new byte[count];
+        placedLight = new byte[count];
         plant = new byte[count];
         plantColor = new Color32[count];
         visiblePlant = new bool[count];
@@ -114,6 +118,8 @@ public partial class CellWorld2D
         BuildRoomChunks();
         CreateRuntimeTexture();
         BakeSolidsFromPhysics();
+        CreateDarknessTexture();
+        RefreshPixelLight();
         textureNeedsRefresh = true;
         
         RenderNow();

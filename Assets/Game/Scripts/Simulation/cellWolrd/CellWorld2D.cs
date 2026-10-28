@@ -103,6 +103,17 @@ public partial class CellWorld2D : MonoBehaviour
     [SerializeField] private Color mediumFireColor = new Color(1f, 0.48f, 0.03f, 1f);
     [SerializeField] private Color hotFireColor = new Color(1f, 0.95f, 0.45f, 1f);
     [SerializeField] private Color steamColor = new Color(0.75f, 0.85f, 0.92f, 0.60f);
+
+    [Header("Pixel Darkness")]
+    [SerializeField] private bool usePixelDarkness = true;
+    [SerializeField, Range(0f, 1f)] private float darkness = 0.95f;
+    [SerializeField, Range(1, 64)] private int fullyLitLevel = 28;
+    [SerializeField, Range(1, 64)] private int fireLightLevel = 28;
+    [SerializeField, Range(0.02f, 0.5f)] private float lightRefreshSeconds = 0.2f;
+    [SerializeField] private int darknessOrder = 100;
+    [SerializeField, Range(0f, 1f)] private float unityLightBase = 0.2f;
+    [SerializeField, Range(0f, 4f)] private float unityLightEffect = 1.25f;
+    [SerializeField, Range(0f, 1f)] private float unityLightMaximum = 0.85f;
     
     
     [Header("Debug")]
@@ -132,10 +143,16 @@ public partial class CellWorld2D : MonoBehaviour
         if (spriteRenderer != null)
             spriteRenderer.enabled =
                 roomActive || showInactiveWorldsForDebug;
+
+        SetDarknessVisible(
+            roomActive || showInactiveWorldsForDebug);
         
         //refresh the image when returning to this room
         if (roomActive)
+        {
             textureNeedsRefresh = true;
+            lightNeedsRefresh = true;
+        }
     }
     
     
@@ -168,8 +185,18 @@ public partial class CellWorld2D : MonoBehaviour
     {
         if (!roomActive || !IsReady) return;
 
-        if (!textureNeedsRefresh &&
-            !(hasVisibleFire && !paused && Time.time >= nextFireVisualUpdate))
+        bool refreshMaterials =
+            textureNeedsRefresh ||
+            (hasVisibleFire &&
+             !paused &&
+             Time.time >= nextFireVisualUpdate);
+
+        bool refreshedLight = UpdatePixelLighting();
+
+        if (!refreshMaterials && !refreshedLight)
+            return;
+
+        if (!refreshMaterials)
             return;
 
         RenderNow();
@@ -183,6 +210,7 @@ public partial class CellWorld2D : MonoBehaviour
     {
         if (runtimeSprite != null) Destroy(runtimeSprite);
         if (runtimeTexture != null) Destroy(runtimeTexture);
+        DestroyDarknessTexture();
     }
 
     //update all active cells by one simulation step

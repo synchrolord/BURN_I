@@ -106,6 +106,7 @@ public partial class CellWorld2D
             }
             WakeCell(x, y);
             textureNeedsRefresh = true;
+            lightNeedsRefresh = true;
         }
     }
 }

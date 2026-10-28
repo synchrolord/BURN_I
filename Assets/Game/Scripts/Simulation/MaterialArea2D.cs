@@ -16,7 +16,8 @@ public sealed class MaterialArea2D : MonoBehaviour
         Fire,
         Smoke,
         Steam,
-        Plant
+        Plant,
+        Light
     }
 
     private enum AreaShape
@@ -36,6 +37,9 @@ public sealed class MaterialArea2D : MonoBehaviour
 
     //color used by visible plant cells
     [SerializeField] private Color plantColor = new Color(0.35f, 0.18f, 0.06f, 1f);
+
+    [SerializeField, Range(1, 64)]
+    private int lightLevel = 28;
 
     //space between the outside and inside of a hollow box
     [SerializeField, Min(0.01f)] private float wallThickness = 0.1f;
@@ -162,6 +166,10 @@ public sealed class MaterialArea2D : MonoBehaviour
 
             case CellMaterial.Plant:
                 world.AddPlant(position, plantColor);
+                break;
+
+            case CellMaterial.Light:
+                world.AddPlacedLight(position, lightLevel);
                 break;
         }
     }

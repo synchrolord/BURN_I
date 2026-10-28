@@ -23,8 +23,9 @@ public sealed class MaterialArea2DEditor : Editor
                     "blockPlayerWater"));
         }
 
-//plant does not use an amount
-        if (material.enumValueIndex != 6)
+//plant and light use their own values
+        if (material.enumValueIndex != 6 &&
+            material.enumValueIndex != 7)
         {
             EditorGUILayout.PropertyField(
                 serializedObject.FindProperty("amount"));
@@ -32,6 +33,9 @@ public sealed class MaterialArea2DEditor : Editor
 
         if (material.enumValueIndex == 6)
             EditorGUILayout.PropertyField(serializedObject.FindProperty("plantColor"));
+
+        if (material.enumValueIndex == 7)
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("lightLevel"));
 
         //only a hollow box needs wall thickness
         if (shape.enumValueIndex == 1)
