@@ -8,7 +8,6 @@ public sealed class CellWorldRoomManager : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private CellWorld2D[] worlds = new CellWorld2D[0];
     [SerializeField] private PressureTool2D pressureTool;
-    [SerializeField] private FireLightPool2D fireLightPool;
     
     [SerializeField]
     private PlayerLiquidInteraction2D playerLiquidInteraction;
@@ -43,9 +42,6 @@ public sealed class CellWorldRoomManager : MonoBehaviour
         if (pressureTool != null)
             pressureTool.SetWorld(CurrentWorld);
 
-        if (fireLightPool != null)
-            fireLightPool.SetWorld(CurrentWorld);
-        
         if (playerLiquidInteraction != null)
         {
             playerLiquidInteraction.SetWorld(CurrentWorld);
@@ -74,9 +70,6 @@ public sealed class CellWorldRoomManager : MonoBehaviour
         if (pressureTool != null)
             pressureTool.SetWorld(CurrentWorld);
 
-        if (fireLightPool != null)
-            fireLightPool.SetWorld(CurrentWorld);
-        
         if (playerLiquidInteraction != null)
         {
             playerLiquidInteraction.SetWorld(null);
