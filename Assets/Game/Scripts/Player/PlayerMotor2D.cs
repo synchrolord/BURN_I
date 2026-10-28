@@ -206,6 +206,7 @@ public sealed class PlayerMotor2D : MonoBehaviour
     private void FixedUpdate()
     {
         
+            
         
         float step = Time.fixedDeltaTime;
         
