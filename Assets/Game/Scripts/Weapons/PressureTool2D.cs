@@ -115,6 +115,7 @@ public sealed class PressureTool2D : MonoBehaviour
     public int MaximumWater => maximumWater;
     public int CurrentFuel => currentFuel;
     public int MaximumFuel => maximumFuel;
+    public CellWorld2D CurrentWorld => cellWorld;
 
     private void Awake()
     {

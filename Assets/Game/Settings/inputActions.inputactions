@@ -47,6 +47,16 @@
                     "priority": 0
                 },
                 {
+                    "name": "Throw",
+                    "type": "PassThrough",
+                    "id": "a880394f-63d0-4bea-93df-e2578c1cc5cf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
                     "name": "SwitchMaterial",
                     "type": "Button",
                     "id": "891fa94b-0f57-4190-baf5-050f123aa1e9",
@@ -173,6 +183,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Spray",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3920b664-c54c-437c-8c9d-95e215bed17d",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Throw",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
