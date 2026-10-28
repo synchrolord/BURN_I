@@ -30,9 +30,21 @@ public sealed class PlayerMotor2D : MonoBehaviour
     
     [Header("Swimming")]
     [SerializeField] private PlayerLiquidInteraction2D liquids;
-    [SerializeField] private float swimSpeed = 5f;
-    [SerializeField] private float waterGravity = 1;
+    [SerializeField] private float swimSpeed = 3.5f;
+    [SerializeField] private float waterGravity = 0.3f;
+    [SerializeField] private float waterFallSpeed = 1.5f;
 
+    [SerializeField] private float swimAcceleration = 8f;
+    [SerializeField] private float swimDeceleration = 4f;
+
+    
+    [Header("Water Buoyancy")]
+    [SerializeField] private float buoyancySpeed = 1.5f;
+    [SerializeField] private float buoyancyAcceleration = 3f;
+
+    private float waterSurfaceY;
+    
+    
     private float normalGravity;
 
     public bool IsSwimming => liquids != null && liquids.IsSwimming;
@@ -383,15 +395,57 @@ public sealed class PlayerMotor2D : MonoBehaviour
     {
         IsGrounded = false;
         coyoteRemaining = 0f;
-        body.gravityScale = waterGravity;
+
+        body.gravityScale = 0f;
 
         Vector2 velocity = body.linearVelocity;
 
-        //move Right, Left,Up,Down
-        velocity.x = moveInput.x * swimSpeed;
-        if (Mathf.Abs(moveInput.y) > 0.01f) { velocity.y = moveInput.y * swimSpeed; }
-    
-    body.linearVelocity = velocity;
+        Vector2 input = Vector2.ClampMagnitude(moveInput, 1f);
+
+        Vector2 targetVelocity = input * swimSpeed;
+
+        // Horizontal swimming
+        float horizontalAcceleration =
+            Mathf.Abs(input.x) > 0.01f
+                ? swimAcceleration
+                : swimDeceleration;
+
+        velocity.x = Mathf.MoveTowards(
+            velocity.x,
+            targetVelocity.x,
+            horizontalAcceleration * Time.fixedDeltaTime
+        );
+
+        // Vertical swimming
+        if (Mathf.Abs(input.y) > 0.01f)
+        {
+            // Player actively swims up or down
+            velocity.y = Mathf.MoveTowards(
+                velocity.y,
+                targetVelocity.y,
+                swimAcceleration * Time.fixedDeltaTime
+            );
+        }
+        else
+        {
+            // No vertical input: naturally float upward
+            velocity.y = Mathf.MoveTowards(
+                velocity.y,
+                buoyancySpeed,
+                buoyancyAcceleration * Time.fixedDeltaTime
+            );
+        }
+        
+        
+        // Limit downward falling speed in water
+        if (input.y >= -0.01f)
+        {
+            velocity.y = Mathf.Max(velocity.y, -waterFallSpeed);
+        }
+        
+        
+
+        body.linearVelocity = velocity;
     }
     
     
