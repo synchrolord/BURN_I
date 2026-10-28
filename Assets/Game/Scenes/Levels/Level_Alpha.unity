@@ -14682,8 +14682,8 @@ Transform:
   m_GameObject: {fileID: 119066677}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.59, y: 6.51, z: 0}
-  m_LocalScale: {x: 4.9244, y: 4.9244, z: 4.9244}
+  m_LocalPosition: {x: 5.39, y: 5.12, z: 0}
+  m_LocalScale: {x: 9.879466, y: 5.359717, z: 5.359717}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 560801266}
@@ -14703,12 +14703,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MaterialArea2D
   world: {fileID: 0}
-  material: 6
-  shape: 1
-  amount: 8
+  material: 0
+  shape: 0
+  amount: 32
   plantColor: {r: 0.35, g: 0.18, b: 0.06, a: 1}
+  lightLevel: 28
   wallThickness: 0.1
-  blockPlayerWater: 1
+  blockPlayerWater: 0
 --- !u!61 &119066680
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16587,7 +16588,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &224143659
 Transform:
   m_ObjectHideFlags: 0
@@ -20824,27 +20825,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41d91088933b85544ab55dbb0f69ad4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::vineController
-  points:
-  - {fileID: 1755760999}
-  - {fileID: 1639718396}
-  - {fileID: 773603854}
-  - {fileID: 113528804}
-  - {fileID: 38728987}
-  - {fileID: 1403873670}
-  - {fileID: 2016378336}
-  - {fileID: 1503922754}
   connectionChance: 1
   maxConnectionsPerPoint: 1
   connectionDistance: 7
   minLooseLength: 0.25
   maxLooseLength: 2
-  pointDistance: 0.2
-  wallMask:
-    serializedVersion: 2
-    m_Bits: 0
-  gravityScale: 1
   damping: 0.1
-  constraintPasses: 10
   swayStrength: 1
   swaySpeed: 1.5
   danglingChance: 0.35
@@ -20865,7 +20851,15 @@ MonoBehaviour:
   - {fileID: -6495944270695713269, guid: f9ebe613f2d46604e9daa484f1ca7a83, type: 3}
   - {fileID: -2808275857587863247, guid: f9ebe613f2d46604e9daa484f1ca7a83, type: 3}
   - {fileID: -8820471369946628315, guid: f9ebe613f2d46604e9daa484f1ca7a83, type: 3}
-  endSprites: []
+  endSprites:
+  - {fileID: 6279524388711898106, guid: e1947a496247e124e9fc96278756e2fa, type: 3}
+  - {fileID: -6995609424117976506, guid: e1947a496247e124e9fc96278756e2fa, type: 3}
+  - {fileID: -3818091094902751645, guid: e1947a496247e124e9fc96278756e2fa, type: 3}
+  - {fileID: 5152313603709667585, guid: e1947a496247e124e9fc96278756e2fa, type: 3}
+  - {fileID: -3009541139127272252, guid: e1947a496247e124e9fc96278756e2fa, type: 3}
+  - {fileID: 7991762624350644166, guid: e1947a496247e124e9fc96278756e2fa, type: 3}
+  - {fileID: -3253292030776865619, guid: e1947a496247e124e9fc96278756e2fa, type: 3}
+  - {fileID: -9065773692325783304, guid: e1947a496247e124e9fc96278756e2fa, type: 3}
   flowerSprites:
   - {fileID: 4642208143693559267, guid: 5e7dc678af03fad408e53ead64f4c6ce, type: 3}
   - {fileID: -99020540565561036, guid: 5e7dc678af03fad408e53ead64f4c6ce, type: 3}
@@ -20898,8 +20892,6 @@ MonoBehaviour:
   - {fileID: -222315705537783325, guid: 5e7dc678af03fad408e53ead64f4c6ce, type: 3}
   - {fileID: 1863314648117946392, guid: 5e7dc678af03fad408e53ead64f4c6ce, type: 3}
   flowerChance: 0.2
-  spriteGap: 4
-  sortingLayer: Default
   behindOrder: 4
   frontOrder: 9
   seed: 21
@@ -20964,7 +20956,7 @@ MonoBehaviour:
     rid: 5616129759719194762
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.2
+  m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
   m_ApplyToSortingLayers: 00000000i
@@ -31672,6 +31664,15 @@ MonoBehaviour:
   mediumFireColor: {r: 1, g: 0.48, b: 0.03, a: 1}
   hotFireColor: {r: 1, g: 0.95, b: 0.45, a: 1}
   steamColor: {r: 0.75, g: 0.85, b: 0.92, a: 0.6}
+  usePixelDarkness: 1
+  darkness: 0.95
+  fullyLitLevel: 28
+  fireLightLevel: 28
+  lightRefreshSeconds: 0.2
+  darknessOrder: 100
+  unityLightBase: 0.2
+  unityLightEffect: 1.25
+  unityLightMaximum: 0.85
   startPaused: 0
   showSolidCells: 0
   solidDebugColor: {r: 0.2, g: 0.2, b: 0.2, a: 0}
@@ -231796,7 +231797,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 3557460669315434451}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97db6f0697a54d74da7cff2bab36e140, type: 3}
   m_Name: 
@@ -231811,7 +231812,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: width
-      value: 600
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: height
@@ -231822,12 +231823,20 @@ PrefabInstance:
       value: 0.125
       objectReference: {fileID: 0}
     - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
+      propertyPath: darkness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: chunkSize
       value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: flameLife
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: flameChance
@@ -231850,6 +231859,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1556756209}
     - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
+      propertyPath: fireLightLevel
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: showSolidCells
       value: 0
       objectReference: {fileID: 0}
@@ -231866,6 +231879,10 @@ PrefabInstance:
       value: 0.296
       objectReference: {fileID: 0}
     - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
+      propertyPath: usePixelDarkness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: activeChunkRadius
       value: 0
       objectReference: {fileID: 0}
@@ -231878,6 +231895,10 @@ PrefabInstance:
       value: 0.084
       objectReference: {fileID: 0}
     - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
+      propertyPath: simulateAllChunks
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: solidDebugColor.a
       value: 0
       objectReference: {fileID: 0}
@@ -231888,6 +231909,10 @@ PrefabInstance:
     - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: fireDecayEveryTicks
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
+      propertyPath: lightRefreshSeconds
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 2382901914975464987, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: plantBurnEveryTicks
@@ -231924,6 +231949,10 @@ PrefabInstance:
     - target: {fileID: 4864798883136579192, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: m_Name
       value: WolrdSystems
+      objectReference: {fileID: 0}
+    - target: {fileID: 4922808871111201828, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6056482426591271369, guid: 32253b26118dfca46836515f1599e6f0, type: 3}
       propertyPath: player
@@ -232270,7 +232299,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 523265667330429985, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 882957592437925421, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: m_Enabled
@@ -232279,6 +232308,10 @@ PrefabInstance:
     - target: {fileID: 2012792728053545839, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: m_Name
       value: PLayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 2727544231959901633, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4209448177274357688, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: profile
@@ -232578,11 +232611,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6017105492911269532, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: m_FalloffIntensity
-      value: 0.618
+      value: 0.689
+      objectReference: {fileID: 0}
+    - target: {fileID: 6017105492911269532, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
+      propertyPath: m_PointLightInnerAngle
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 6017105492911269532, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: m_PointLightOuterAngle
-      value: 360
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 6017105492911269532, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: m_PointLightInnerRadius
