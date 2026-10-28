@@ -4,6 +4,9 @@ using UnityEngine.Serialization;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public sealed class MaterialArea2D : MonoBehaviour
+
+//stop the player using water inside this area
+
 {
     private enum CellMaterial
     {
@@ -36,9 +39,9 @@ public sealed class MaterialArea2D : MonoBehaviour
 
     //space between the outside and inside of a hollow box
     [SerializeField, Min(0.01f)] private float wallThickness = 0.1f;
-
+    
     private BoxCollider2D area;
-
+    [SerializeField] private bool blockPlayerWater = true;
 
     private void Awake()
     {
@@ -161,5 +164,14 @@ public sealed class MaterialArea2D : MonoBehaviour
                 world.AddPlant(position, plantColor);
                 break;
         }
+    }
+    
+    
+    //get player overlaps with liquid area  
+    public bool BlocksPlayerWater(Vector2 position)
+    {
+        return blockPlayerWater &&
+               material == CellMaterial.Water &&
+               ContainsPoint(position);
     }
 }

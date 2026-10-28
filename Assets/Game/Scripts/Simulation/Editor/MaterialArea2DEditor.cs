@@ -15,9 +15,20 @@ public sealed class MaterialArea2DEditor : Editor
         EditorGUILayout.PropertyField(material);
         EditorGUILayout.PropertyField(shape);
 
-        //plant does not use an amount
+//only water areas show this option
+        if (material.enumValueIndex == 0)
+        {
+            EditorGUILayout.PropertyField(
+                serializedObject.FindProperty(
+                    "blockPlayerWater"));
+        }
+
+//plant does not use an amount
         if (material.enumValueIndex != 6)
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("amount"));
+        {
+            EditorGUILayout.PropertyField(
+                serializedObject.FindProperty("amount"));
+        }
 
         if (material.enumValueIndex == 6)
             EditorGUILayout.PropertyField(serializedObject.FindProperty("plantColor"));

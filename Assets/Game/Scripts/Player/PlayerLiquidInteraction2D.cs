@@ -22,7 +22,7 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
     [Header("Swimming")]
     [SerializeField] private Transform swimPoint;
     [SerializeField, Range(0f, 1f)] private float swimWaterNeeded = 0.5f;
-
+    private MaterialArea2D[] materialAreas;
     public bool IsSwimming { get; private set; }
     
     
@@ -39,6 +39,10 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
         pressureTool = GetComponent<PressureTool2D>();
         interactAction =
             GetComponent<PlayerInput>().actions.FindAction("Interact");
+        
+        materialAreas =
+            FindObjectsByType<MaterialArea2D>(
+                FindObjectsSortMode.None);
     }
     
     
@@ -67,9 +71,13 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
         Vector2 swimPosition = swimPoint != null
             ? swimPoint.position
             : transform.position;
-
+        
+        
+        //can only swim if enough water is there and it  isn't a tank
         IsSwimming =
-            cellWorld.GetWaterFraction(swimPosition) >= swimWaterNeeded;
+            !WaterIsBlocked(swimPosition) &&
+            cellWorld.GetWaterFraction(swimPosition) >=
+            swimWaterNeeded;
 
         sampleTimer -= Time.deltaTime;
 
@@ -115,9 +123,9 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
     }
     public void AbsorbWater(Vector2 position)
     {
-        if (!vitals.HasPoison)
-            return;
         
+        if (!vitals.HasPoison || WaterIsBlocked(position)) { return; }
+
         int absorbedUnits = cellWorld.ExtractWater(
             position,
             sampleRadius,
@@ -164,7 +172,8 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
                 Vector2 samplePosition = position + offset;
 
                 //water wins if fire and water are both touching the player
-                if (cellWorld.GetWaterFraction(samplePosition) > 0f)
+                if (!WaterIsBlocked(samplePosition) &&
+                    cellWorld.GetWaterFraction(samplePosition) > 0f)
                 {
                     vitals.SetWet();
                     return;
@@ -208,6 +217,9 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
 
             return;
         }
+        
+        if (WaterIsBlocked(position))
+            return;
 
         //drain water from environment
         int needed =
@@ -235,6 +247,21 @@ public class PlayerLiquidInteraction2D : MonoBehaviour
     {
         if (valve == oldValve)
             valve = null;
+    }
+    
+    
+    private bool WaterIsBlocked(Vector2 position)
+    {
+        foreach (MaterialArea2D area in materialAreas)
+        {
+            if (area != null &&
+                area.BlocksPlayerWater(position))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
     
 }
