@@ -59,7 +59,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 35aba0aeb90b48547bc692797ce5ee8c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -105,19 +105,83 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41f4c3c675c69bb4abc6f5977f8afe3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CellWorld2D
+  fireVisualFramesPerSecond: 20
+  fireFlickerAmount: 0.25
+  fireFlickerSpeed: 7
+  fireHeat: 0.7
+  fireMinimumAlpha: 0.35
   width: 400
   height: 300
   cellSize: 0.05
-  ticksPerSecond: 60
-  maximumTicksPerFrame: 8
   solidMask:
     serializedVersion: 2
     m_Bits: 8
-  maximumWaterPerCell: 23
-  maximumVerticalFlowPerTick: 25
-  maximumSideFlowPerTick: 12
+  ticksPerSecond: 20
+  maximumTicksPerFrame: 3
+  activityTarget: {fileID: 0}
+  simulateAllChunks: 0
+  chunkSize: 32
+  activeChunkRadius: 1
+  chunkStayAwakeTicks: 40
+  liquidCapacity: 8
+  waterViscosity: 0.05
+  fuelViscosity: 0.55
+  acidViscosity: 0.15
+  oilBuoyancyStrength: 1
+  waterSpreadDistance: 8
+  waterSidewaysPasses: 3
+  fuelSpreadSearchDistance: 4
+  fuelSidewaysPasses: 1
+  gasCapacity: 8
+  gasSpreadDistance: 4
+  gasBuoyancy: 0.9
+  gasVelocityDrag: 0.12
+  gasMaximumSpeedInCells: 3
+  smokeRisePerTick: 4
+  smokeDecayEveryTicks: 200
+  smokeSidewaysChance: 0.35
+  steamRisePerTick: 6
+  steamDecayEveryTicks: 100
+  steamSidewaysChance: 0.55
+  fuelBurnEveryTicks: 8
+  fireDecayEveryTicks: 3
+  fireSpreadEveryTicks: 5
+  fireSpreadChance: 0.3
+  upwardSpreadBonus: 0.15
+  smokeMadeByFire: 4
+  waterUsedToExtinguish: 2
+  firePuffEveryTicks: 4
+  firePuffChance: 0.25
+  firePuffAmount: 1
+  firePuffPower: 1
+  fireWander: 0.7
+  fireDrag: 0.15
+  plantBurnEveryTicks: 20
+  plantSpreadEveryTicks: 10
+  plantSpreadChance: 0.12
+  plantUpwardSpreadBonus: 0.08
+  burnedPlantColor: {r: 0.18, g: 0.09, b: 0.03, a: 1}
   shallowWaterColor: {r: 0.15, g: 0.48, b: 0.85, a: 0.5}
   deepWaterColor: {r: 0.03, g: 0.22, b: 0.65, a: 0.95}
+  shallowFuelColor: {r: 0.5, g: 0.28, b: 0.06, a: 0.45}
+  deepFuelColor: {r: 0.92, g: 0.48, b: 0.05, a: 0.9}
+  shallowAcidColor: {r: 0.35, g: 0.85, b: 0.18, a: 0.5}
+  deepAcidColor: {r: 0.55, g: 1, b: 0.15, a: 0.95}
+  smokeColor: {r: 0.3, g: 0.31, b: 0.34, a: 0.72}
+  weakFireColor: {r: 0.9, g: 0.18, b: 0.03, a: 1}
+  mediumFireColor: {r: 1, g: 0.48, b: 0.03, a: 1}
+  hotFireColor: {r: 1, g: 0.95, b: 0.45, a: 1}
+  steamColor: {r: 0.75, g: 0.85, b: 0.92, a: 0.6}
+  usePixelDarkness: 1
+  darkness: 1
+  fullyLitLevel: 28
+  fireLightLevel: 64
+  lightRefreshSeconds: 0.02
+  darknessOrder: 100
+  unityLightBase: 0.2
+  unityLightEffect: 1.25
+  unityLightMaximum: 0.85
   startPaused: 0
-  showSolidCells: 1
+  showSolidCells: 0
   solidDebugColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.55}
+  showInactiveWorldsForDebug: 0

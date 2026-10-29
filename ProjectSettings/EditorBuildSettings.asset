@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/Levels/StartScreen.unity
     guid: 146b2412c542f6d47a6575a747ad5199
   - enabled: 1
-    path: Assets/Game/Scenes/Levels/Level_Alpha.unity
+    path: Assets/Game/Scenes/Levels/Floor Skeletons/Level_Alpha.unity
     guid: f6cbb67a42c1892489f87f88a8c98a9a
   - enabled: 1
     path: Assets/Game/Scenes/Levels/Floor Skeletons/Floor_01.unity
