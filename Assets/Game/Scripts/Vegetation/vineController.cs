@@ -65,10 +65,22 @@ public sealed class vineController : MonoBehaviour
 
     //same seed creates the same vines every time
     [SerializeField] private int seed = 1234;
-
+    
+    
+    [Header("Burning")]
+    [SerializeField] private CellWorldRoomManager roomManager;
+    [SerializeField, Min(0.1f)] private float burnTime = 1.5f;
+    [SerializeField, Range(0f, 1f)] private float burnSpread = 0.35f;
+    [SerializeField, Min(0.1f)] private float brokenLife = 4f;
+    [SerializeField, Min(0f)] private float lifeRandom = 0.75f;
+    [SerializeField, Range(0, 3)] private int fireSize = 1;
+    [SerializeField, Range(1, 3)] private int firePower = 2;
+    [SerializeField, Range(0, 4)] private int breakSize = 2;
+    [SerializeField, Range(1, 3)] private int breakPower = 3;
 
     private void Start()
     {
+        if (roomManager == null) roomManager = FindFirstObjectByType<CellWorldRoomManager>();
         points = new Transform[transform.childCount];
 
         for (int i = 0; i < transform.childCount; i++)
@@ -176,7 +188,17 @@ public sealed class vineController : MonoBehaviour
             RandomOrder(),
             damping,
             swayStrength,
-            swaySpeed);
+            swaySpeed,
+            roomManager,
+            burnTime,
+            burnSpread,
+            brokenLife,
+            lifeRandom,
+            fireSize,
+            firePower,
+            breakSize,
+            breakPower);
+        
     }
 
 
