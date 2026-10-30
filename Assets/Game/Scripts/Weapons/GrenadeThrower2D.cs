@@ -22,6 +22,10 @@ public sealed class GrenadeThrower2D : MonoBehaviour
     private bool charging;
     private float chargeTime;
 
+    
+    
+    
+    
     public bool IsCharging => charging;
     public float Charge => Mathf.PingPong(
         chargeTime * chargeSpeed,
@@ -50,6 +54,14 @@ public sealed class GrenadeThrower2D : MonoBehaviour
     //right mouse starts charging and releasing it throws
     public void OnThrow(InputValue value)
     {
+        
+        if (!PlayerUnlocks2D.Has(PlayerUnlocks2D.Item.Grenade))
+        {
+            charging = false;
+            chargeTime = 0f;
+            return;
+        }
+        
         if (value.isPressed)
         {
             charging = true;

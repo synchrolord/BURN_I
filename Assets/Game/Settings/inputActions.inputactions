@@ -67,10 +67,10 @@
                     "priority": 0
                 },
                 {
-                    "name": "NozzleScroll",
-                    "type": "PassThrough",
+                    "name": "SwitchNozzle",
+                    "type": "Button",
                     "id": "20fe47e6-acbe-4a53-b32c-f59884ea9db2",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false,
@@ -210,19 +210,8 @@
                 },
                 {
                     "name": "",
-                    "id": "38ab67c9-3f6a-4ae1-b6ec-df42ef6215da",
-                    "path": "<Mouse>/scroll",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "NozzleScroll",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "cca098ee-2215-401c-9857-a443aef92055",
-                    "path": "<Keyboard>/f",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -238,6 +227,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Run",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fd1be2d7-1413-43ba-ae40-f816eaabd775",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchNozzle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

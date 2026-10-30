@@ -196,11 +196,16 @@ public sealed class PressureTool2D : MonoBehaviour
            
     }
     
-    public void ToggleSprayType() =>
-        currentSprayType = currentSprayType == SprayType.Water
-        ? SprayType.Flame
-        : SprayType.Water;
-    
+    public void ToggleSprayType()
+    {
+        SprayType next =
+            currentSprayType == SprayType.Water
+                ? SprayType.Flame
+                : SprayType.Water;
+
+        if (HasSprayType(next))
+            currentSprayType = next;
+    }
     
     
     //pressing "Q"
@@ -215,15 +220,46 @@ public sealed class PressureTool2D : MonoBehaviour
 
     
     
-    // Switch nozzles with the mouse wheel.
-    public void OnNozzleScroll(InputValue value)
+    // Switch nozzles with F
+    public void OnSwitchNozzle(InputValue value)
     {
-        //increment between nozzles wit mouse wheel.
-        float scroll = value.Get<Vector2>().y;
-        if (scroll != 0)
-            nozzleMode =
-                (nozzleMode + (scroll > 0 ? 1 : 2)) % 3;
+        if (!value.isPressed)
+            return;
+
+        //skip nozzles the player has not unlocked
+        for (int i = 0; i < 3; i++)
+        {
+            nozzleMode = (nozzleMode + 1) % 3;
+
+            if (HasNozzle(nozzleMode))
+                return;
+        }
     }
+    private bool HasNozzle(int mode)
+    {
+        PlayerUnlocks2D.Item item =
+            mode == 0
+                ? PlayerUnlocks2D.Item.Pilot
+                : mode == 2
+                    ? PlayerUnlocks2D.Item.Wide
+                    : PlayerUnlocks2D.Item.Jet;
+
+        return PlayerUnlocks2D.Has(item);
+    }
+
+
+    private bool HasSprayType(SprayType type)
+    {
+        PlayerUnlocks2D.Item item =
+            type == SprayType.Water
+                ? PlayerUnlocks2D.Item.Water
+                : PlayerUnlocks2D.Item.Flame;
+
+        return PlayerUnlocks2D.Has(item);
+    }
+    
+    
+    
     private NozzleSettings GetCurrentNozzleSettings()
     {
         if (nozzleMode == 0) return pilot;
@@ -240,7 +276,13 @@ public sealed class PressureTool2D : MonoBehaviour
         int supplyCostPerShot = Mathf.Max(0, nozzleSettings.supplyCostPerShot);
         
         //check if player is allowed to shoot
-        bool canSpray = isSprayHeld && HasSupply(supplyCostPerShot);
+        bool canSpray =
+            isSprayHeld &&
+            HasSprayType(currentSprayType) &&
+            HasNozzle(nozzleMode) &&
+            HasSupply(supplyCostPerShot);
+        
+        
         if (playerMotor != null) playerMotor.SetUsingTool(canSpray);
         if (!canSpray) return;
 
