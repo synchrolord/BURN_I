@@ -12,29 +12,8 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/Levels/StartScreen.unity
     guid: 146b2412c542f6d47a6575a747ad5199
   - enabled: 1
-    path: Assets/Game/Scenes/Levels/Floor Skeletons/Level_Alpha.unity
-    guid: f6cbb67a42c1892489f87f88a8c98a9a
-  - enabled: 1
     path: Assets/Game/Scenes/Levels/Floor Skeletons/Floor_01.unity
     guid: e01cba8139c81884f852fc7a799e4377
-  - enabled: 1
-    path: Assets/Game/Scenes/Levels/Floor Skeletons/Floor_02.unity
-    guid: a4d1e09a9e7cec44d91a24b63d879bb3
-  - enabled: 1
-    path: Assets/Game/Scenes/Levels/Floor Skeletons/Floor_03.unity
-    guid: ec966ffce04bb1244891a364c8d89b74
-  - enabled: 1
-    path: Assets/Game/Scenes/Levels/Floor Skeletons/Floor_04.unity
-    guid: af35e49165e331b4e8b51846ceb2c43e
-  - enabled: 1
-    path: Assets/Game/Scenes/Levels/Floor Skeletons/Floor_05.unity
-    guid: 874a8bb74953022488ec294a41b327d1
-  - enabled: 1
-    path: Assets/Game/Scenes/Levels/Floor Skeletons/Floor_06.unity
-    guid: 3ddc230bb199270479a31df8c534a4f8
-  - enabled: 1
-    path: Assets/Game/Scenes/Levels/Floor Skeletons/Floor_07.unity
-    guid: 905a83dd54643224ab69b0f1f6c22a4e
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 498b19058156df6459c6cf88543bdfff, type: 3}

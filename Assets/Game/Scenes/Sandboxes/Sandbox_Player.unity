@@ -1470,10 +1470,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.22008735
-    y: 0.1456693
-    width: 0.558952
-    height: 0.70866144
+    x: 0.5
+    y: 0.041666668
+    width: 0.5
+    height: 0.5
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -1565,8 +1565,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6766f55c707edf94fa725ed32b608984, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraFollow2D
-  target: {fileID: 1556756209}
+  target: {fileID: 0}
   offset: {x: 0, y: 0}
+  roomCamera: 0
+  transitionTime: 0.15
 --- !u!114 &1247774258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1730,11 +1732,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!4 &1556756209 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 965012237666206120, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
-  m_PrefabInstance: {fileID: 5927780772427190850}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1692818437
 GameObject:
   m_ObjectHideFlags: 0
@@ -2013,33 +2010,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!1 &1976053456 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3218544355980089873, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
-  m_PrefabInstance: {fileID: 5927780772427190850}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &1976053459
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1976053456}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0f762ac1db640e7468e5a137ce573270, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2097035638
 GameObject:
   m_ObjectHideFlags: 0
@@ -2270,10 +2240,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3218544355980089873, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1976053459}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -19,6 +19,7 @@ public sealed class CellWorldRoomManager : MonoBehaviour
         int index = worlds.Length;
         System.Array.Resize(ref worlds, index + 1);
         worlds[index] = world;
+        world.SetActivityTarget(player);
         world.SetRoomActive(false);
     }
 

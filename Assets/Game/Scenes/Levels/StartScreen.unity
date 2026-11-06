@@ -545,7 +545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09a7e2e90bbd5494dbced4f41d4bd1e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StartScreen2D
-  gameSceneName: Level_Alpha
+  gameSceneName: Floor_01
 --- !u!4 &1354517138
 Transform:
   m_ObjectHideFlags: 0

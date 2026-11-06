@@ -125,6 +125,7 @@ public partial class CellWorld2D : MonoBehaviour
     public int Width => width;
     public int Height => height;
     public float CellSize => cellSize;
+    public void SetActivityTarget(Transform target) => activityTarget = target;
 
     //configure a new room before Start allocates its cell arrays
     public void ConfigureGrid(int columns, int rows, float size)
