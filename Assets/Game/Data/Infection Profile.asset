@@ -19,45 +19,51 @@ MonoBehaviour:
     aggroMultiplier: 1
     movementMultiplier: 1
     fireDamageMultiplier: 1
+    poisonResistance: 0
     animationOverride: {fileID: 0}
     placeHolderTint: {r: 1, g: 1, b: 1, a: 1}
   - name: Exposed
     healthMultiplier: 0.95
     visionMultiplier: 0.9
-    aggroMultiplier: 0.85
+    aggroMultiplier: 0.8
     movementMultiplier: 0.975
     fireDamageMultiplier: 1.2
+    poisonResistance: 0.1
     animationOverride: {fileID: 22100000, guid: 30995ffacc4be504ca2374b63b2823e5, type: 2}
     placeHolderTint: {r: 0.8875, g: 0.9625, b: 0.8625, a: 1}
   - name: Rooted
     healthMultiplier: 0.9
     visionMultiplier: 0.8
-    aggroMultiplier: 0.7
+    aggroMultiplier: 0.55
     movementMultiplier: 0.95
     fireDamageMultiplier: 1.4
+    poisonResistance: 0.3
     animationOverride: {fileID: 22100000, guid: 53bb97a4b18aa3447a4da2395d7989af, type: 2}
     placeHolderTint: {r: 0.775, g: 0.925, b: 0.725, a: 1}
   - name: Overgrown
     healthMultiplier: 0.85
     visionMultiplier: 0.7
-    aggroMultiplier: 0.54999995
+    aggroMultiplier: 0.3
     movementMultiplier: 0.925
     fireDamageMultiplier: 1.6
+    poisonResistance: 0.55
     animationOverride: {fileID: 22100000, guid: 8541d27071ac27e4ca632dcbc2945250, type: 2}
     placeHolderTint: {r: 0.6625, g: 0.88750005, b: 0.5875, a: 1}
   - name: Lost
     healthMultiplier: 0.3
     visionMultiplier: 0.6
-    aggroMultiplier: 0.39999998
+    aggroMultiplier: 0.1
     movementMultiplier: 0.23
     fireDamageMultiplier: 1.8
+    poisonResistance: 0.85
     animationOverride: {fileID: 22100000, guid: 1c486eb81ca645647a4bd722ed7ece5d, type: 2}
     placeHolderTint: {r: 0.55, g: 0.85, b: 0.45, a: 1}
   - name: Consumed
     healthMultiplier: 0.1
     visionMultiplier: 0.6
-    aggroMultiplier: 0.39999998
+    aggroMultiplier: 0.05
     movementMultiplier: 0.4
     fireDamageMultiplier: 1.8
+    poisonResistance: 1
     animationOverride: {fileID: 22100000, guid: b070faedc95b12d469b2750f6acf47ac, type: 2}
     placeHolderTint: {r: 0.55, g: 0.85, b: 0.45, a: 1}

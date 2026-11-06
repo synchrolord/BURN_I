@@ -68,8 +68,10 @@ public sealed class PlantEnemy2D : MonoBehaviour
 
     private Rigidbody2D body;
     private PlayerVitals2D player;
+    private SurfaceWalker2D surfaceWalker;
 
     private float startingX;
+    private Vector2 startingPosition;
     private float patrolDirection = 1f;
     private float attackCooldownRemaining;
 
@@ -89,8 +91,19 @@ public sealed class PlantEnemy2D : MonoBehaviour
 
         player = FindFirstObjectByType<PlayerVitals2D>();
         startingX = transform.position.x;
+        startingPosition = transform.position;
         
         bodyCollider = GetComponent<Collider2D>();
+
+        if (enemyType == EnemyType.Spitter)
+        {
+            surfaceWalker = GetComponent<SurfaceWalker2D>();
+
+            if (surfaceWalker == null)
+                surfaceWalker = gameObject.AddComponent<SurfaceWalker2D>();
+
+            surfaceWalker.Setup(mask, facingRoot);
+        }
 
         if (player != null)
             playerCollider = player.GetComponent<Collider2D>();
@@ -126,8 +139,9 @@ public sealed class PlantEnemy2D : MonoBehaviour
             return;
         }
 
-        // Keep  enemy still until its attack animation finishes.
-        if (attackAnimationRemaining > 0f)
+        //walkers stop while attacking, spitters can shoot while moving
+        if (enemyType == EnemyType.Walker &&
+            attackAnimationRemaining > 0f)
         {
             StopMoving();
             return;
@@ -172,25 +186,71 @@ public sealed class PlantEnemy2D : MonoBehaviour
     }
     private void UpdateSpitter()
     {
-        StopMoving();
-        FacePlayer();
+        float distanceToPlayer = GetDistanceToPlayer();
 
-        float effectiveSpitRange =
-            spitRange * player.CurrentStage.aggroMultiplier;
+        float effectiveAggroDistance =
+            agroDistance *
+            player.CurrentStage.aggroMultiplier;
 
-        if (GetDistanceToPlayer() > effectiveSpitRange)
+        //stay inside the patrol leash until the player is noticed
+        if (distanceToPlayer > effectiveAggroDistance)
         {
-            PlayAnimation(IdleAnimation);
+            PatrolSurface();
             return;
         }
 
-        if (attackCooldownRemaining > 0f)
+        //once aggroed it keeps moving and spits whenever close enough
+        ChaseOnSurface();
+
+        if (distanceToPlayer <= spitRange)
+            TrySpit();
+    }
+
+
+    private void PatrolSurface()
+    {
+        if (surfaceWalker == null)
         {
-            PlayAnimation(IdleAnimation);
+            StopMoving();
             return;
         }
 
-        TrySpit();
+        float distanceFromStart = Vector2.Distance(
+            body.position,
+            startingPosition);
+
+        if (distanceFromStart >= patrolDistance &&
+            surfaceWalker.MovingAwayFrom(startingPosition))
+        {
+            surfaceWalker.Reverse();
+        }
+
+        surfaceWalker.Move(
+            surfaceWalker.Direction,
+            moveSpeed);
+
+        FaceDirection(surfaceWalker.Direction);
+        PlayAnimation(MoveAnimation);
+    }
+
+
+    private void ChaseOnSurface()
+    {
+        if (surfaceWalker == null)
+        {
+            StopMoving();
+            return;
+        }
+
+        //keep crawling around corners while each shot aims at the player
+        surfaceWalker.Move(
+            surfaceWalker.Direction,
+            agroSpeed);
+
+        FaceDirection(surfaceWalker.Direction);
+
+        if (attackAnimationRemaining <= 0f)
+            PlayAnimation(MoveAnimation);
     }
     
     
@@ -306,6 +366,13 @@ public sealed class PlantEnemy2D : MonoBehaviour
 
     private void StopMoving()
     {
+        if (enemyType == EnemyType.Spitter &&
+            surfaceWalker != null)
+        {
+            surfaceWalker.Stop();
+            return;
+        }
+
         body.linearVelocity = new Vector2(0f, body.linearVelocity.y);
     }
     private float GetDistanceToPlayer()
@@ -372,6 +439,15 @@ public sealed class PlantEnemy2D : MonoBehaviour
     
     private void FacePlayer()
     {
+        if (enemyType == EnemyType.Spitter &&
+            surfaceWalker != null)
+        {
+            FaceDirection(
+                surfaceWalker.DirectionTo(player.BodyCenter));
+
+            return;
+        }
+
         FaceDirection(
             player.transform.position.x - transform.position.x
         );

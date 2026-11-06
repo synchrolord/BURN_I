@@ -16,10 +16,10 @@ public class InfectionProfile : ScriptableObject{
         //multipliers on players stats
         [Min(0.1f)] public float healthMultiplier = 1f;
         [Min(0.1f)] public float visionMultiplier = 1f;
-        [Min(0.1f)] public float aggroMultiplier = 1f;
+        [Range(0f, 1f)] public float aggroMultiplier = 1f;
         [Min(0.1f)] public float movementMultiplier = 1f;
         [Min(0.1f)] public float fireDamageMultiplier = 1f;
-        [Min(0.1f)] public float poisonResistance=1f;
+        [Range(0f, 1f)] public float poisonResistance;
         
         //custom sprites for every infection state while using the same animator
         public AnimatorOverrideController animationOverride;
@@ -49,6 +49,8 @@ public class InfectionProfile : ScriptableObject{
     public static InfectionStage[] CreateDefaultStages()
     {
         string[] names = { "Healthy", "Exposed", "Rooted", "Overgrown", "Lost", "Consumed" };
+        float[] aggro = { 1f, 0.8f, 0.55f, 0.3f, 0.1f, 0.05f };
+        float[] poisonResistances = { 0f, 0.1f, 0.3f, 0.55f, 0.85f, 1f };
         var result = new InfectionStage[InfectionCount];
         
         
@@ -59,10 +61,10 @@ public class InfectionProfile : ScriptableObject{
                 name = names[i],
                 healthMultiplier = 1f - i * 0.05f,
                 visionMultiplier = 1f - i * 0.10f,
-                aggroMultiplier = 1f - i * 0.15f,
+                aggroMultiplier = aggro[i],
                 movementMultiplier = 1f - i * 0.025f,
                 fireDamageMultiplier = 1f + i * 0.20f,
-                poisonResistance = i * 0.10f,
+                poisonResistance = poisonResistances[i],
                 placeHolderTint = Color.Lerp(Color.white, new Color(0.55f, 0.85f, 0.45f), i / 4f)
                 
             };

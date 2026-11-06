@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1873494964109382222}
   - component: {fileID: 2303785671633571436}
+  - component: {fileID: 793900000000000001}
   m_Layer: 0
   m_Name: SporeShot
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 792272919091547291}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.55522, y: 3.51365, z: 0}
+  m_LocalPosition: {x: 7.5625, y: 3.8125, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -48,12 +49,28 @@ MonoBehaviour:
   speed: 6
   lifetime: 20
   damage: 10
-  poisonAmount: 25
+  poisonAmount: 10
   hitMask:
     serializedVersion: 2
     m_Bits: 72
-  acidSplashRadius: 5
-  acidUnitsPerCell: 39
+  acidSplashRadius: 1
+  acidUnitsPerCell: 4
+--- !u!114 &793900000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 792272919091547291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f658ba6a2b3bbea489dd583d39d37ced, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CellLight2D
+  world: {fileID: 0}
+  lightLevel: 21
+  flickerAmount: 0.754
+  flickerSpeed: 12
 --- !u!1 &2499085839434073133
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,7 +204,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0, g: 0.509434, b: 0.12550883, a: 1}
+      maxColor: {r: 0, g: 0.8113208, b: 0.19970977, a: 0.45882353}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -251,7 +268,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 3
       minMaxState: 0
-      scalar: 1
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -351,8 +368,8 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    gravitySource: 0
-    maxNumParticles: 1000
+    gravitySource: 1
+    maxNumParticles: 10000
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -474,7 +491,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 3
       minMaxState: 0
-      scalar: 20
+      scalar: 100
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -491,11 +508,29 @@ ParticleSystem:
     rateOverDistance:
       serializedVersion: 3
       minMaxState: 0
-      scalar: 0
+      scalar: 1
       minScalar: 0
       maxCurve:
         serializedVersion: 2
-        m_Curve: []
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
@@ -1848,7 +1883,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    minVertexDistance: 0.2
+    minVertexDistance: 0.03
     textureMode: 0
     textureScale: {x: 1, y: 1}
     ribbonCount: 1
@@ -1928,7 +1963,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     widthOverTrail:
       serializedVersion: 3
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:
