@@ -64,7 +64,6 @@ public partial class CellWorld2D
             else if (GetTotalGas(i) > 0)
                 pixels[i] = GasColor(i);
             
-            
             //dynamically color liquids
             else if (GetTotalLiquid(i) > 0)
             {
@@ -81,6 +80,23 @@ public partial class CellWorld2D
         textureNeedsRefresh = false;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //choose fire color from its strength and changing flicker
     private Color FireColor(int index)
     {

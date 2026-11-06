@@ -4,7 +4,11 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 //copy ordinary Tilemap sprites into CellWorld when play starts
-[DisallowMultipleComponent, RequireComponent(typeof(Tilemap), typeof(TilemapRenderer))]
+[DisallowMultipleComponent]
+[RequireComponent(
+    typeof(Tilemap),
+    typeof(TilemapRenderer),
+    typeof(TilemapCollider2D))]
 public sealed class BurnablePlantMap2D : MonoBehaviour
 {
     private sealed class PlantTile
@@ -29,10 +33,10 @@ public sealed class BurnablePlantMap2D : MonoBehaviour
     private void Awake()
     {
         map = GetComponent<Tilemap>();
-
-        
+        //solid plants must be included in the player's ground and wall checks
         TilemapCollider2D plantCollider = GetComponent<TilemapCollider2D>();
-        if (plantCollider != null) plantCollider.enabled = false;
+        if (plantCollider.enabled && !plantCollider.isTrigger)
+            gameObject.layer = LayerMask.NameToLayer("Ground");
     }
 
     private IEnumerator Start()
@@ -51,8 +55,28 @@ public sealed class BurnablePlantMap2D : MonoBehaviour
 
         if (!world.IsInitialized) yield break;
 
+        PutPlantsBehindFire();
         CopyPlants();
         UpdatePlantTiles();
+    }
+
+    private void PutPlantsBehindFire()
+    {
+        TilemapRenderer plantRenderer =
+            GetComponent<TilemapRenderer>();
+
+        SpriteRenderer worldRenderer =
+            world.GetComponent<SpriteRenderer>();
+
+        if (worldRenderer == null)
+            return;
+
+        //draw CellWorld fire over the plant sprites
+        plantRenderer.sortingLayerID =
+            worldRenderer.sortingLayerID;
+
+        plantRenderer.sortingOrder =
+            worldRenderer.sortingOrder - 1;
     }
 
     private void CopyPlants()
@@ -165,7 +189,7 @@ public sealed class BurnablePlantMap2D : MonoBehaviour
         tile.hideFlags = HideFlags.HideAndDontSave;
         tile.sprite = sprite;
         tile.flags = TileFlags.None;
-        tile.colliderType = Tile.ColliderType.None;
+        tile.colliderType = Tile.ColliderType.Grid;
         stageTiles.Add(sprite, tile);
         return tile;
     }

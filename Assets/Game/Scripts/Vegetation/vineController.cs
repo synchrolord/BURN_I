@@ -1,13 +1,22 @@
 using UnityEngine;
 using UnityEngine.Serialization;
-
-#if UNITY_EDITOR
 using System.Collections.Generic;
-#endif
 
 //create hanging vines between a group of points
 public sealed class vineController : MonoBehaviour
 {
+    private readonly List<VineRope2D> createdVines = new List<VineRope2D>();
+
+    public bool IsBurning
+    {
+        get
+        {
+            foreach (VineRope2D rope in createdVines)
+                if (rope != null && rope.IsBurning) return true;
+            return false;
+        }
+    }
+
     [Header("Connections")]
     private Transform[] points;
 
@@ -46,6 +55,7 @@ public sealed class vineController : MonoBehaviour
         new Vector2(1f, 4f);
 
     [Header("Sprites")]
+    [SerializeField, Range(1f, 10f)] private float maxStretch = 2f;
     [SerializeField] private Object vineSheet;
     [SerializeField] private Object endSheet;
     [SerializeField] private Object flowerSheet;
@@ -166,16 +176,20 @@ public sealed class vineController : MonoBehaviour
     }
 
 
-    private void CreateVine(
+    public VineRope2D CreateVine(
         Transform start,
         Transform end,
         float ropeLength)
     {
+        if (roomManager == null)
+            roomManager = FindAnyObjectByType<CellWorldRoomManager>();
+
         GameObject vineObject = new GameObject("Vine");
         vineObject.transform.SetParent(transform, false);
 
         VineRope2D rope =
             vineObject.AddComponent<VineRope2D>();
+        rope.MaxStretch = maxStretch;
 
         rope.Setup(
             start,
@@ -198,7 +212,10 @@ public sealed class vineController : MonoBehaviour
             firePower,
             breakSize,
             breakPower);
-        
+        for (int i = createdVines.Count - 1; i >= 0; i--)
+            if (createdVines[i] == null) createdVines.RemoveAt(i);
+        createdVines.Add(rope);
+        return rope;
     }
 
 

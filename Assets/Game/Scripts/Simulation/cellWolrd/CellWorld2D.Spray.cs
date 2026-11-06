@@ -37,6 +37,8 @@ public partial class CellWorld2D
         {
             //ignore if it is the players collider
             if (shooter != null && hit.collider.transform.IsChildOf(shooter)) continue;
+            //plant sprites can block the player without stopping the spray
+            if (hit.collider.GetComponentInParent<BurnablePlantMap2D>() != null) continue;
             path.hitObstacle = true;
             path.endPosition = hit.point + hit.normal * (cellSize * 0.55f);
             path.insideSurfacePosition = hit.point - hit.normal * (cellSize * 0.5f);
@@ -59,6 +61,10 @@ public partial class CellWorld2D
             {
                 continue;
             }
+
+            //sprite plants let shots through, painted plant walls still hold tanks
+            int index = Index(cell.x, cell.y);
+            if (HasPlant(index) && !visiblePlant[index]) continue;
 
             path.hitObstacle = true;
             path.endPosition = point - direction * (cellSize * 0.55f);

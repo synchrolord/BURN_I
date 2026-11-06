@@ -205,7 +205,7 @@ public partial class CellWorld2D
             if (!IsInsideCircle(x, y, center, radiusSquared)) continue;
             int i = Index(x, y);
             if (water[i] == 0 && fuel[i] == 0 && acid[i]==0&&
-                fire[i] == 0 && smoke[i] == 0&&steam[i]==0) 
+                fire[i] == 0 && smoke[i] == 0&&steam[i]==0)
                 continue;
 
             //clear everything and update

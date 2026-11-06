@@ -125,6 +125,16 @@ public partial class CellWorld2D : MonoBehaviour
     public int Width => width;
     public int Height => height;
     public float CellSize => cellSize;
+
+    //configure a new room before Start allocates its cell arrays
+    public void ConfigureGrid(int columns, int rows, float size)
+    {
+        if (IsInitialized) return;
+        width = columns;
+        height = rows;
+        cellSize = size;
+        lightRefreshSeconds = 0.15f;
+    }
     public bool IsPaused => paused;
     
     
@@ -139,6 +149,7 @@ public partial class CellWorld2D : MonoBehaviour
     {
         //avoid resetting the timer when nothing changed
         if (roomActive == active) return;
+        roomActive = active;
 
         if (spriteRenderer != null)
             spriteRenderer.enabled =

@@ -4,10 +4,34 @@ using UnityEngine;
 
 public partial class CellWorld2D
 {
+    private readonly List<Collider2D> solidHits = new List<Collider2D>(8);
+    private readonly Dictionary<Collider2D, bool> plantColliders = new Dictionary<Collider2D, bool>();
+
+    private bool HasSolidCollider(Vector2 position, Vector2 size)
+    {
+        ContactFilter2D filter = new ContactFilter2D();
+        filter.SetLayerMask(solidMask);
+        filter.useTriggers = false;
+        Physics2D.OverlapBox(position, size, 0f, filter, solidHits);
+
+        //foliage blocks characters, but only real walls block CellWorld materials
+        foreach (Collider2D hit in solidHits)
+        {
+            if (!plantColliders.TryGetValue(hit, out bool isPlant))
+            {
+                isPlant = hit.GetComponentInParent<BurnablePlantMap2D>() != null;
+                plantColliders[hit] = isPlant;
+            }
+            if (!isPlant) return true;
+        }
+        return false;
+    }
+
     //build the blocked-cell array from the current Unity colliders
     private void BakeSolidsFromPhysics()
     {
         Physics2D.SyncTransforms();
+        plantColliders.Clear();
         Array.Clear(solid, 0, solid.Length);
 
         //close the outside ring so materials stay inside the grid
@@ -34,11 +58,7 @@ public partial class CellWorld2D
             solid[i] =
                 (HasPlant(i) && visiblePlant[i]) ||
                 !ContainsCell(x, y) ||
-                Physics2D.OverlapBox(
-                    CellToWorld(x, y),
-                    sampleSize,
-                    0f,
-                    solidMask.value) != null;
+                HasSolidCollider(CellToWorld(x, y), sampleSize);
 
             if (solid[i])
             {
@@ -82,6 +102,7 @@ public partial class CellWorld2D
         if (!IsReady) return;
         Physics2D.SyncTransforms();
         LastLocalSolidRefreshCellCount = cells.Count;
+        plantColliders.Clear();
         Vector2 sampleSize = Vector2.one * (cellSize * 0.85f);
         foreach (int i in cells)
         {
@@ -91,11 +112,7 @@ public partial class CellWorld2D
                 !ContainsCell(x, y) ||
                 x == 0 || y == 0 ||
                 x == width - 1 || y == height - 1 ||
-                Physics2D.OverlapBox(
-                    CellToWorld(x, y),
-                    sampleSize,
-                    0f,
-                    solidMask.value) != null;
+                HasSolidCollider(CellToWorld(x, y), sampleSize);
             //leave unchanged cells alone and update cells whose blocked state changed
             if (solid[i] == blocked) continue;
             solid[i] = blocked;

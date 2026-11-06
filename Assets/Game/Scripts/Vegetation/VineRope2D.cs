@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 //move and draw one generated vine
 public sealed class VineRope2D : MonoBehaviour
@@ -14,6 +15,10 @@ public sealed class VineRope2D : MonoBehaviour
     private Vector2[] oldPoints;
 
     private SpriteRenderer[] parts;
+    private List<SpriteRenderer>[] extraParts;
+    private Sprite[] bodySprites;
+    public float MaxStretch { get; set; } = 2f;
+    public float BurnResistance { get; set; } = 1f;
     private float[] partAngles;
     private int[] partEnds;
 
@@ -37,6 +42,7 @@ public sealed class VineRope2D : MonoBehaviour
 
     private bool[] burning;
     private float[] burn;
+    private float[] wetUntil;
 
     private float burnTime;
     private float burnSpread;
@@ -48,6 +54,35 @@ public sealed class VineRope2D : MonoBehaviour
     private bool[] behindFire;
 
     private int brokenLink = -1;
+    public bool IsBroken => brokenLink >= 0;
+    public void Extinguish(float protectionSeconds)
+    {
+        if (burning == null) return;
+        for (int i = 0; i < burning.Length; i++)
+        {
+            burning[i] = false;
+            wetUntil[i] = Mathf.Max(wetUntil[i], Time.time + protectionSeconds);
+        }
+    }
+
+    public bool IsBurning
+    {
+        get
+        {
+            if (burning == null) return false;
+            foreach (bool pointBurning in burning)
+                if (pointBurning) return true;
+            return false;
+        }
+    }
+
+    //change the spacing without rebuilding sprites or losing burn progress
+    public void SetLength(float length)
+    {
+        if (ready && !IsBroken)
+            pointDistance = Mathf.Max(0.1f, length) / (points.Length - 1);
+    }
+
     public void Setup(
         Transform start,
         Transform end,
@@ -96,6 +131,7 @@ public sealed class VineRope2D : MonoBehaviour
         breakPower = newBreakPower;
         burning = new bool[points.Length];
         burn = new float[points.Length];
+        wetUntil = new float[points.Length];
         behindFire = new bool[points.Length];
         CreateParts(
             vineSprites,
@@ -105,6 +141,8 @@ public sealed class VineRope2D : MonoBehaviour
             sortingOrder);
 
         ready = true;
+        //spread fire sampling across frames when many vines are together
+        nextFireCheck = Time.time + Random.Range(0f, fireCheckEvery);
     }
 
 
@@ -159,7 +197,9 @@ public sealed class VineRope2D : MonoBehaviour
         float flowerChance,
         int sortingOrder)
     {
+        bodySprites = vineSprites;
         parts = new SpriteRenderer[points.Length];
+        extraParts = new List<SpriteRenderer>[points.Length];
         partAngles = new float[points.Length];
         partEnds = new int[points.Length];
 
@@ -489,22 +529,68 @@ public sealed class VineRope2D : MonoBehaviour
                 0.01f,
                 partSprite.sprite.bounds.size.y);
 
-            float stretch =
-                (bodyDirection.magnitude + spriteOverlap) /
-                spriteLength;
+            DrawSection(i, partSprite, bodyDirection.magnitude, spriteLength);
+        }
+    }
 
-            partSprite.transform.localScale =
-                new Vector3(1f, stretch, 1f);
+    private void DrawSection(
+        int index,
+        SpriteRenderer original,
+        float length,
+        float spriteLength)
+    {
+        //repeat long sections instead of stretching one sprite across them
+        int count = Mathf.Max(1, Mathf.CeilToInt(
+            length / (spriteLength * Mathf.Max(1f, MaxStretch))));
 
-            //scale the pivot correction with the stretched sprite
-            Vector2 spriteCenter =
-                partSprite.sprite.bounds.center;
+        List<SpriteRenderer> extras = extraParts[index];
+        if (count > 1 && extras == null)
+        {
+            extras = new List<SpriteRenderer>();
+            extraParts[index] = extras;
+        }
 
-            partSprite.transform.localPosition =
-                new Vector3(
-                    -spriteCenter.x,
-                    -spriteCenter.y * stretch,
-                    0f);
+        //keep extra sprites for later so moving vines do not rebuild every frame
+        while (extras != null && extras.Count < count - 1)
+        {
+            GameObject image = new GameObject("Vine Repeat");
+            image.transform.SetParent(original.transform.parent, false);
+            SpriteRenderer repeat = image.AddComponent<SpriteRenderer>();
+            repeat.sprite = RandomSprite(bodySprites);
+            if (repeat.sprite == null) repeat.sprite = original.sprite;
+            //choose once so the pattern does not change every frame
+            repeat.flipX = Random.value < 0.5f;
+            repeat.flipY = Random.value < 0.5f;
+            extras.Add(repeat);
+        }
+
+        float pieceLength = length / count;
+        int total = 1 + (extras != null ? extras.Count : 0);
+
+        for (int i = 0; i < total; i++)
+        {
+            SpriteRenderer image = i == 0 ? original : extras[i - 1];
+            image.enabled = i < count;
+            if (!image.enabled) continue;
+
+            if (i > 0)
+            {
+                image.sharedMaterial = original.sharedMaterial;
+                image.color = original.color;
+                image.sortingLayerID = original.sortingLayerID;
+                image.sortingOrder = original.sortingOrder;
+            }
+
+            float stretch = (pieceLength + spriteOverlap) /
+                Mathf.Max(0.01f, image.sprite.bounds.size.y);
+            Vector2 center = image.sprite.bounds.center;
+            if (image.flipX) center.x = -center.x;
+            if (image.flipY) center.y = -center.y;
+            image.transform.localScale = new Vector3(1f, stretch, 1f);
+            image.transform.localPosition = new Vector3(
+                -center.x,
+                -length * 0.5f + pieceLength * (i + 0.5f) - center.y * stretch,
+                0f);
         }
     }
     private void UpdateBurning()
@@ -520,14 +606,21 @@ public sealed class VineRope2D : MonoBehaviour
         {
             nextFireCheck = Time.time + fireCheckEvery;
 
-            //check whether real CellWorld fire touches the rope
+            //water wins when fire and water touch the same rope point
             for (int i = 0; i < points.Length; i++)
             {
-                if (world.GetFireEnergy(points[i]) > 0)
+                if (world.GetWaterFraction(points[i]) > 0f)
+                {
+                    burning[i] = false;
+                    wetUntil[i] = Time.time + 0.5f;
+                }
+                else if (Time.time >= wetUntil[i] &&
+                         world.GetFireEnergy(points[i]) > 0)
                     burning[i] = true;
             }
         }
 
+        int emittedFlames = 0;
         for (int i = 0; i < points.Length; i++)
         {
             if (!burning[i])
@@ -536,11 +629,14 @@ public sealed class VineRope2D : MonoBehaviour
             burn[i] = Mathf.MoveTowards(
                 burn[i],
                 1f,
-                Time.fixedDeltaTime / burnTime);
+                Time.fixedDeltaTime / (burnTime * Mathf.Max(1f, BurnResistance)));
 
             //keep a small real flame on the burning vine
-            if (checkFire && world != null && i % 2 == 0)
+            //limit new fire per rope and stop emitting from fully consumed points
+            if (checkFire && world != null && i % 2 == 0 &&
+                burn[i] < 1f && emittedFlames < 3)
             {
+                emittedFlames++;
                 world.Ignite(
                     points[i],
                     fireSize,
@@ -550,10 +646,10 @@ public sealed class VineRope2D : MonoBehaviour
             //spread burning into the next rope points
             if (burn[i] >= burnSpread)
             {
-                if (i > 0)
+                if (i > 0 && Time.time >= wetUntil[i - 1])
                     burning[i - 1] = true;
 
-                if (i < points.Length - 1)
+                if (i < points.Length - 1 && Time.time >= wetUntil[i + 1])
                     burning[i + 1] = true;
             }
 

@@ -24,7 +24,7 @@ public sealed class BurnablePlantTile : TileBase
         tileData.color = Color.white;
         tileData.transform = Matrix4x4.identity;
         tileData.flags = TileFlags.None;
-        tileData.colliderType = Tile.ColliderType.None;
+        tileData.colliderType = Tile.ColliderType.Grid;
     }
 }
 

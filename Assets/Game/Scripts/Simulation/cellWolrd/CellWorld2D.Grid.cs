@@ -109,6 +109,7 @@ public partial class CellWorld2D
         movedFire = new bool[count];
         pendingFire = new byte[count];
         
+        
         //how many chunks to cove Grid
         chunkCountX = Mathf.CeilToInt(width / (float)chunkSize);
         chunkCountY = Mathf.CeilToInt(height / (float)chunkSize);
@@ -155,7 +156,6 @@ public partial class CellWorld2D
         acid[index] = 0;
         smoke[index] = 0;
         steam[index] = 0;
-
         smokeVelocity[index] = Vector2.zero;
         steamVelocity[index] = Vector2.zero;
         pendingFire[index] = 0;
