@@ -13,6 +13,15 @@ public sealed class CellWorldRoomManager : MonoBehaviour
     private PlayerLiquidInteraction2D playerLiquidInteraction;
     public CellWorld2D CurrentWorld { get; private set; }
 
+    public void RegisterWorld(CellWorld2D world)
+    {
+        if (world == null || System.Array.IndexOf(worlds, world) >= 0) return;
+        int index = worlds.Length;
+        System.Array.Resize(ref worlds, index + 1);
+        worlds[index] = world;
+        world.SetRoomActive(false);
+    }
+
     private void Update()
     {
         //keep the current room while the player is inside it

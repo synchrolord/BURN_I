@@ -4,6 +4,9 @@ using UnityEngine.Rendering.Universal;
 
 public sealed class RandomLightFlickerGroup2D : MonoBehaviour
 {
+    [SerializeField, Min(0f)] private float intensity = 1f;
+    private float appliedIntensity = -1f;
+
     [Header("Random time ranges")]
     [SerializeField, Min(0.01f)] private float minimumOnTime = 0.08f;
     [SerializeField, Min(0.01f)] private float maximumOnTime = 0.35f;
@@ -17,6 +20,7 @@ public sealed class RandomLightFlickerGroup2D : MonoBehaviour
     private void Awake()
     {
         lights = GetComponentsInChildren<Light2D>(true);
+        ApplyIntensity();
         timers = new float[lights.Length];
         lightIsOn = new bool[lights.Length];
 
@@ -30,8 +34,11 @@ public sealed class RandomLightFlickerGroup2D : MonoBehaviour
 
     private void Update()
     {
+        if (intensity != appliedIntensity) ApplyIntensity();
+
         for (int i = 0; i < lights.Length; i++)
         {
+            if (lights[i] == null) continue;
             timers[i] -= Time.deltaTime;
 
             if (timers[i] > 0f)
@@ -54,5 +61,15 @@ public sealed class RandomLightFlickerGroup2D : MonoBehaviour
     {
         maximumOnTime = Mathf.Max(minimumOnTime, maximumOnTime);
         maximumOffTime = Mathf.Max(minimumOffTime, maximumOffTime);
+        ApplyIntensity();
+    }
+
+    private void ApplyIntensity()
+    {
+        //include switched-off lights so they use the same brightness when they flicker on
+        Light2D[] children = GetComponentsInChildren<Light2D>(true);
+        foreach (Light2D light in children)
+            light.intensity = intensity;
+        appliedIntensity = intensity;
     }
 }

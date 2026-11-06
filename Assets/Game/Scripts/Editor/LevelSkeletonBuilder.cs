@@ -11,7 +11,7 @@ using UnityEngine.Tilemaps;
 public static class LevelSkeletonBuilder
 {
     private const string SourceScene =
-        "Assets/Game/Scenes/Levels/Level_Alpha.unity";
+        "Assets/Game/Scenes/Levels/Floor Skeletons/Level_Alpha.unity";
 
     private const string SceneFolder =
         "Assets/Game/Scenes/Levels/Floor Skeletons";
