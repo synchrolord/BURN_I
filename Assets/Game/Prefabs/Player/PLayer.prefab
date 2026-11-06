@@ -81,6 +81,7 @@ GameObject:
   - component: {fileID: 4209448177274357688}
   - component: {fileID: 4547994943949416811}
   - component: {fileID: 8347162954302859331}
+  - component: {fileID: 900000000000000001}
   m_Layer: 6
   m_Name: PLayer
   m_TagString: Untagged
@@ -236,6 +237,8 @@ MonoBehaviour:
   leftCheck: {fileID: 0}
   rightCheck: {fileID: 0}
   wallCheckRadius: 0.1
+  wallJumpSpeed: 14
+  wallJumpTime: 0.18
   liquids: {fileID: 0}
   swimSpeed: 5
   waterGravity: 0.3
@@ -280,7 +283,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PressureTool2D
   showFlameVisual: 1
   currentSprayType: 0
-  nozzleMode: 1
+  nozzleMode: 0
   jet:
     label: Jet
     spreadAngleDegrees: 16
@@ -356,7 +359,7 @@ MonoBehaviour:
   poisonDamageInterval: 0.5
   currentPoison: 0
   maxHealth: 100
-  profile: {fileID: 0}
+  profile: {fileID: 11400000, guid: 4981899b84a86424ab3c7a786fddec2d, type: 2}
   infectionStage: 0
   fireEmitter: {fileID: 0}
   invincibilityTime: 0
@@ -412,6 +415,20 @@ MonoBehaviour:
   upwardBoost: 2
   chargeSpeed: 0.8
   showChargeBar: 1
+--- !u!114 &900000000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012792728053545839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 244e0e5da15862c48a39e696c1fe2d1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAppearance2D
+  playerVitals: {fileID: 4209448177274357688}
+  animator: {fileID: 5039823176905918113}
 --- !u!1 &2223576177532432259
 GameObject:
   m_ObjectHideFlags: 0

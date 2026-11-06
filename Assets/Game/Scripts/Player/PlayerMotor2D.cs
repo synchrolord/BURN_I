@@ -9,7 +9,6 @@ public sealed class PlayerMotor2D : MonoBehaviour
     
     [Header("Walking and jumping")]
     [SerializeField] private float moveSpeed = 6f;
-    [SerializeField] private float sprintMultiplier = 2f;
     [SerializeField] private float jumpSpeed = 10f;
     [SerializeField] private float coyoteTime = 0.12f;
     [SerializeField] private float jumpBufferTime = 0.14f;
@@ -23,10 +22,14 @@ public sealed class PlayerMotor2D : MonoBehaviour
     [SerializeField] private Transform leftCheck;
     [SerializeField] private Transform rightCheck;
     [SerializeField] private float wallCheckRadius = 0.1f;
+    [SerializeField, Min(0f)] private float wallJumpSpeed = 14f;
+    [SerializeField, Min(0f)] private float wallJumpUpSpeed = 16f;
+    [SerializeField, Min(0f)] private float wallJumpTime = 0.18f;
+    private float wallJumpRemaining;
+    private float wallJumpDirection;
 
     public bool IsTouchingWall { get; private set; }
     
-    private bool isRunning = false;
     
     [Header("Swimming")]
     [SerializeField] private PlayerLiquidInteraction2D liquids;
@@ -91,8 +94,6 @@ public sealed class PlayerMotor2D : MonoBehaviour
     private static readonly int DeadAnimation =
         Animator.StringToHash("Dead");
     
-    private static readonly int SprintAnimation= 
-        Animator.StringToHash("Sprint");
 
     private Rigidbody2D body;
     private Vector2 moveInput;
@@ -137,18 +138,6 @@ public sealed class PlayerMotor2D : MonoBehaviour
         moveInput = value.Get<Vector2>();
     }
 
-    public void OnRun(InputValue value)
-    {
-        // value.isPressed is true when held, false when released
-        if (value.isPressed)
-        {
-            isRunning = true;
-        }
-        else
-        {
-            isRunning = false;
-        }
-    }
 
     //store jump input for some time to allow queueing jumps.
     public void OnJump(InputValue value)
@@ -181,9 +170,11 @@ public sealed class PlayerMotor2D : MonoBehaviour
     
     
     
-    private bool TouchesWall()
+    private int GetWallSide()
     {
-        return CheckWall(leftCheck) || CheckWall(rightCheck);
+        if (CheckWall(leftCheck)) return -1;
+        if (CheckWall(rightCheck)) return 1;
+        return 0;
     }
 
     private bool CheckWall(Transform check)
@@ -224,6 +215,7 @@ public sealed class PlayerMotor2D : MonoBehaviour
         
         if (playerVitals != null && playerVitals.IsDead)
         {
+            wallJumpRemaining = 0f;
             moveInput = Vector2.zero;
 
             body.linearVelocity = new Vector2(
@@ -241,6 +233,7 @@ public sealed class PlayerMotor2D : MonoBehaviour
 
         if (IsSwimming)
         {
+            wallJumpRemaining = 0f;
             Swim();
             UpdateAppearance();
             return;
@@ -249,7 +242,10 @@ public sealed class PlayerMotor2D : MonoBehaviour
         
         bool groundedNow = TouchesGround();
         
-        IsTouchingWall = TouchesWall();
+        int wallSide = GetWallSide();
+        IsTouchingWall = wallSide != 0;
+        wallJumpRemaining = Mathf.Max(0f, wallJumpRemaining - step);
+        if (groundedNow) wallJumpRemaining = 0f;
 
         if (!wasGrounded && groundedNow)
             landingPoseRemaining = landingPoseSeconds;
@@ -277,13 +273,14 @@ public sealed class PlayerMotor2D : MonoBehaviour
         
         
         
-        float runSpeed = isRunning ? sprintMultiplier : 1f;
-
         velocity.x =
             moveInput.x *
             moveSpeed *
-            runSpeed *
             infectionSpeedMultiplier;
+
+        //keep the sideways launch briefly instead of replacing it with movement input
+        if (wallJumpRemaining > 0f)
+            velocity.x = wallJumpDirection * wallJumpSpeed;
         
         
         //when to allow jumping
@@ -291,6 +288,14 @@ public sealed class PlayerMotor2D : MonoBehaviour
             (IsGrounded || IsTouchingWall || coyoteRemaining > 0f))
         {
             velocity.y = jumpSpeed;
+
+            if (!IsGrounded && wallSide != 0)
+            {
+                velocity.y = wallJumpUpSpeed;
+                wallJumpDirection = -wallSide;
+                wallJumpRemaining = wallJumpTime;
+                velocity.x = wallJumpDirection * wallJumpSpeed;
+            }
 
             IsGrounded = false;
             coyoteRemaining = 0f;
@@ -402,7 +407,15 @@ public sealed class PlayerMotor2D : MonoBehaviour
 
         Vector2 input = Vector2.ClampMagnitude(moveInput, 1f);
 
-        Vector2 targetVelocity = input * swimSpeed;
+        float infectionSpeedMultiplier =
+            playerVitals != null
+                ? playerVitals.CurrentStage.movementMultiplier
+                : 1f;
+
+        Vector2 targetVelocity =
+            input *
+            swimSpeed *
+            infectionSpeedMultiplier;
 
         // Horizontal swimming
         float horizontalAcceleration =
@@ -441,6 +454,12 @@ public sealed class PlayerMotor2D : MonoBehaviour
         if (input.y >= -0.01f)
         {
             velocity.y = Mathf.Max(velocity.y, -waterFallSpeed);
+        }
+        //each jump press gives an upward push, even without touching the bottom
+        if (jumpBufferRemaining > 0f)
+        {
+            velocity.y = jumpSpeed;
+            jumpBufferRemaining = 0f;
         }
         
         

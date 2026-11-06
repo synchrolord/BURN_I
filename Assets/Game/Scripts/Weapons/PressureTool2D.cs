@@ -269,11 +269,16 @@ public sealed class PressureTool2D : MonoBehaviour
 
     
     
+    private float waterSupplyUsed;
+
     private void LaunchShots(float elapsedSeconds)
     {
         //initialize settings for this shot
         NozzleSettings nozzleSettings = GetCurrentNozzleSettings();
         int supplyCostPerShot = Mathf.Max(0, nozzleSettings.supplyCostPerShot);
+        bool isWater = currentSprayType == SprayType.Water;
+        float waterCost = supplyCostPerShot / Mathf.Max(1f, waterShotRateMultiplier);
+        if (isWater) supplyCostPerShot = Mathf.FloorToInt(waterSupplyUsed + waterCost);
         
         //check if player is allowed to shoot
         bool canSpray =
@@ -287,7 +292,6 @@ public sealed class PressureTool2D : MonoBehaviour
         if (!canSpray) return;
 
         //check current matterial type and change setting to water if needed
-        bool isWater = currentSprayType == SprayType.Water;
         float shotsPerSecond = nozzleSettings.shotsPerSecond * (isWater ? waterShotRateMultiplier : 1);
         shotsToLaunch = Mathf.Min(shotsToLaunch + shotsPerSecond * elapsedSeconds, 12);
 
@@ -330,9 +334,15 @@ public sealed class PressureTool2D : MonoBehaviour
             //subtract fuel from player if not in debugMode and shorten shot queue.
             if (!unlimitedResourcesForTesting)
             {
-                if (isWater) currentWater -= supplyCostPerShot;
+                if (isWater)
+                {
+                    //extra water shots share the cost instead of draining the tank faster
+                    currentWater -= supplyCostPerShot;
+                    waterSupplyUsed += waterCost - supplyCostPerShot;
+                }
                 else currentFuel -= supplyCostPerShot;
             }
+            if (isWater) supplyCostPerShot = Mathf.FloorToInt(waterSupplyUsed + waterCost);
             shotsToLaunch--;
         }
     }

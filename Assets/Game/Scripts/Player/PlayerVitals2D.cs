@@ -107,6 +107,11 @@ public partial class PlayerVitals2D : MonoBehaviour, Damageable2D{
 
     private void Awake()
     {
+        IncomingDamageMultiplier =
+            GameOptions.DamageMultiplier;
+
+        ReducedFlashing =
+            GameOptions.ReducedFlashing;
         
         motor = GetComponent<PlayerMotor2D>();
         bodyCollider = GetComponent<Collider2D>();

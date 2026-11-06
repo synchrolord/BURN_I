@@ -79,12 +79,15 @@ public sealed class LiquidValve2D : MonoBehaviour
                 ? sink.position
                 : transform.position;
 
-        //remove water from cellWorld and add it to player's pressureTool
+        int requested = Mathf.Min(amount, needed);
+
+//drain extra water while keeping the normal refill amount
         int removed = usedWorld.ExtractWater(
             position,
             radius,
-            Mathf.Min(amount, needed));
+            requested * 4);
 
-        pressureTool.AddWaterResource(removed);
+        pressureTool.AddWaterResource(
+            Mathf.Min(removed, requested));
     }
 }

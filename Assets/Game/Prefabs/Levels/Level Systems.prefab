@@ -1248,11 +1248,11 @@ PrefabInstance:
       objectReference: {fileID: 9036549749304080515}
     - target: {fileID: 4209448177274357688, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: infectionStage
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4209448177274357688, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: invincibilityTime
-      value: 100
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4209448177274357688, guid: 07c3b3d5e7aad4745b0e2083569ee202, type: 3}
       propertyPath: damageFlashSeconds
