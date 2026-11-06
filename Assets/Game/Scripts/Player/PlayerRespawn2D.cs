@@ -14,6 +14,8 @@ public sealed class PlayerRespawn2D : MonoBehaviour
     private Coroutine respawnRoutine;
 
     private bool diedWhilePoisoned;
+    public Transform BossSpawnPoint { get; private set; }
+    public event System.Action Respawned;
     
     private void Awake()
     {
@@ -86,5 +88,12 @@ public sealed class PlayerRespawn2D : MonoBehaviour
         vitals.ResetForSpawn(nextStage);
         diedWhilePoisoned = false;
         respawnRoutine = null;
+        Respawned?.Invoke();
+    }
+
+    public void SetCheckpoint(Transform point, Transform bossPoint = null)
+    {
+        respawnPoint = point;
+        BossSpawnPoint = bossPoint;
     }
 }
