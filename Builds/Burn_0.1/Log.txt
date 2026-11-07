@@ -1,0 +1,4 @@
+created player
+created simple controls
+created simple collisions with 2d circle collider
+tested simple sprites.

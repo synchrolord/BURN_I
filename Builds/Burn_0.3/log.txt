@@ -1,0 +1,10 @@
+learned sprite slicing
+created shell for first level
+learned 2d-spotlights
+created simple pixle-based liquid system (NOITA inspired)
+introduced Fire, water, smoke, 
+oil cannow be ignited
+water can put out fire.
+light is now effected by tiles and casts shadows
+first level shell is complete (minus the burnable plants)
+created dynamic light from fire

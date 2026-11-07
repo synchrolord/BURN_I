@@ -1,8 +1,10 @@
-# Track only the Unity project source needed to open and build the game.
+# Track Unity project sources and game builds.
 /*
 !/Assets/
 !/Packages/
 !/ProjectSettings/
+!/Builds/
+!/Build/
 
 # Keep Git configuration.
 !/.gitignore
