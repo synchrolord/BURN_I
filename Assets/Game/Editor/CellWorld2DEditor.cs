@@ -1,47 +1,93 @@
+using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-//custom Inspector for CellWorld and its subclasses
-[CustomEditor(typeof(CellWorld2D), true)]
+[CustomEditor(typeof(CellWorld2D), true), CanEditMultipleObjects]
 public class CellWorld2DEditor : Editor
 {
-    public override void OnInspectorGUI()
+    private readonly Dictionary<string, List<string>> sections = new Dictionary<string, List<string>>();
+    private static readonly string[] order =
     {
-        serializedObject.Update();
-        DrawGridProperties();
-        serializedObject.ApplyModifiedProperties();
-    }
+        "Grid and room size", "Simulation and performance", "Water, fuel and acid",
+        "Smoke and steam", "Fire", "Plants", "Colours and appearance",
+        "Darkness and lighting", "Debug"
+    };
 
-    //draw ordinary fields and insert our size information
-    protected void DrawGridProperties(params string[] excluded)
+    private void OnEnable()
     {
+        sections.Clear();
+        string section = "Other";
         SerializedProperty property = serializedObject.GetIterator();
         bool enterChildren = true;
-
         while (property.NextVisible(enterChildren))
         {
             enterChildren = false;
-
-            if (System.Array.IndexOf(excluded, property.name) >= 0)
-                continue;
-
-            bool gridSizeField =
-                property.name == "width" ||
-                property.name == "height" ||
-                property.name == "cellSize";
-
-            //arrays are created at startup, so prevent resizing during Play
-            bool readOnly = property.name == "m_Script" ||
-                            (Application.isPlaying && gridSizeField);
-
-            using (new EditorGUI.DisabledScope(readOnly))
-                EditorGUILayout.PropertyField(property, true);
-
-            if (property.name == "height")
-                DrawGridSizeStatus();
+            if (property.name == "m_Script") continue;
+            //reuse the existing headers so new settings appear without another field list
+            System.Type type = target.GetType();
+            FieldInfo field = null;
+            while (type != null && field == null)
+            {
+                field = type.GetField(property.name, BindingFlags.Instance | BindingFlags.Public |
+                    BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+                type = type.BaseType;
+            }
+            HeaderAttribute header = field != null ? field.GetCustomAttribute<HeaderAttribute>() : null;
+            if (header != null) section = SectionName(header.header);
+            if (!sections.ContainsKey(section)) sections[section] = new List<string>();
+            sections[section].Add(property.name);
         }
     }
 
+    public override void OnInspectorGUI()
+    {
+        serializedObject.Update();
+        using (new EditorGUI.DisabledScope(true))
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("m_Script"));
+        foreach (string name in order) DrawSection(name);
+        //keep unfamiliar sections visible if more settings are added later
+        foreach (string name in sections.Keys)
+            if (System.Array.IndexOf(order, name) < 0) DrawSection(name);
+        serializedObject.ApplyModifiedProperties();
+    }
+
+    private void DrawSection(string name)
+    {
+        if (!sections.TryGetValue(name, out List<string> fields)) return;
+        string key = "BURN.CellWorld." + name;
+        bool open = SessionState.GetBool(key, name == "Grid and room size");
+        open = EditorGUILayout.BeginFoldoutHeaderGroup(open, name);
+        SessionState.SetBool(key, open);
+        if (open)
+        {
+            EditorGUI.indentLevel++;
+            foreach (string field in fields)
+            {
+                bool gridField = field == "width" || field == "height" || field == "cellSize";
+                using (new EditorGUI.DisabledScope(Application.isPlaying && gridField))
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty(field), true);
+                if (field == "height") DrawGridSizeStatus();
+            }
+            EditorGUI.indentLevel--;
+        }
+        EditorGUILayout.EndFoldoutHeaderGroup();
+    }
+
+    private static string SectionName(string header)
+    {
+        switch (header)
+        {
+            case "Grid": return "Grid and room size";
+            case "Simulation": case "Chunks": return "Simulation and performance";
+            case "Basic Liquids": return "Water, fuel and acid";
+            case "Gases": case "Gas Momentum": case "Smoke": case "Steam": return "Smoke and steam";
+            case "Fire": case "Fire Puff": case "Fire Appearance": return "Fire";
+            case "Colors": return "Colours and appearance";
+            case "Pixel Darkness": return "Darkness and lighting";
+            default: return header;
+        }
+    }
     private void DrawGridSizeStatus()
     {
         int width = serializedObject.FindProperty("width").intValue;

@@ -13,6 +13,17 @@ public sealed class CellWorldRoomManager : MonoBehaviour
     private PlayerLiquidInteraction2D playerLiquidInteraction;
     public CellWorld2D CurrentWorld { get; private set; }
 
+    [Header("Darkness defaults")]
+    [SerializeField] private bool usePixelDarkness = true;
+    [SerializeField, Range(0f, 1f)] private float darkness = 0.95f;
+    [SerializeField, Range(1, 64)] private int fullyLitLevel = 28;
+    [SerializeField, Range(1, 64)] private int fireLightLevel = 28;
+    [SerializeField, Range(0.02f, 0.5f)] private float lightRefreshSeconds = 0.2f;
+    [SerializeField] private int darknessOrder = 100;
+    [SerializeField, Range(0f, 1f)] private float unityLightBase = 0.2f;
+    [SerializeField, Range(0f, 4f)] private float unityLightEffect = 1.25f;
+    [SerializeField, Range(0f, 1f)] private float unityLightMaximum = 0.85f;
+
     public void RegisterWorld(CellWorld2D world)
     {
         if (world == null || System.Array.IndexOf(worlds, world) >= 0) return;

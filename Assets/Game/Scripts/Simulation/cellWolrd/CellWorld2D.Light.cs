@@ -68,17 +68,27 @@ public partial class CellWorld2D
         {
             darknessRenderer.sharedMaterial = material;
 
-            MaterialPropertyBlock properties =
-                new MaterialPropertyBlock();
+        }
+        RefreshDarkness();
+    }
 
+    //apply changed inspector values without recreating the darkness texture
+    public void RefreshDarkness()
+    {
+        if (darknessRenderer != null)
+        {
+            MaterialPropertyBlock properties = new MaterialPropertyBlock();
+            darknessRenderer.GetPropertyBlock(properties);
             properties.SetFloat("_CellSize", cellSize);
             properties.SetFloat("_BaseLight", unityLightBase);
             properties.SetFloat("_LightEffect", unityLightEffect);
             properties.SetFloat("_MaximumLight", unityLightMaximum);
             darknessRenderer.SetPropertyBlock(properties);
+            darknessRenderer.sortingOrder = darknessOrder;
+            SetDarknessVisible(roomActive || showInactiveWorldsForDebug);
         }
-
-        SetDarknessVisible(roomActive);
+        lightNeedsRefresh = true;
+        nextLightRefresh = 0f;
     }
 
 
