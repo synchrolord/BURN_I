@@ -236,17 +236,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1380685519997426850}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca5c0a867518440a936fdc610a2d4d08, type: 3}
+  m_Script: {fileID: 11500000, guid: 3f15cd33434247cba7d81d913d3a6b90, type: 3}
   m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::BossPounce2D
-  approachDistance: 10
-  windupTime: 1
-  pounceTime: 0.35
-  pounceSpeed: 18
-  recoveryTime: 1.2
-  spawnGrace: 3
-  warningSound: {fileID: 8300000, guid: 8947e522d146f12498d86471d3642144, type: 3}
-  warningVolume: 0.6
+  m_EditorClassIdentifier: Assembly-CSharp::BossAudio2D
+  restLoop: {fileID: 0}
+  chaseLoop: {fileID: 0}
+  burningLoop: {fileID: 0}
+  volume: 0.7
+  hearingDistance: 40
 --- !u!114 &793900000000000002
 MonoBehaviour:
   m_ObjectHideFlags: 0

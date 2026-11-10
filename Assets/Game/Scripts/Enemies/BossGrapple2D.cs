@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public sealed class BossGrapple2D : MonoBehaviour
 {
-    public enum State { Rest, Chase, Burning, Windup, Pounce, Recover }
+    public enum State { Rest, Chase, Burning }
 
     [Header("Target")]
     [SerializeField] private Transform target;
@@ -38,25 +38,6 @@ public sealed class BossGrapple2D : MonoBehaviour
         restPoint = null;
         nextContactHit = Time.time + 3f;
         SetAggro(chase);
-    }
-
-    public void PauseForAttack(State attackState)
-    {
-        state = attackState;
-        foreach (Arm arm in arms)
-        {
-            if (arm.routine != null) StopCoroutine(arm.routine);
-            arm.routine = null;
-            arm.joint.enabled = false;
-            arm.aimedWall = null;
-        }
-    }
-
-    public void ResumeGrappling()
-    {
-        state = State.Chase;
-        UpdateState();
-        OnEnable();
     }
 
     [Header("Vine")]
@@ -111,7 +92,7 @@ public sealed class BossGrapple2D : MonoBehaviour
         //burning takes priority over both resting and chasing
         if (Time.time < burningUntil) state = State.Burning;
         else if (!aggro) state = State.Rest;
-        else if (state == State.Rest || state == State.Burning) state = State.Chase;
+        else state = State.Chase;
     }
 
     public void Ignite()
@@ -531,7 +512,7 @@ public sealed class BossGrapple2D : MonoBehaviour
 
     private void HurtPlayer(Collision2D collision)
     {
-        if (state == State.Rest || state == State.Windup || state == State.Recover || contactDamage <= 0f ||
+        if (state == State.Rest || contactDamage <= 0f ||
             Time.time < nextContactHit) return;
 
         PlayerVitals2D player = collision.collider.GetComponentInParent<PlayerVitals2D>();

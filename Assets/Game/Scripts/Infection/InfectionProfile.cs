@@ -49,8 +49,12 @@ public class InfectionProfile : ScriptableObject{
     public static InfectionStage[] CreateDefaultStages()
     {
         string[] names = { "Healthy", "Exposed", "Rooted", "Overgrown", "Lost", "Consumed" };
-        float[] aggro = { 1f, 0.8f, 0.55f, 0.3f, 0.1f, 0.05f };
-        float[] poisonResistances = { 0f, 0.1f, 0.3f, 0.55f, 0.85f, 1f };
+        float[] aggro = { 1f, 0.95f, 0.88f, 0.78f, 0.65f, 0.05f };
+        float[] poisonResistances = { 0f, 0.05f, 0.12f, 0.22f, 0.35f, 1f };
+        float[] health = { 1f, 0.98f, 0.95f, 0.9f, 0.82f, 0.4f };
+        float[] vision = { 1f, 0.97f, 0.93f, 0.88f, 0.8f, 0.35f };
+        float[] movement = { 1f, 0.98f, 0.96f, 0.93f, 0.88f, 0.4f };
+        float[] fireDamage = { 1f, 1.05f, 1.1f, 1.2f, 1.35f, 2f };
         var result = new InfectionStage[InfectionCount];
         
         
@@ -59,11 +63,11 @@ public class InfectionProfile : ScriptableObject{
             result[i] = new InfectionStage()
             {
                 name = names[i],
-                healthMultiplier = 1f - i * 0.05f,
-                visionMultiplier = 1f - i * 0.10f,
+                healthMultiplier = health[i],
+                visionMultiplier = vision[i],
                 aggroMultiplier = aggro[i],
-                movementMultiplier = 1f - i * 0.025f,
-                fireDamageMultiplier = 1f + i * 0.20f,
+                movementMultiplier = movement[i],
+                fireDamageMultiplier = fireDamage[i],
                 poisonResistance = poisonResistances[i],
                 placeHolderTint = Color.Lerp(Color.white, new Color(0.55f, 0.85f, 0.45f), i / 4f)
                 
