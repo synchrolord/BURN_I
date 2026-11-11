@@ -536,5 +536,4 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 7097bf79ee4e0534eb7c278672bbd00c, type: 3}
   pauseBetweenSounds: {x: 3, y: 7}
   hurtPause: 0.75
-  volume: 0.55
   hearingDistance: 18

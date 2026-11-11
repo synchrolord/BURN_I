@@ -8,6 +8,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+  - component: {fileID: 793900000000000005}
   - component: {fileID: 6680323366764100468}
   m_Layer: 0
   m_Name: Level Room
@@ -1044,3 +1045,21 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1754409515678161814, guid: 16c6378bf2992a5469346fdafcabe55f, type: 3}
   m_PrefabInstance: {fileID: 2622807233331483497}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &793900000000000005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624776658900345437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b739bce28134541996a21d315f34f92, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::RoomAudio2D
+  world: {fileID: 0}
+  enemies: []
+  volume: 1
+  cutoff: 22000
+  distortion: 0
+  reverb: 0

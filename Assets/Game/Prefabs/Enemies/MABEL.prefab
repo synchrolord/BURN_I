@@ -343,7 +343,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 910e5ad52a002a740a9ddfa85cb6439f, type: 3}
   - {fileID: 8300000, guid: 719d1622725cdc843844b3cf72a95f14, type: 3}
   - {fileID: 8300000, guid: 6b3b142d52baea546939c6f13e769df2, type: 3}
-  volume: 0.7
   hearingDistance: 40
 --- !u!1 &5593468165621898432
 GameObject:

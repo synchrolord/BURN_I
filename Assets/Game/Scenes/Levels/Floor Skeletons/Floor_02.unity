@@ -2954,6 +2954,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 793900000000000005, guid: f7cffec0ccd04254b9f63e4ac1270584, type: 3}
+      propertyPath: volume
+      value: 0.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 793900000000000005, guid: f7cffec0ccd04254b9f63e4ac1270584, type: 3}
+      propertyPath: cutoff
+      value: 1800
+      objectReference: {fileID: 0}
+    - target: {fileID: 793900000000000005, guid: f7cffec0ccd04254b9f63e4ac1270584, type: 3}
+      propertyPath: distortion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 793900000000000005, guid: f7cffec0ccd04254b9f63e4ac1270584, type: 3}
+      propertyPath: reverb
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 793900000000000005, guid: f7cffec0ccd04254b9f63e4ac1270584, type: 3}
+      propertyPath: enemies.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 793900000000000005, guid: f7cffec0ccd04254b9f63e4ac1270584, type: 3}
+      propertyPath: enemies.Array.data[0]
+      value:
+      objectReference: {fileID: 1949000001}
     - target: {fileID: 1955244203017452693, guid: f7cffec0ccd04254b9f63e4ac1270584, type: 3}
       propertyPath: m_Name
       value: CellWorld_2
@@ -10616,6 +10640,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 793900000000000005, guid: f7cffec0ccd04254b9f63e4ac1270584, type: 3}
+      propertyPath: volume
+      value: 0.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 793900000000000005, guid: f7cffec0ccd04254b9f63e4ac1270584, type: 3}
+      propertyPath: cutoff
+      value: 16000
+      objectReference: {fileID: 0}
+    - target: {fileID: 793900000000000005, guid: f7cffec0ccd04254b9f63e4ac1270584, type: 3}
+      propertyPath: distortion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 793900000000000005, guid: f7cffec0ccd04254b9f63e4ac1270584, type: 3}
+      propertyPath: reverb
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 793900000000000005, guid: f7cffec0ccd04254b9f63e4ac1270584, type: 3}
+      propertyPath: enemies.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 793900000000000005, guid: f7cffec0ccd04254b9f63e4ac1270584, type: 3}
+      propertyPath: enemies.Array.data[0]
+      value:
+      objectReference: {fileID: 1949000001}
+    - target: {fileID: 793900000000000005, guid: f7cffec0ccd04254b9f63e4ac1270584, type: 3}
+      propertyPath: enemies.Array.data[1]
+      value:
+      objectReference: {fileID: 1949000002}
     - target: {fileID: 1955244203017452693, guid: f7cffec0ccd04254b9f63e4ac1270584, type: 3}
       propertyPath: m_Name
       value: CellWorld_1
@@ -206150,3 +206202,25 @@ SceneRoots:
   - {fileID: 925314126}
   - {fileID: 585203827}
   - {fileID: 1989167621}
+--- !u!114 &1949000001 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 793900000000000003, guid: b7c0052826b10d4478c195ecbf98cca4, type: 3}
+  m_PrefabInstance: {fileID: 265198773}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f15cd33434247cba7d81d913d3a6b90, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAudio2D
+--- !u!114 &1949000002 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 793900000000000004, guid: 5d348d79a5082c746b1ada113d6b3e2e, type: 3}
+  m_PrefabInstance: {fileID: 824563246}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f15cd33434247cba7d81d913d3a6b90, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAudio2D
