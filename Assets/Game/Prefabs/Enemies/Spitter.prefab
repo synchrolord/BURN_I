@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 8511525086972793026}
   - component: {fileID: 6800642711979355943}
   - component: {fileID: 7917023801476179367}
+  - component: {fileID: 793900000000000004}
   m_Layer: 9
   m_Name: Spitter
   m_TagString: Untagged
@@ -494,3 +495,46 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6652993547707778549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+
+--- !u!114 &793900000000000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5633550519022820784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f15cd33434247cba7d81d913d3a6b90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAudio2D
+  idleSounds:
+  - {fileID: 8300000, guid: 8933d065a172c5440af26b8784be6839, type: 3}
+  - {fileID: 8300000, guid: b037cd8b093b91c4badb3ae1b8a972b5, type: 3}
+  - {fileID: 8300000, guid: ba8c81dce8bfb274c88e350135bb6b8a, type: 3}
+  - {fileID: 8300000, guid: d929f53e1392cdd41a0535df24a30a1c, type: 3}
+  - {fileID: 8300000, guid: f9291bc4453a5ac4a8071aaacc8bca82, type: 3}
+  aggroSounds:
+  - {fileID: 8300000, guid: 6c42d59438ff2814ba74142ae516fc17, type: 3}
+  - {fileID: 8300000, guid: 910e5ad52a002a740a9ddfa85cb6439f, type: 3}
+  chaseSounds:
+  - {fileID: 8300000, guid: 83eb2b861e5ae3a40ba89948727b8bc8, type: 3}
+  attackSounds:
+  - {fileID: 8300000, guid: 347e7654baf7438429e16a1dff5b908e, type: 3}
+  - {fileID: 8300000, guid: de78c75305c0f3b4d8350be98aba4da8, type: 3}
+  spitSounds:
+  - {fileID: 8300000, guid: 05e2f4ac202ab8549a9e6a5c8b647329, type: 3}
+  - {fileID: 8300000, guid: 1b7aefbc8e5164d46bbe68e3bf1471e7, type: 3}
+  - {fileID: 8300000, guid: 95be8bef2ab97024baf79fd30ccb05e0, type: 3}
+  hurtSounds:
+  - {fileID: 8300000, guid: 009bbd6494a714d4d8898a03aff10c8f, type: 3}
+  - {fileID: 8300000, guid: 3c06f5ca13fb6db4a8900eb7db0b1a64, type: 3}
+  - {fileID: 8300000, guid: 7097bf79ee4e0534eb7c278672bbd00c, type: 3}
+  fireSounds:
+  - {fileID: 8300000, guid: 009bbd6494a714d4d8898a03aff10c8f, type: 3}
+  - {fileID: 8300000, guid: 3c06f5ca13fb6db4a8900eb7db0b1a64, type: 3}
+  - {fileID: 8300000, guid: 7097bf79ee4e0534eb7c278672bbd00c, type: 3}
+  pauseBetweenSounds: {x: 3, y: 7}
+  hurtPause: 0.75
+  volume: 0.55
+  hearingDistance: 18

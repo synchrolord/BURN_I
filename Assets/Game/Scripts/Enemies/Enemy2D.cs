@@ -3,6 +3,10 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public sealed class PlantEnemy2D : MonoBehaviour
 {
+    public event System.Action Attacked;
+    public event System.Action Spat;
+    public bool IsAggro { get; private set; }
+    public Transform Target => player != null ? player.transform : null;
     public enum EnemyType
     {
         Walker,
@@ -134,6 +138,7 @@ public sealed class PlantEnemy2D : MonoBehaviour
         // enemies stop when player dies
         if (player == null || player.IsDead)
         {
+            IsAggro = false;
             StopMoving();
             PlayAnimation(IdleAnimation);
             return;
@@ -164,6 +169,7 @@ public sealed class PlantEnemy2D : MonoBehaviour
         float effectiveAggroDistance =
             agroDistance *
             player.CurrentStage.aggroMultiplier;
+        IsAggro = distanceToPlayer <= effectiveAggroDistance;
         
         if (distanceToPlayer <= attackRange)
         {
@@ -191,6 +197,7 @@ public sealed class PlantEnemy2D : MonoBehaviour
         float effectiveAggroDistance =
             agroDistance *
             player.CurrentStage.aggroMultiplier;
+        IsAggro = distanceToPlayer <= effectiveAggroDistance;
 
         //stay inside the patrol leash until the player is noticed
         if (distanceToPlayer > effectiveAggroDistance)
@@ -309,6 +316,7 @@ public sealed class PlantEnemy2D : MonoBehaviour
 
         // Apply the hit and briefly lock the attack animation.
         player.TakeDamage(attackDamage);
+        Attacked?.Invoke();
 
         attackCooldownRemaining = attackCooldown;
         
@@ -342,6 +350,7 @@ public sealed class PlantEnemy2D : MonoBehaviour
                 : null;
 
         shot.Launch(shotDirection, activeWorld);
+        Spat?.Invoke();
 
         attackCooldownRemaining = attackCooldown;
         attackAnimationRemaining = attackAnimationSeconds;

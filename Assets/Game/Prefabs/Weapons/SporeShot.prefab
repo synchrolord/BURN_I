@@ -48,8 +48,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Projectile2D
   speed: 6
   lifetime: 20
-  damage: 10
-  poisonAmount: 10
+  damage: 2
+  poisonAmount: 25
   hitMask:
     serializedVersion: 2
     m_Bits: 72

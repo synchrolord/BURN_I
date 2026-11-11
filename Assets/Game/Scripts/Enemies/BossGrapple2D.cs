@@ -28,6 +28,9 @@ public sealed class BossGrapple2D : MonoBehaviour
     private float fireProtectedUntil;
 
     public State CurrentState => state;
+    public event System.Action Attacked;
+    public event System.Action Hurt;
+    public void NotifyAttack() => Attacked?.Invoke();
     public Transform Target => target;
     public LayerMask WallMask => wallMask;
 
@@ -103,6 +106,7 @@ public sealed class BossGrapple2D : MonoBehaviour
         aggro = true;
         burningUntil = Time.time + retreatTime;
         UpdateState();
+        Hurt?.Invoke();
     }
 
     private void Update()
@@ -240,6 +244,7 @@ public sealed class BossGrapple2D : MonoBehaviour
                 //a burned arm cannot immediately grow another rope into the fire
                 arm.regrowAt = Time.time + regenTime;
                 arm.restMade = false;
+                Hurt?.Invoke();
                 Release(arm);
             }
 
@@ -519,7 +524,9 @@ public sealed class BossGrapple2D : MonoBehaviour
         if (player == null || player.IsDead) return;
 
         //space out contact hits even if player invincibility is set to zero
+        float health = player.CurrentHealth;
         player.TakeDamage(contactDamage);
+        if (player.CurrentHealth < health) NotifyAttack();
         nextContactHit = Time.time + contactInterval;
     }
 

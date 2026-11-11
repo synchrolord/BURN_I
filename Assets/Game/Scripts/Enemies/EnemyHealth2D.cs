@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class CreatureHealth2D : MonoBehaviour,Damageable2D
 {
+    public event Action Hurt;
+    public bool IsBurning => burning;
     [Header("Health")]
     [SerializeField, Min(1f)] private float maxHealth = 30f;
     
@@ -106,6 +108,7 @@ public class CreatureHealth2D : MonoBehaviour,Damageable2D
 
         if (showFlash)
         {
+            Hurt?.Invoke();
             FlashDamage();
         }
 
@@ -123,6 +126,7 @@ public class CreatureHealth2D : MonoBehaviour,Damageable2D
         if (!burning)
         {
             burning = true;
+            Hurt?.Invoke();
 
             if (fireEmitter != null)
             {

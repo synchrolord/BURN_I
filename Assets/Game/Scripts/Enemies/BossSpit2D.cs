@@ -4,6 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(BossGrapple2D))]
 public sealed class BossSpit2D : MonoBehaviour
 {
+    public event System.Action Spat;
     [SerializeField] private bool canSpit;
     [SerializeField] private Projectile2D spitPrefab;
     [SerializeField] private Transform shotOrigin;
@@ -50,6 +51,7 @@ public sealed class BossSpit2D : MonoBehaviour
 
         Projectile2D shot = Instantiate(spitPrefab, start, Quaternion.identity);
         shot.Launch(direction, roomManager != null ? roomManager.CurrentWorld : null);
+        Spat?.Invoke();
         nextSpit = Time.time + spitInterval;
     }
 }

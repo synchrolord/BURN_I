@@ -209,12 +209,18 @@ MonoBehaviour:
     m_Bits: 8
   aggro: 1
   restPoint: {fileID: 0}
+  wakeVines: {fileID: 0}
   breathSize: 0.05
   breathSpeed: 1.5
+  vineBody: {fileID: 0}
+  retreatTime: 2
+  fireProtectionTime: 6
+  state: 0
   vines: {fileID: 4244604956855368561}
   anchorCount: 9
   shotDelay: 0.1
   anchorSpacing: 5
+  regenTime: 6
   reach: 999
   spread: 65
   moveSteps: 18
@@ -224,44 +230,11 @@ MonoBehaviour:
   pullTime: 0.8
   closeDistance: 1
   maxSpeed: 18
+  contactDamage: 15
+  contactInterval: 0.75
   ropeColor: {r: 0.3, g: 0.5, b: 0.2, a: 0}
   ropeWidth: 0.08
   sortingOrder: 110
---- !u!114 &793900000000000003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1380685519997426850}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f15cd33434247cba7d81d913d3a6b90, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::BossAudio2D
-  restLoop: {fileID: 0}
-  chaseLoop: {fileID: 0}
-  burningLoop: {fileID: 0}
-  volume: 0.7
-  hearingDistance: 40
---- !u!114 &793900000000000002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1380685519997426850}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d881c3ecc00549d2a5e24f2d23b7f671, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::BossSpit2D
-  canSpit: 0
-  spitPrefab: {fileID: 2303785671633571436, guid: a7607b44ee5cbc4499a8b4e9cba5defa, type: 3}
-  shotOrigin: {fileID: 0}
-  range: 8
-  spitInterval: 2
-  roomManager: {fileID: 0}
 --- !u!58 &4652851781767333062
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -298,6 +271,80 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.625
+--- !u!114 &793900000000000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1380685519997426850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d881c3ecc00549d2a5e24f2d23b7f671, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossSpit2D
+  canSpit: 0
+  spitPrefab: {fileID: 2303785671633571436, guid: a7607b44ee5cbc4499a8b4e9cba5defa, type: 3}
+  shotOrigin: {fileID: 0}
+  range: 8
+  spitInterval: 2
+  roomManager: {fileID: 0}
+--- !u!114 &793900000000000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1380685519997426850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f15cd33434247cba7d81d913d3a6b90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAudio2D
+  idleSounds:
+  - {fileID: 8300000, guid: 9ad8e3675946f3440b358d79daf1617f, type: 3}
+  - {fileID: 8300000, guid: 93c7c742b7953fc498ed780b478ce90c, type: 3}
+  - {fileID: 8300000, guid: 756ad49f7a4a9bf40b1cd9d14bdb6dc8, type: 3}
+  - {fileID: 8300000, guid: 9d9834821892b2f4987b44b5309a0860, type: 3}
+  - {fileID: 8300000, guid: f2a58dde595a93047822f1379095fd09, type: 3}
+  chaseSounds:
+  - {fileID: 8300000, guid: 1adc20375129a134fb118163ef90111e, type: 3}
+  - {fileID: 8300000, guid: 83eb2b861e5ae3a40ba89948727b8bc8, type: 3}
+  attackSounds:
+  - {fileID: 8300000, guid: 886ebb7734f7d634084b567a047d1eed, type: 3}
+  - {fileID: 8300000, guid: a0c9c5ecd66dd9f418217b39c859c706, type: 3}
+  - {fileID: 8300000, guid: 347e7654baf7438429e16a1dff5b908e, type: 3}
+  - {fileID: 8300000, guid: da4d06df4e7924b4d9e47e95bf253f0d, type: 3}
+  - {fileID: 8300000, guid: de78c75305c0f3b4d8350be98aba4da8, type: 3}
+  spitSounds:
+  - {fileID: 8300000, guid: 05e2f4ac202ab8549a9e6a5c8b647329, type: 3}
+  - {fileID: 8300000, guid: 1b7aefbc8e5164d46bbe68e3bf1471e7, type: 3}
+  - {fileID: 8300000, guid: 95be8bef2ab97024baf79fd30ccb05e0, type: 3}
+  hurtSounds:
+  - {fileID: 8300000, guid: 421aa81fdb9bfa341ad47b48eb5129ee, type: 3}
+  - {fileID: 8300000, guid: 009bbd6494a714d4d8898a03aff10c8f, type: 3}
+  - {fileID: 8300000, guid: fa5b623bf83551a409cd57364eaa374c, type: 3}
+  - {fileID: 8300000, guid: 3c06f5ca13fb6db4a8900eb7db0b1a64, type: 3}
+  - {fileID: 8300000, guid: 45fe129951902854785492c2ec1b5f9b, type: 3}
+  - {fileID: 8300000, guid: 7097bf79ee4e0534eb7c278672bbd00c, type: 3}
+  fireSounds:
+  - {fileID: 8300000, guid: 421aa81fdb9bfa341ad47b48eb5129ee, type: 3}
+  - {fileID: 8300000, guid: 009bbd6494a714d4d8898a03aff10c8f, type: 3}
+  - {fileID: 8300000, guid: fa5b623bf83551a409cd57364eaa374c, type: 3}
+  - {fileID: 8300000, guid: 3c06f5ca13fb6db4a8900eb7db0b1a64, type: 3}
+  - {fileID: 8300000, guid: 45fe129951902854785492c2ec1b5f9b, type: 3}
+  - {fileID: 8300000, guid: 7097bf79ee4e0534eb7c278672bbd00c, type: 3}
+  pauseBetweenSounds: {x: 2, y: 5}
+  hurtPause: 0.75
+  aggroSounds:
+  - {fileID: 8300000, guid: 5240b09fe67a5c84a96a96f487e491fe, type: 3}
+  - {fileID: 8300000, guid: 776f20bf516442f4cb6f7dbbde11c4d1, type: 3}
+  - {fileID: 8300000, guid: 6c42d59438ff2814ba74142ae516fc17, type: 3}
+  - {fileID: 8300000, guid: 910e5ad52a002a740a9ddfa85cb6439f, type: 3}
+  - {fileID: 8300000, guid: 719d1622725cdc843844b3cf72a95f14, type: 3}
+  - {fileID: 8300000, guid: 6b3b142d52baea546939c6f13e769df2, type: 3}
+  volume: 0.7
+  hearingDistance: 40
 --- !u!1 &5593468165621898432
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,6 +424,8 @@ MonoBehaviour:
   size: 10
   density: 24
   seed: 123
+  regenTime: 6
+  fireResistance: 4
 --- !u!1 &8311122224052922628
 GameObject:
   m_ObjectHideFlags: 0
