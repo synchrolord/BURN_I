@@ -307,9 +307,17 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 756ad49f7a4a9bf40b1cd9d14bdb6dc8, type: 3}
   - {fileID: 8300000, guid: 9d9834821892b2f4987b44b5309a0860, type: 3}
   - {fileID: 8300000, guid: f2a58dde595a93047822f1379095fd09, type: 3}
+  aggroSounds:
+  - {fileID: 8300000, guid: 5240b09fe67a5c84a96a96f487e491fe, type: 3}
+  - {fileID: 8300000, guid: 776f20bf516442f4cb6f7dbbde11c4d1, type: 3}
+  - {fileID: 8300000, guid: 6c42d59438ff2814ba74142ae516fc17, type: 3}
+  - {fileID: 8300000, guid: 910e5ad52a002a740a9ddfa85cb6439f, type: 3}
+  - {fileID: 8300000, guid: 719d1622725cdc843844b3cf72a95f14, type: 3}
+  - {fileID: 8300000, guid: 6b3b142d52baea546939c6f13e769df2, type: 3}
   chaseSounds:
   - {fileID: 8300000, guid: 1adc20375129a134fb118163ef90111e, type: 3}
-  - {fileID: 8300000, guid: 83eb2b861e5ae3a40ba89948727b8bc8, type: 3}
+  - {fileID: 8300000, guid: 719d1622725cdc843844b3cf72a95f14, type: 3}
+  - {fileID: 8300000, guid: 719d1622725cdc843844b3cf72a95f14, type: 3}
   attackSounds:
   - {fileID: 8300000, guid: 886ebb7734f7d634084b567a047d1eed, type: 3}
   - {fileID: 8300000, guid: a0c9c5ecd66dd9f418217b39c859c706, type: 3}
@@ -336,14 +344,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 7097bf79ee4e0534eb7c278672bbd00c, type: 3}
   pauseBetweenSounds: {x: 2, y: 5}
   hurtPause: 0.75
-  aggroSounds:
-  - {fileID: 8300000, guid: 5240b09fe67a5c84a96a96f487e491fe, type: 3}
-  - {fileID: 8300000, guid: 776f20bf516442f4cb6f7dbbde11c4d1, type: 3}
-  - {fileID: 8300000, guid: 6c42d59438ff2814ba74142ae516fc17, type: 3}
-  - {fileID: 8300000, guid: 910e5ad52a002a740a9ddfa85cb6439f, type: 3}
-  - {fileID: 8300000, guid: 719d1622725cdc843844b3cf72a95f14, type: 3}
-  - {fileID: 8300000, guid: 6b3b142d52baea546939c6f13e769df2, type: 3}
   hearingDistance: 40
+  pitch: {x: 0.45, y: 1.05}
+  loudness: {x: 0.65, y: 0.9}
+  distortion: 0.353
 --- !u!1 &5593468165621898432
 GameObject:
   m_ObjectHideFlags: 0
