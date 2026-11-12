@@ -16,6 +16,7 @@ public sealed class SurfaceWalker2D : MonoBehaviour
     private RigidbodyConstraints2D oldConstraints;
     private Quaternion oldVisualRotation;
     private float direction = 1f;
+    private bool attached;
 
     public float Direction => direction;
 
@@ -31,7 +32,7 @@ public sealed class SurfaceWalker2D : MonoBehaviour
         oldGravity = body.gravityScale;
         oldConstraints = body.constraints;
 
-        body.gravityScale = 0f;
+        body.gravityScale = oldGravity;
         body.constraints |=
             RigidbodyConstraints2D.FreezeRotation;
     }
@@ -47,7 +48,7 @@ public sealed class SurfaceWalker2D : MonoBehaviour
         if (visualRoot != null)
             oldVisualRotation = visualRoot.localRotation;
 
-        FindSurface();
+        attached = FindSurface();
     }
 
 
@@ -58,10 +59,13 @@ public sealed class SurfaceWalker2D : MonoBehaviour
 
         if (!StayOnSurface())
         {
-            Stop();
+            //fall normally until there is a surface close enough to grab
+            body.gravityScale = oldGravity;
+            body.linearVelocity = new Vector2(0f, body.linearVelocity.y);
             return;
         }
 
+        body.gravityScale = 0f;
         Vector2 moveDirection = MoveDirection;
 
         //turn onto a wall or ceiling directly ahead
@@ -71,28 +75,11 @@ public sealed class SurfaceWalker2D : MonoBehaviour
             GetOffset(moveDirection) + cornerDistance,
             surfaceMask);
 
-        if (corner.collider != null)
+        if (corner.collider != null &&
+            corner.distance > 0.001f && Vector2.Dot(corner.normal, moveDirection) < -0.5f)
         {
             surfaceNormal = corner.normal;
             SnapToSurface(corner);
-            moveDirection = MoveDirection;
-        }
-
-        //turn back instead of walking away from the surface
-        Vector2 supportPoint =
-            (Vector2)bodyCollider.bounds.center +
-            moveDirection *
-            (GetOffset(moveDirection) + cornerDistance);
-
-        bool hasSurfaceAhead = Physics2D.Raycast(
-            supportPoint,
-            -surfaceNormal,
-            GetOffset(surfaceNormal) + extraSurfaceDistance,
-            surfaceMask);
-
-        if (!hasSurfaceAhead)
-        {
-            Reverse();
             moveDirection = MoveDirection;
         }
 
@@ -146,20 +133,49 @@ public sealed class SurfaceWalker2D : MonoBehaviour
 
     public void Stop()
     {
-        body.linearVelocity = Vector2.zero;
+        //stopping in midair should not cancel the fall
+        body.linearVelocity = body.gravityScale == 0f
+            ? Vector2.zero : new Vector2(0f, body.linearVelocity.y);
     }
 
 
     private bool StayOnSurface()
     {
+        if (!attached)
+        {
+            attached = FindSurface();
+            return attached;
+        }
+
         RaycastHit2D surface = Physics2D.Raycast(
             bodyCollider.bounds.center,
             -surfaceNormal,
             GetOffset(surfaceNormal) + extraSurfaceDistance,
             surfaceMask);
 
-        if (surface.collider == null)
-            return FindSurface();
+        if (surface.collider == null || surface.distance <= 0.001f)
+        {
+            //look back around the edge for the next face of the same corner
+            Vector2 forward = MoveDirection;
+            Vector2 centre = bodyCollider.bounds.center;
+            Vector2 origin = centre + forward * (GetOffset(forward) + cornerDistance)
+                - surfaceNormal * (GetOffset(surfaceNormal) + extraSurfaceDistance);
+            RaycastHit2D edge = Physics2D.Raycast(origin, -forward,
+                GetOffset(forward) * 2f + cornerDistance * 2f, surfaceMask);
+
+            if (edge.collider != null && edge.distance > 0.001f &&
+                Vector2.Dot(edge.normal, forward) > 0.5f)
+            {
+                surfaceNormal = edge.normal;
+                //place the collider's centre, since its pivot is down at its feet
+                Vector2 target = edge.point + surfaceNormal * (GetOffset(surfaceNormal) + 0.02f);
+                body.position += target - centre;
+                return true;
+            }
+
+            attached = false;
+            return false;
+        }
 
         surfaceNormal = surface.normal;
         SnapToSurface(surface);
@@ -185,10 +201,10 @@ public sealed class SurfaceWalker2D : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(
                 bodyCollider.bounds.center,
                 checkDirection,
-                GetOffset(checkDirection) + 1.5f,
+                GetOffset(checkDirection) + extraSurfaceDistance,
                 surfaceMask);
 
-            if (hit.collider == null ||
+            if (hit.collider == null || hit.distance <= 0.001f ||
                 hit.distance >= closestDistance)
             {
                 continue;
@@ -210,8 +226,8 @@ public sealed class SurfaceWalker2D : MonoBehaviour
     private void SnapToSurface(RaycastHit2D surface)
     {
         float correction =
-            GetOffset(surfaceNormal) -
-            surface.distance;
+            GetOffset(surfaceNormal) + 0.02f -
+            Vector2.Dot((Vector2)bodyCollider.bounds.center - surface.point, surfaceNormal);
 
         body.position +=
             surfaceNormal * correction;
