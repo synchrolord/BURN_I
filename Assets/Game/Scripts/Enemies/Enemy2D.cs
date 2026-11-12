@@ -55,14 +55,10 @@ public sealed class PlantEnemy2D : MonoBehaviour
     private static readonly int IdleAnimation =
         Animator.StringToHash("Idle");
 
-    private static readonly int MoveAnimation =
-        Animator.StringToHash("Move");
+    private static readonly int WalkAnimation =
+        Animator.StringToHash("Walk");
 
-    private static readonly int AttackAnimation =
-        Animator.StringToHash("Attack");
 
-    private static readonly int DeadAnimation =
-        Animator.StringToHash("Dead");
 
     private int currentAnimation;
     private float attackAnimationRemaining;
@@ -237,7 +233,7 @@ public sealed class PlantEnemy2D : MonoBehaviour
             moveSpeed);
 
         FaceDirection(surfaceWalker.Direction);
-        PlayAnimation(MoveAnimation);
+        PlayAnimation(WalkAnimation);
     }
 
 
@@ -257,7 +253,7 @@ public sealed class PlantEnemy2D : MonoBehaviour
         FaceDirection(surfaceWalker.Direction);
 
         if (attackAnimationRemaining <= 0f)
-            PlayAnimation(MoveAnimation);
+            PlayAnimation(WalkAnimation);
     }
     
     
@@ -322,7 +318,6 @@ public sealed class PlantEnemy2D : MonoBehaviour
         
         attackAnimationRemaining = attackAnimationSeconds;
 
-        PlayAnimation(AttackAnimation);
         return true;
     }
     private void TrySpit()
@@ -355,7 +350,6 @@ public sealed class PlantEnemy2D : MonoBehaviour
         attackCooldownRemaining = attackCooldown;
         attackAnimationRemaining = attackAnimationSeconds;
 
-        PlayAnimation(AttackAnimation);
     }
 
     
@@ -370,7 +364,7 @@ public sealed class PlantEnemy2D : MonoBehaviour
             body.linearVelocity.y
         );
 
-        PlayAnimation(MoveAnimation);
+        PlayAnimation(WalkAnimation);
     }
 
     private void StopMoving()

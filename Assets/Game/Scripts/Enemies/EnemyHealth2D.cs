@@ -27,8 +27,8 @@ public class CreatureHealth2D : MonoBehaviour,Damageable2D
     [SerializeField] private PlantEnemy2D behaviour;
 
 
-    private static readonly int DeadAnimation =
-        Animator.StringToHash("Dead");
+    private static readonly int IdleAnimation =
+        Animator.StringToHash("Idle");
 
     private Rigidbody2D body;
     private Collider2D bodyCollider;
@@ -156,10 +156,10 @@ public class CreatureHealth2D : MonoBehaviour,Damageable2D
         //disable enemy collider when they die
         if(bodyCollider != null) bodyCollider.enabled = false;
         
-        //play death animation
-        if (animator != null && animator.HasState(0, DeadAnimation))
+        //use idle until we have a separate death animation
+        if (animator != null && animator.HasState(0, IdleAnimation))
         {
-            animator.Play(DeadAnimation);
+            animator.Play(IdleAnimation);
         }
         
         Destroy(gameObject, deathDelay);
