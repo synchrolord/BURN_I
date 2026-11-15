@@ -225,7 +225,7 @@ MonoBehaviour:
   agroDistance: 9
   attackRange: 0.8
   attackDamage: 10
-  attackCooldown: 2
+  attackCooldown: 1
   facingRoot: {fileID: 6652993547707778549}
   mask:
     serializedVersion: 2
@@ -321,7 +321,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3c06f5ca13fb6db4a8900eb7db0b1a64, type: 3}
   - {fileID: 8300000, guid: 7097bf79ee4e0534eb7c278672bbd00c, type: 3}
   pauseBetweenSounds: {x: 3, y: 7}
+  idlePause: {x: 8, y: 15}
   hurtPause: 0.75
+  aggroPause: 10
   hearingDistance: 18
   pitch: {x: 1.23, y: 1.05}
   loudness: {x: 0.65, y: 0.9}

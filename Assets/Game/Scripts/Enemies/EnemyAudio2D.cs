@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public sealed class EnemyAudio2D : MonoBehaviour
 {
     [SerializeField] private AudioClip[] idleSounds = new AudioClip[0];
@@ -12,7 +11,9 @@ public sealed class EnemyAudio2D : MonoBehaviour
     [SerializeField] private AudioClip[] hurtSounds = new AudioClip[0];
     [SerializeField] private AudioClip[] fireSounds = new AudioClip[0];
     [SerializeField] private Vector2 pauseBetweenSounds = new Vector2(2f, 5f);
+    [SerializeField] private Vector2 idlePause = new Vector2(8f, 15f);
     [SerializeField, Min(0f)] private float hurtPause = 0.75f;
+    [SerializeField, Min(0f)] private float aggroPause = 10f;
     [SerializeField, Min(1f)] private float hearingDistance = 40f;
 
     [Header("Voice")]
@@ -20,25 +21,24 @@ public sealed class EnemyAudio2D : MonoBehaviour
     [SerializeField] private Vector2 loudness = new Vector2(0.65f, 0.9f);
     [SerializeField, Range(0f, 1f)] private float distortion = 0.15f;
 
-    private static readonly List<EnemyAudio2D> active = new List<EnemyAudio2D>();
-    private static int countFrame = -1;
-    private static int playingCount;
-    private AudioLowPassFilter lowPass;
-    private AudioDistortionFilter distortionFilter;
-    private AudioReverbFilter reverbFilter;
-    private float voiceLoudness = 1f;
-    private float effectLoudness = 1f;
-    private float nextEffect;
     private BossGrapple2D boss;
     private PlantEnemy2D enemy;
     private CreatureHealth2D health;
     private BossSpit2D spitter;
+    private EnemyVoiceManager manager;
     private AudioSource voice;
-    private AudioSource effects;
+    private AudioLowPassFilter lowPass;
+    private AudioDistortionFilter distortionFilter;
+    private AudioReverbFilter reverbFilter;
     private Transform listener;
     private int previousState = -1;
+    private EnemyVoiceManager.Sound currentSound;
+    private float basePitch;
+    private float voiceLoudness = 1f;
     private float nextSound;
     private float nextHurt;
+    private float nextAggro;
+    private readonly Dictionary<AudioClip[], AudioClip> lastClips = new Dictionary<AudioClip[], AudioClip>();
 
     private void Awake()
     {
@@ -46,10 +46,12 @@ public sealed class EnemyAudio2D : MonoBehaviour
         enemy = GetComponent<PlantEnemy2D>();
         health = GetComponent<CreatureHealth2D>();
         spitter = GetComponent<BossSpit2D>();
+        manager = EnemyVoiceManager.Get();
         voice = gameObject.AddComponent<AudioSource>();
-        effects = gameObject.AddComponent<AudioSource>();
-        voice.playOnAwake = effects.playOnAwake = false;
-        voice.volume = effects.volume = 0f;
+        voice.playOnAwake = false;
+        voice.volume = 0f;
+        //keep this enemy's voice recognisable instead of choosing a completely new pitch each time
+        basePitch = Random.Range(Mathf.Max(0.1f, Mathf.Min(pitch.x, pitch.y)), Mathf.Max(0.1f, Mathf.Max(pitch.x, pitch.y)));
         lowPass = gameObject.AddComponent<AudioLowPassFilter>();
         distortionFilter = gameObject.AddComponent<AudioDistortionFilter>();
         reverbFilter = gameObject.AddComponent<AudioReverbFilter>();
@@ -59,15 +61,12 @@ public sealed class EnemyAudio2D : MonoBehaviour
 
     private void OnEnable()
     {
-        active.Add(this);
-        if (boss != null) boss.Attacked += PlayAttack;
+        if (boss != null) { boss.Attacked += PlayAttack; boss.Hurt += PlayHurt; }
         if (enemy != null) { enemy.Attacked += PlayAttack; enemy.Spat += PlaySpit; }
         if (health != null) health.Hurt += PlayHurt;
         if (spitter != null) spitter.Spat += PlaySpit;
-        if (boss != null) boss.Hurt += PlayHurt;
-        //don't make every idle enemy start meowing on the same frame
-        nextSound = Time.time + Random.Range(0f, Mathf.Max(0f, pauseBetweenSounds.y));
-        nextHurt = nextEffect = 0f;
+        nextSound = Time.time + Random.Range(1f, 5f);
+        nextHurt = nextAggro = 0f;
         previousState = -1;
     }
 
@@ -78,24 +77,27 @@ public sealed class EnemyAudio2D : MonoBehaviour
             health != null && health.IsBurning ? 2 : enemy != null && enemy.IsAggro ? 1 : 0;
         if (state != previousState)
         {
-            voice.Stop();
-            if (previousState <= 0 && state == 1) PlayEffect(aggroSounds);
+            //a state change can cancel background chatter, but not an attack or hurt sound
+            if (currentSound <= EnemyVoiceManager.Sound.Chase) voice.Stop();
+            if (previousState <= 0 && state == 1 && Time.time >= nextAggro)
+            {
+                nextAggro = Time.time + aggroPause;
+                Play(aggroSounds, EnemyVoiceManager.Sound.Aggro);
+            }
+            if (previousState >= 0) nextSound = Time.time + Random.Range(1f, 2f);
             previousState = state;
-            if (state != 0) nextSound = Time.time + Random.Range(0f, 0.6f);
         }
-
         if (voice.isPlaying || Time.time < nextSound) return;
-        AudioClip[] sounds = previousState == 0 ? idleSounds :
-            previousState == 2 ? fireSounds : chaseSounds;
-        voice.clip = Pick(sounds);
-        voice.pitch = Random.Range(Mathf.Max(0.1f, pitch.x), Mathf.Max(0.1f, Mathf.Max(pitch.x, pitch.y)));
-        voiceLoudness = Random.Range(loudness.x, loudness.y);
-        
-        if (voice.clip != null) voice.Play();
-        float pause = previousState == 2 ? 0f : 
-            Random.Range(Mathf.Max(0f, pauseBetweenSounds.x), Mathf.Max(pauseBetweenSounds.x, pauseBetweenSounds.y));
-        
-        nextSound = Time.time + (voice.clip != null ? voice.clip.length / voice.pitch : 0.5f) + pause;
+        AudioClip[] sounds = state == 0 ? idleSounds : state == 2 ? fireSounds : chaseSounds;
+        EnemyVoiceManager.Sound kind = state == 0 ? EnemyVoiceManager.Sound.Idle :
+            state == 2 ? EnemyVoiceManager.Sound.Hurt : EnemyVoiceManager.Sound.Chase;
+        if (Play(sounds, kind))
+        {
+            Vector2 pause = state == 0 ? idlePause : pauseBetweenSounds;
+            nextSound = Time.time + voice.clip.length / voice.pitch +
+                Random.Range(Mathf.Max(0f, pause.x), Mathf.Max(0f, Mathf.Max(pause.x, pause.y)));
+        }
+        else nextSound = Time.time + Random.Range(1f, 2f);
     }
 
     private float GetVolume()
@@ -111,62 +113,61 @@ public sealed class EnemyAudio2D : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (countFrame != Time.frameCount)
-        {
-            countFrame = Time.frameCount;
-            playingCount = 0;
-            foreach (EnemyAudio2D other in active)
-                if ((other.voice.isPlaying || other.effects.isPlaying) && other.GetVolume() > 0f) playingCount++;
-        }
-        float targetVolume = GetVolume() / Mathf.Sqrt(Mathf.Max(1, playingCount));
-        effects.volume = Mathf.MoveTowards(effects.volume, targetVolume * effectLoudness, Time.deltaTime * 2f);
-        voice.volume = Mathf.MoveTowards(voice.volume,
-            targetVolume * voiceLoudness * (effects.isPlaying ? 0.35f : 1f), Time.deltaTime * 2f);
-
+        float volume = GetVolume();
+        //inaudible enemies shouldn't occupy a shared voice slot
+        if (volume <= 0f) voice.Stop();
+        voice.volume = Mathf.MoveTowards(voice.volume, volume * voiceLoudness, Time.deltaTime * 2f);
         RoomAudio2D room = RoomAudio2D.Current;
         lowPass.cutoffFrequency = room != null ? room.Cutoff : 22000f;
         distortionFilter.distortionLevel = Mathf.Min(0.8f, distortion + (room != null ? room.Distortion : 0f));
         reverbFilter.reverbPreset = room != null ? room.Reverb : AudioReverbPreset.Off;
     }
 
-    private static AudioClip Pick(AudioClip[] sounds)
+    private AudioClip Pick(AudioClip[] sounds)
     {
         if (sounds == null || sounds.Length == 0) return null;
-        int start = Random.Range(0, sounds.Length);
-        for (int i = 0; i < sounds.Length; i++)
-            if (sounds[(start + i) % sounds.Length] != null) return sounds[(start + i) % sounds.Length];
-        return null;
+        lastClips.TryGetValue(sounds, out AudioClip last);
+        AudioClip chosen = null;
+        int count = 0;
+        //each usable entry has the same chance; skip the last clip if there is another choice
+        foreach (AudioClip clip in sounds)
+        {
+            if (clip == null || clip == last) continue;
+            if (Random.Range(0, ++count) == 0) chosen = clip;
+        }
+        return chosen != null ? chosen : last;
     }
 
-    private void PlayAttack() => PlayEffect(attackSounds);
-    private void PlaySpit() => PlayEffect(spitSounds);
+    private bool Play(AudioClip[] sounds, EnemyVoiceManager.Sound kind)
+    {
+        if (GetVolume() <= 0f || (health != null && health.IsDead)) return false;
+        AudioClip clip = Pick(sounds);
+        if (clip == null || manager == null || !manager.Request(voice, kind)) return false;
+        lastClips[sounds] = clip;
+        currentSound = kind;
+        voice.clip = clip;
+        voice.pitch = basePitch * Random.Range(0.97f, 1.03f);
+        voiceLoudness = Random.Range(loudness.x, loudness.y);
+        voice.volume = GetVolume() * voiceLoudness;
+        voice.Play();
+        return true;
+    }
+
+    private void PlayAttack() => Play(attackSounds, EnemyVoiceManager.Sound.Attack);
+    private void PlaySpit() => Play(spitSounds, EnemyVoiceManager.Sound.Attack);
     private void PlayHurt()
     {
         if (Time.time < nextHurt) return;
         nextHurt = Time.time + hurtPause;
-        PlayEffect(hurtSounds);
-    }
-    private void PlayEffect(AudioClip[] sounds)
-    {
-        AudioClip clip = Pick(sounds);
-        if (clip == null || Time.time < nextEffect) return;
-        nextEffect = Time.time + 0.15f;
-        effects.pitch = Random.Range(Mathf.Max(0.1f, pitch.x), Mathf.Max(0.1f, Mathf.Max(pitch.x, pitch.y)));
-        effectLoudness = Random.Range(loudness.x, loudness.y);
-        effects.clip = clip;
-        effects.volume = 0f;
-        effects.Play();
+        Play(hurtSounds, EnemyVoiceManager.Sound.Hurt);
     }
 
     private void OnDisable()
     {
-        active.Remove(this);
-        if (boss != null) boss.Attacked -= PlayAttack;
+        if (boss != null) { boss.Attacked -= PlayAttack; boss.Hurt -= PlayHurt; }
         if (enemy != null) { enemy.Attacked -= PlayAttack; enemy.Spat -= PlaySpit; }
         if (health != null) health.Hurt -= PlayHurt;
         if (spitter != null) spitter.Spat -= PlaySpit;
-        if (boss != null) boss.Hurt -= PlayHurt;
         voice.Stop();
-        effects.Stop();
     }
 }
