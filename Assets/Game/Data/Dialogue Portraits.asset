@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 084c31aa47a54a8e90c03a6921000001, type: 3}
+  m_Name: Dialogue Portraits
+  m_EditorClassIdentifier: Assembly-CSharp::DialoguePortraits
+  box: {fileID: 1567562913664623127, guid: ba4936bc380ca2642baed416daa17500, type: 3}
+  boxes:
+  - {fileID: -2253911629886400664, guid: 3192011da6a9ffb4e959c2e09e920bb5, type: 3}
+  - {fileID: -2253911629886400664, guid: 64f8d0d782a280e4fbc8fc6fcda8e554, type: 3}
+  - {fileID: -2253911629886400664, guid: f5115496f1612864c89c676dfda4e15c, type: 3}
+  - {fileID: -2253911629886400664, guid: d999fc2c4a13c8b4daffe91382d7fb9c, type: 3}
+  - {fileID: -2253911629886400664, guid: 8572164510a9ccc4db41ca30781c5e98, type: 3}
+  - {fileID: -2253911629886400664, guid: 399ae0f46cf70974e8166528aa40d226, type: 3}
+  font: {fileID: 11400000, guid: 85fb4703586cadb498e1099ec1fe9f01, type: 2}
+  wordSpacing: 5
+  stages:
+  - {fileID: -1564446650741556321, guid: 276cdab0c02bbb641bfc68566d107acb, type: 3}
+  - {fileID: 6393391442200488149, guid: 276cdab0c02bbb641bfc68566d107acb, type: 3}
+  - {fileID: -1564446650741556321, guid: 276cdab0c02bbb641bfc68566d107acb, type: 3}
+  - {fileID: -1564446650741556321, guid: 276cdab0c02bbb641bfc68566d107acb, type: 3}
+  - {fileID: -1564446650741556321, guid: 276cdab0c02bbb641bfc68566d107acb, type: 3}
+  - {fileID: -1564446650741556321, guid: 276cdab0c02bbb641bfc68566d107acb, type: 3}
+  faces: {fileID: -2253911629886400664, guid: 3c09f6a6d03e00c4dbe0872d345e02ae, type: 3}
